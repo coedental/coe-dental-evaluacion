@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COE Dental — Evaluación de Desempeño 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0fa; --surface: #fff; --sidebar: #c9b8e8; --sidebar-hover: #b8a4dc;
+    --accent: #a78bd4; --accent-light: #ede8f8; --blue: #7eb8d4; --blue-light: #e4f3fa;
+    --text: #3d3550; --text-muted: #8f82a8; --border: #e4ddf2;
+    --radius: 10px; --shadow: 0 2px 12px rgba(167,139,212,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #ede8f8 0%, #e4f3fa 100%);
+  }
+  .login-box {
+    background: #fff; border-radius: 18px; padding: 44px 40px; width: 420px;
+    box-shadow: 0 8px 40px rgba(167,139,212,0.18); text-align: center;
+  }
+  .login-logo { font-size: 38px; margin-bottom: 6px; }
+  .login-brand { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.1em; margin-bottom: 4px; }
+  .login-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .login-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 30px; }
+  .login-box label { display: block; font-size: 12px; font-weight: 600; text-align: left; margin-bottom: 6px; color: var(--text); }
+  .login-box select, .login-box input {
+    width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 14px; color: var(--text); outline: none; margin-bottom: 16px;
+    background: #fafbfd; transition: border 0.15s;
+  }
+  .login-box select:focus, .login-box input:focus { border-color: var(--accent); background: #fff; }
+  .login-btn {
+    width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none;
+    border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: background 0.15s; margin-top: 4px;
+  }
+  .login-btn:hover { background: #9278c4; }
+  .login-error { color: #b85555; font-size: 13px; margin-top: 10px; display: none; }
+  .pin-dots { display: flex; justify-content: center; gap: 10px; margin: 10px 0 16px; }
+  .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); transition: all 0.2s; }
+  .pin-dot.filled { background: var(--accent); border-color: var(--accent); }
+  .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .pin-key {
+    padding: 14px; border-radius: 9px; border: 1.5px solid var(--border); background: #fafbfd;
+    font-size: 18px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text);
+    transition: all 0.15s;
+  }
+  .pin-key:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+  .pin-key.del { font-size: 14px; color: var(--text-muted); }
+
+  /* ── APP SHELL ── */
+  #app { display: none; min-height: 100vh; display: none; flex-direction: row; }
+  #app.visible { display: flex; }
+  .sidebar {
+    width: 240px; min-height: 100vh; background: var(--sidebar);
+    display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100;
+  }
+  .sidebar-logo { padding: 24px 24px 18px; border-bottom: 1px solid rgba(61,53,80,0.12); }
+  .sidebar-logo .brand { font-size: 10px; font-weight: 600; color: rgba(61,53,80,0.5); letter-spacing: 0.08em; margin-bottom: 3px; }
+  .sidebar-logo h1 { font-size: 15px; font-weight: 700; color: #3d3550; line-height: 1.2; }
+  .sidebar-logo .year { font-size: 11px; color: #7e5db8; font-weight: 600; margin-top: 2px; }
+  .sidebar-nav { padding: 14px 12px; flex: 1; }
+  .nav-section { font-size: 10px; font-weight: 600; color: rgba(61,53,80,0.4); letter-spacing: 0.1em; padding: 10px 12px 5px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+    cursor: pointer; color: rgba(61,53,80,0.7); font-size: 13px; font-weight: 500;
+    transition: background 0.15s, color 0.15s; margin-bottom: 2px;
+  }
+  .nav-item:hover { background: var(--sidebar-hover); color: #3d3550; }
+  .nav-item.active { background: #a78bd4; color: #fff; font-weight: 600; }
+  .nav-item.hidden { display: none; }
+  .nav-item .icon { width: 18px; text-align: center; font-size: 15px; }
+  .sidebar-user {
+    padding: 14px 16px; border-top: 1px solid rgba(61,53,80,0.12); margin: 0 8px 8px;
+    border-radius: 8px; background: rgba(255,255,255,0.35);
+  }
+  .sidebar-user .u-role { font-size: 10px; font-weight: 600; color: rgba(61,53,80,0.5); margin-bottom: 2px; }
+  .sidebar-user .u-name { font-size: 12.5px; font-weight: 700; color: #3d3550; }
+  .sidebar-user .u-area { font-size: 11px; color: #7e5db8; }
+  .logout-btn {
+    margin: 0 8px 14px; padding: 8px 12px; border-radius: 8px; border: none;
+    background: rgba(183,90,90,0.12); color: #b85555; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; width: calc(100% - 16px); text-align: left;
+  }
+  .logout-btn:hover { background: rgba(183,90,90,0.2); }
+
+  .main { margin-left: 240px; flex: 1; min-height: 100vh; }
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-badge { background: var(--accent-light); color: var(--accent); font-size: 11.5px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+  .print-btn {
+    background: #3d3550; color: #fff; border: none; padding: 7px 14px; border-radius: 8px;
+    font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px;
+  }
+  .print-btn:hover { background: #5a4f72; }
+  .content { padding: 24px 28px; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── DASHBOARD ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .stat-card .label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 7px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+  .stat-card .sub { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; }
+  .stat-card.accent-card { background: #a78bd4; }
+  .stat-card.accent-card .label { color: rgba(255,255,255,0.75); }
+  .stat-card.accent-card .value { color: #fff; }
+  .stat-card.accent-card .sub { color: rgba(255,255,255,0.65); }
+  .section-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title span { background: var(--blue-light); color: var(--blue); font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .areas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .area-card {
+    background: var(--surface); border-radius: var(--radius); padding: 16px 18px;
+    box-shadow: var(--shadow); border: 1px solid var(--border); cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .area-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .area-card .area-name { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
+  .area-card .area-jefe { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; }
+  .area-card .area-score { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .area-card .progress-bar { height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .area-card .progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s; }
+  .area-card .area-meta { display: flex; justify-content: space-between; margin-top: 6px; }
+  .area-card .area-meta span { font-size: 10.5px; color: var(--text-muted); }
+
+  /* ── TABLE ── */
+  .table-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; }
+  .table-card table { width: 100%; border-collapse: collapse; }
+  .table-card th { background: #f8fafc; font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .table-card td { padding: 11px 14px; font-size: 12.5px; border-bottom: 1px solid #f0f4f8; vertical-align: middle; }
+  .table-card tr:last-child td { border-bottom: none; }
+  .table-card tr:hover td { background: #fafbfd; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 600; }
+  .badge.excelente { background: #c8f0dd; color: #3a9e6e; }
+  .badge.bueno { background: #c5e4f5; color: #3a7fa8; }
+  .badge.regular { background: #fdefc8; color: #a07820; }
+  .badge.bajo { background: #f5c8c8; color: #a04040; }
+  .score-pill { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 24px; border-radius: 6px; font-size: 12.5px; font-weight: 700; }
+  .empty { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+  .empty .icon { font-size: 36px; margin-bottom: 10px; }
+  .empty p { font-size: 13px; }
+
+  /* ── FILTERS ── */
+  .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--surface); font-size: 12px; font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .filter-btn.active, .filter-btn:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+  .search-input { padding: 6px 12px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px; font-family: inherit; color: var(--text); outline: none; width: 200px; }
+  .search-input:focus { border-color: var(--accent); }
+
+  /* ── FORM ── */
+  .form-container { max-width: 720px; }
+  .form-card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; }
+  .form-card h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .form-card h3 .area-tag { background: var(--blue-light); color: var(--blue); font-size: 10.5px; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .form-row label .req { color: #b85555; margin-left: 2px; }
+  .form-row select, .form-row input[type="text"], .form-row textarea {
+    width: 100%; padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 13px; color: var(--text); outline: none; transition: border 0.15s; background: #fafbfd;
+  }
+  .form-row select:focus, .form-row input:focus, .form-row textarea:focus { border-color: var(--accent); background: #fff; }
+  .form-row textarea { resize: vertical; min-height: 72px; }
+  .selector-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .criteria-grid { display: grid; gap: 12px; }
+  .criterion { padding: 13px 15px; border: 1.5px solid var(--border); border-radius: 8px; background: #fafbfd; }
+  .criterion .crit-label { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
+  .criterion .crit-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .rating-row { display: flex; gap: 6px; }
+  .rating-btn {
+    flex: 1; padding: 7px 4px; border-radius: 7px; border: 1.5px solid var(--border);
+    background: var(--surface); font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; text-align: center; color: var(--text-muted);
+  }
+  .rating-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .rating-btn.selected-1 { background: #f5d4d4; border-color: #c47878; color: #a04040; }
+  .rating-btn.selected-2 { background: #fdefc8; border-color: #d4aa60; color: #a07828; }
+  .rating-btn.selected-3 { background: #fef9dc; border-color: #d4c060; color: #8a7820; }
+  .rating-btn.selected-4 { background: #d4ecf8; border-color: #6aacc8; color: #3a7fa8; }
+  .rating-btn.selected-5 { background: #c8f0dd; border-color: #6abf98; color: #3a9e6e; }
+  .rating-labels { display: flex; gap: 6px; margin-top: 3px; }
+  .rating-labels span { flex: 1; font-size: 9.5px; color: var(--text-muted); text-align: center; }
+  .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-primary { background: #a78bd4; color: #fff; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+  .btn-primary:hover { background: #9278c4; }
+  .btn-secondary { background: transparent; color: var(--text-muted); border: 1.5px solid var(--border); padding: 11px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 500; cursor: pointer; font-family: inherit; }
+
+  /* ── PRINT MODAL ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #fff; border-radius: 14px; padding: 32px; max-width: 480px; width: 92%; }
+  .modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .modal .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 22px; }
+  .modal-options { display: grid; gap: 10px; margin-bottom: 20px; }
+  .modal-option {
+    padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px; transition: all 0.15s;
+  }
+  .modal-option:hover { border-color: var(--accent); background: var(--accent-light); }
+  .modal-option .opt-icon { font-size: 22px; }
+  .modal-option .opt-title { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .modal-option .opt-desc { font-size: 11.5px; color: var(--text-muted); }
+  .modal-close { background: transparent; border: 1.5px solid var(--border); color: var(--text-muted); padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; width: 100%; }
+
+  /* ── SUCCESS MODAL ── */
+  .success-modal { background: #fff; border-radius: 14px; padding: 32px; max-width: 380px; width: 92%; text-align: center; }
+  .success-modal .check { font-size: 44px; margin-bottom: 14px; }
+  .success-modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .success-modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    #login-screen, .sidebar, .topbar, .filters, .form-actions, .print-btn,
+    .nav-item, .logout-btn, .modal-overlay { display: none !important; }
+    .main { margin-left: 0 !important; }
+    body { background: #fff; }
+    .content { padding: 0; }
+    .view { display: block !important; }
+    .view:not(.print-target) { display: none !important; }
+    .print-section { page-break-after: always; }
+    .print-header { text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #3d3550; }
+    .print-header h2 { font-size: 18px; color: #3d3550; }
+    .print-header p { font-size: 12px; color: #8f82a8; margin-top: 4px; }
+    .no-print { display: none !important; }
+  }
+
+  /* SCORES */
+  .s-excelente { color: #3a9e6e; } .s-bueno { color: #3a7fa8; }
+  .s-regular { color: #c4952a; } .s-bajo { color: #b85555; }
+
+  /* PIN AREA SELECTOR */
+  .area-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .area-select-btn {
+    padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: #fafbfd; font-family: inherit; font-size: 12.5px; font-weight: 500;
+    cursor: pointer; text-align: left; color: var(--text); transition: all 0.15s;
+  }
+  .area-select-btn:hover, .area-select-btn.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 600; }
+  .area-select-btn .area-btn-icon { margin-right: 6px; }
+
+  .admin-link { font-size: 12px; color: var(--text-muted); margin-top: 16px; cursor: pointer; }
+  .admin-link:hover { color: var(--accent); }
+  .step { display: none; }
+  .step.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg viewBox="0 0 300 160" width="160" height="90" xmlns="http://www.w3.org/2000/svg">
+        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="100" fill="#3d3550">COE</text>
+        <text x="50%" y="83%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-weight="400" font-size="20" letter-spacing="12" fill="#3d3550">DENTAL</text>
+        <path d="M 70 145 Q 150 168 230 145" stroke="#3d3550" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="login-title" style="margin-top:4px">Evaluación de Desempeño</div>
+    <div class="login-sub">Selecciona tu área e ingresa tu PIN para continuar</div>
+
+    <!-- STEP 1: Selección de área -->
+    <div class="step active" id="step-area">
+      <label>¿Cuál es tu área?</label>
+      <div class="area-select-grid" id="area-select-grid"></div>
+      <div class="admin-link" onclick="goAdminLogin()">🔑 Acceso administrador</div>
+    </div>
+
+    <!-- STEP 2: PIN -->
+    <div class="step" id="step-pin">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px" id="pin-area-label"></div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="dot-0"></div>
+        <div class="pin-dot" id="dot-1"></div>
+        <div class="pin-dot" id="dot-2"></div>
+        <div class="pin-dot" id="dot-3"></div>
+      </div>
+      <div class="pin-keypad">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key del" onclick="pinBack()">← Borrar</button>
+        <button class="pin-key" onclick="pinKey('0')">0</button>
+        <button class="pin-key" onclick="pinSubmit()" style="background:var(--accent);color:#fff;border-color:var(--accent)">✓</button>
+      </div>
+      <div class="login-error" id="pin-error">PIN incorrecto. Inténtalo de nuevo.</div>
+      <div style="font-size:12px;color:var(--text-muted);cursor:pointer;margin-top:8px" onclick="backToAreas()">← Cambiar área</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 300 160" width="120" height="64" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-bottom:6px">
+        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="100" fill="#3d3550">COE</text>
+        <text x="50%" y="83%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-weight="400" font-size="20" letter-spacing="12" fill="#3d3550">DENTAL</text>
+        <path d="M 70 145 Q 150 168 230 145" stroke="#3d3550" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <h1>Evaluación de Desempeño</h1>
+      <div class="year" id="sidebar-year">2026</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">MENÚ</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="showView('dashboard')">
+        <span class="icon">📊</span><span>Dashboard</span>
+      </div>
+      <div class="nav-item" id="nav-form" onclick="showView('form')">
+        <span class="icon">📝</span><span>Nueva Evaluación</span>
+      </div>
+      <div class="nav-item" id="nav-results" onclick="showView('results')">
+        <span class="icon">👥</span><span>Resultados</span>
+      </div>
+      <div class="nav-item hidden" id="nav-print" onclick="openPrintModal()">
+        <span class="icon">🖨️</span><span>Imprimir</span>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="u-role" id="sidebar-role">ROL</div>
+      <div class="u-name" id="sidebar-name">Usuario</div>
+      <div class="u-area" id="sidebar-area-label">Área</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">⟵ Cerrar sesión</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-sub" id="topbar-sub">Resumen de evaluaciones</div>
+      </div>
+      <div class="topbar-right">
+        <button class="print-btn" onclick="openPrintModal()">🖨️ Imprimir / Exportar</button>
+        <div class="topbar-badge" id="topbar-badge">2026</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-row" id="dash-stats">
+          <div class="stat-card accent-card">
+            <div class="label">Personal en tu área</div>
+            <div class="value" id="stat-total">—</div>
+            <div class="sub" id="stat-total-sub">colaboradores</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Evaluaciones completadas</div>
+            <div class="value" id="stat-eval">0</div>
+            <div class="sub" id="stat-eval-pct">0% del área</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Promedio del área</div>
+            <div class="value" id="stat-avg">—</div>
+            <div class="sub">sobre 5.0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Mejor puntaje</div>
+            <div class="value" id="stat-best" style="font-size:14px;padding-top:4px;">—</div>
+            <div class="sub" id="stat-best-score">sin datos</div>
+          </div>
+        </div>
+        <div class="section-title" id="dash-areas-title">Resumen por área <span id="areas-count"></span></div>
+        <div class="areas-grid" id="areas-grid"></div>
+        <div class="section-title">Últimas evaluaciones <span id="recent-count">0</span></div>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Colaborador</th><th>Área</th><th>Puntaje</th><th>Nivel</th><th>Período</th><th>Fecha</th></tr></thead>
+            <tbody id="recent-table"><tr><td colspan="6"><div class="empty"><div class="icon">📋</div><p>Sin evaluaciones aún.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="view" id="view-form">
+        <div class="form-container">
+          <div class="form-card">
+            <h3>📋 Datos de la Evaluación</h3>
+            <div class="selector-row">
+              <div class="form-row">
+                <label>Área <span class="req">*</span></label>
+                <select id="sel-area" onchange="onAreaChange()">
+                  <option value="">— Selecciona el área —</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Colaborador evaluado <span class="req">*</span></label>
+                <select id="sel-colaborador"><option value="">— Selecciona primero el área —</option></select>
+              </div>
+            </div>
+            <div class="selector-row">
+              <div class="form-row">
+                <label>Evaluado por</label>
+                <input type="text" id="input-jefe" readonly style="background:#f0f4f8;color:var(--text-muted);">
+              </div>
+              <div class="form-row">
+                <label>Período evaluado</label>
+                <select id="input-periodo">
+                  <option value="2026 — Cuarto trimestre" selected>2026 — Cuarto trimestre (Oct–Dic)</option>
+                  <option value="2026 — Segundo semestre">2026 — Segundo semestre (Jul–Dic)</option>
+                  <option value="2026 — Anual">2026 — Evaluación Anual</option>
+                  <option value="2026 — Tercer trimestre">2026 — Tercer trimestre (Jul–Sep)</option>
+                  <option value="2026 — Segundo trimestre">2026 — Segundo trimestre (Abr–Jun)</option>
+                  <option value="2026 — Primer trimestre">2026 — Primer trimestre (Ene–Mar)</option>
+                  <option value="2027 — Primer trimestre">2027 — Primer trimestre (Ene–Mar)</option>
+                  <option value="2027 — Segundo trimestre">2027 — Segundo trimestre (Abr–Jun)</option>
+                  <option value="2027 — Tercer trimestre">2027 — Tercer trimestre (Jul–Sep)</option>
+                  <option value="2027 — Cuarto trimestre">2027 — Cuarto trimestre (Oct–Dic)</option>
+                  <option value="2027 — Primer semestre">2027 — Primer semestre (Ene–Jun)</option>
+                  <option value="2027 — Segundo semestre">2027 — Segundo semestre (Jul–Dic)</option>
+                  <option value="2027 — Anual">2027 — Evaluación Anual</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-card" id="criteria-card" style="display:none;">
+            <h3>⭐ Criterios de Evaluación <span class="area-tag" id="criteria-area-tag"></span></h3>
+            <div class="criteria-grid" id="criteria-grid"></div>
+          </div>
+          <div class="form-card" id="obs-card" style="display:none;">
+            <h3>💬 Observaciones</h3>
+            <div class="form-row"><label>Fortalezas</label><textarea id="obs-fortalezas" placeholder="¿Qué hace bien este colaborador?"></textarea></div>
+            <div class="form-row"><label>Áreas de mejora</label><textarea id="obs-mejora" placeholder="¿En qué aspectos debe mejorar?"></textarea></div>
+            <div class="form-row"><label>Comentario general</label><textarea id="obs-general" placeholder="Observaciones adicionales..."></textarea></div>
+            <div class="form-actions">
+              <button class="btn-primary" onclick="submitForm()">✓ Guardar Evaluación</button>
+              <button class="btn-secondary" onclick="resetForm()">Limpiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="view" id="view-results">
+        <div class="filters" id="results-filters">
+          <button class="filter-btn active" onclick="filterResults('all',this)">Todas</button>
+        </div>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Colaborador</th><th>Cargo</th><th>Área</th><th>Evaluado por</th><th>Puntaje</th><th>Nivel</th><th>Período</th><th>Fortalezas</th><th>Fecha</th><th></th></tr></thead>
+            <tbody id="results-table"><tr><td colspan="10"><div class="empty"><div class="icon">📊</div><p>Sin evaluaciones.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- PRINT MODAL -->
+<div class="modal-overlay" id="print-modal">
+  <div class="modal">
+    <h3>🖨️ Imprimir / Exportar</h3>
+    <div class="modal-sub">Elige qué deseas imprimir</div>
+    <div class="modal-options">
+      <div class="modal-option" onclick="printIndividual()">
+        <div class="opt-icon">👤</div>
+        <div>
+          <div class="opt-title">Ficha individual</div>
+          <div class="opt-desc">Selecciona un colaborador específico para imprimir su evaluación completa</div>
+        </div>
+      </div>
+      <div class="modal-option" onclick="printArea()">
+        <div class="opt-icon">📋</div>
+        <div>
+          <div class="opt-title">Resumen de área</div>
+          <div class="opt-desc">Todos los evaluados de tu área en una sola hoja de resumen</div>
+        </div>
+      </div>
+      <div class="modal-option" id="print-all-opt" onclick="printAll()">
+        <div class="opt-icon">📊</div>
+        <div>
+          <div class="opt-title">Reporte general</div>
+          <div class="opt-desc">Todas las áreas con ranking y promedios — solo administrador</div>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closePrintModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- SELECT INDIVIDUAL MODAL -->
+<div class="modal-overlay" id="individual-modal">
+  <div class="modal">
+    <h3>👤 Ficha individual</h3>
+    <div class="modal-sub">Selecciona el colaborador</div>
+    <div class="form-row">
+      <select id="sel-print-colab" style="width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;outline:none;">
+        <option value="">— Selecciona —</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" onclick="doPrintIndividual()">🖨️ Imprimir ficha</button>
+      <button class="btn-secondary" onclick="closeIndividualModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="success-modal">
+  <div class="success-modal">
+    <div class="check">✅</div>
+    <h3>Evaluación guardada</h3>
+    <p id="success-msg">Registrada correctamente.</p>
+    <button class="btn-primary" onclick="closeSuccess()" style="width:100%">Ver Dashboard</button>
+  </div>
+</div>
+
+<!-- PRINT FRAME (hidden) -->
+<div id="print-frame" style="display:none;"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG: PINs — cambia estos valores antes de distribuir
+// ═══════════════════════════════════════════════════════
+const PINS = {
+  admin:          '0000',  // PIN maestro — acceso total
+  doctores:       '1111',
+  asistentes:     '2222',
+  recepcion:      '3333',
+  administrativo: '4444',
+  ventas:         '5555',
+  marketing:      '6666',
+  servicios:      '7777',
+  coe_lab:        '8888',
+};
+
+// ═══════════════════════════════════════════════════════
+// CRITERIOS UNIVERSALES
+// ═══════════════════════════════════════════════════════
+const CRITERIOS_UNIVERSALES = [
+  { id: 'u1', label: 'Puntualidad y asistencia', desc: 'Cumplimiento de horarios, registro de entrada/salida y presencia efectiva',
+    escala: [
+      'Llega tarde o falta más de 3 veces por semana sin justificación',
+      'Llega tarde o falta 1-2 veces por semana, justificaciones inconsistentes',
+      'Ocasionalmente tarde, faltas siempre justificadas con anticipación',
+      'Puntual casi siempre, ausencias muy esporádicas y bien comunicadas',
+      'Puntualidad ejemplar, nunca ha llegado tarde ni faltado sin aviso previo'
+    ]},
+  { id: 'u2', label: 'Orden y limpieza', desc: 'Mantenimiento del espacio de trabajo limpio, ordenado y presentable en todo momento',
+    escala: [
+      'Espacio de trabajo desordenado y sucio de forma habitual',
+      'Mantiene cierto orden pero requiere recordatorio frecuente',
+      'Espacio generalmente ordenado, limpia al final del turno',
+      'Espacio siempre limpio y ordenado, cuida materiales y equipos',
+      'Referente del área en orden y limpieza, promueve buenas prácticas en el equipo'
+    ]},
+];
+
+// ═══════════════════════════════════════════════════════
+// ÁREAS
+// ═══════════════════════════════════════════════════════
+const AREAS = {
+  doctores: {
+    label: 'Doctores / Odontólogos', jefe: 'Antonio Zamora', color: '#7eb8d4', icon: '🦷',
+    colaboradores: [
+      { id: 'COE-001', name: 'Alexander Antonio Zamora García', cargo: 'Jefe / Odontólogo' },
+      { id: 'COE-013', name: 'Jose Guillermo Carbajal Parra', cargo: 'Odontólogo/Ortodoncia' },
+      { id: 'COE-015', name: 'Juan Francisco Acasiete Ramirez', cargo: 'Odontólogo general' },
+      { id: 'COE-016', name: 'Katia Cristina Ágreda Daffaut', cargo: 'Odontólogo general' },
+      { id: 'COE-002', name: 'Alexis Issac Temoche Ojeda', cargo: 'Odontólogo' },
+      { id: 'COE-020', name: 'Rebeca Giovanna Grados Salazar', cargo: 'Dentista Cirujano' },
+      { id: 'COE-027', name: 'Milagros Cristel Trigodo Quinteros', cargo: 'Odontólogo general' },
+      { id: 'COE-029', name: 'Gabriela Edith Huamanciza Alva', cargo: 'Dentista Cirujano' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Calidad clínica', desc: 'Precisión, técnica y resultados de los tratamientos realizados',
+        escala: ['Comete errores frecuentes, requiere supervisión constante','Resultados irregulares, necesita orientación en casos de mediana complejidad','Ejecuta correctamente los procedimientos estándar de la clínica','Alta precisión técnica, maneja bien casos complejos con mínima supervisión','Excelencia clínica consistente, referente técnico dentro del equipo médico']},
+      { id: 'c2', label: 'Trato al paciente', desc: 'Empatía, comunicación y satisfacción del paciente',
+        escala: ['Recibe quejas frecuentes, actitud fría o poco empática','Trato básico, no genera confianza ni vínculo con el paciente','Trato cordial y profesional, pacientes satisfechos en general','Pacientes expresan satisfacción activa, genera confianza y fidelidad','Pacientes lo recomiendan espontáneamente, cero quejas registradas']},
+      { id: 'c3', label: 'Trabajo en equipo', desc: 'Colaboración con asistentes, administración y otros doctores',
+        escala: ['No colabora, genera roces o conflictos con el resto del equipo','Trabaja de forma aislada, colabora solo cuando se le pide','Apoya al equipo cuando es necesario y mantiene buenas relaciones','Promueve la colaboración, facilita el trabajo de asistentes y administración','Pieza clave del equipo, su actitud eleva el rendimiento colectivo']},
+      { id: 'c4', label: 'Cumplimiento de protocolos', desc: 'Adherencia a los procedimientos y normas de la clínica',
+        escala: ['Incumple protocolos de forma reiterada, representa un riesgo','Cumple protocolos básicos pero omite pasos en situaciones de presión','Sigue los protocolos establecidos en la mayoría de los casos','Cumplimiento riguroso, nunca omite pasos aunque haya presión de tiempo','Cumplimiento ejemplar, además sugiere mejoras a los protocolos existentes']},
+      { id: 'c5', label: 'Productividad', desc: 'Número de pacientes atendidos y tratamientos completados',
+        escala: ['Atiende menos pacientes de lo esperado de forma habitual','Productividad por debajo del promedio del área','Cumple con el volumen de atención esperado para su cargo','Supera el promedio de atención sin comprometer la calidad clínica','Máxima productividad del área, optimiza tiempos sin perder calidad']},
+    ]
+  },
+  asistentes: {
+    label: 'Asistentes Dentales', jefe: 'Pilar García', color: '#a78bd4', icon: '🩺',
+    colaboradores: [
+      { id: 'COE-010', name: 'Gladys Pilar García Sinti', cargo: 'Jefa / Encargada Asistentes' },
+      { id: 'COE-025', name: 'Anghi Yorye Rojas Pariona', cargo: 'Asistente Dental' },
+      { id: 'COE-028', name: "Fiorella O'Brien Chavez Arroyo", cargo: 'Asistente Dental' },
+      { id: 'COE-030', name: 'Daiana Jaqueline Huangal Flores', cargo: 'Asistente Dental' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental',
+        escala: ['Materiales frecuentemente incompletos o incorrectos antes del procedimiento','Prepara lo básico pero olvida elementos en casos complejos','Materiales listos y completos para los procedimientos estándar','Siempre preparado con anticipación, incluye materiales de contingencia','Anticipa necesidades del doctor sin que se le indique, cero improvisaciones']},
+      { id: 'c2', label: 'Apoyo al doctor', desc: 'Eficiencia y coordinación durante los procedimientos',
+        escala: ['Lento, descoordinado, interrumpe el flujo del procedimiento','Apoya pero requiere instrucciones paso a paso durante el procedimiento','Coordina bien en procedimientos rutinarios','Coordinación fluida, anticipa los movimientos del doctor','Apoyo experto, el doctor trabaja con mayor velocidad y precisión gracias a él/ella']},
+      { id: 'c3', label: 'Protocolo de esterilización', desc: 'Cumplimiento de normas de bioseguridad e higiene',
+        escala: ['Incumple normas de bioseguridad de forma habitual, representa un riesgo','Conoce los protocolos pero los aplica de forma incompleta','Aplica correctamente los protocolos de esterilización establecidos','Riguroso con bioseguridad, registra y documenta correctamente','Referente de bioseguridad en el área, detecta y reporta riesgos proactivamente']},
+      { id: 'c4', label: 'Trato al paciente', desc: 'Amabilidad y contención con los pacientes',
+        escala: ['Pacientes incómodos o con quejas por su actitud','Trato neutro, no genera confianza ni tranquiliza al paciente','Amable y profesional, paciente se siente cómodo','Contiene la ansiedad del paciente, genera ambiente de confianza','Pacientes solicitan ser atendidos por él/ella, referente de calidez humana']},
+      { id: 'c5', label: 'Proactividad', desc: 'Iniciativa y anticipación a las necesidades del equipo',
+        escala: ['Espera siempre instrucciones, no actúa por iniciativa propia','Actúa solo en tareas conocidas, no anticipa necesidades nuevas','Identifica necesidades básicas y actúa sin que se le indique','Regularmente propone mejoras o detecta problemas antes que ocurran','Constantemente un paso adelante, su iniciativa mejora el flujo del área']},
+    ]
+  },
+  recepcion: {
+    label: 'Recepción', jefe: 'Jhoanna Gonzalez', color: '#6bbccc', icon: '🗂️',
+    colaboradores: [
+      { id: 'COE-011', name: 'Jhohana Stephany Desiree Gonzalez Vargas', cargo: 'Jefa / Recepción' },
+      { id: 'COE-036', name: 'Angeles Juaquina Trevejo Soto', cargo: 'Recepcionista' },
+      { id: 'COE-034', name: 'Tiffany Eliana Clausen Moscayza', cargo: 'Psicóloga' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Atención al paciente', desc: 'Calidad de bienvenida, escucha y resolución de consultas',
+        escala: ['Trato frío o descortés, pacientes han presentado quejas formales','Atención básica, no resuelve consultas sin escalar al jefe','Atención cordial, resuelve consultas frecuentes con autonomía','Pacientes se sienten bienvenidos y bien atendidos de forma consistente','Primera impresión excelente, pacientes destacan el trato en reseñas o comentarios']},
+      { id: 'c2', label: 'Gestión de agenda', desc: 'Manejo eficiente de citas, confirmaciones y reprogramaciones',
+        escala: ['Errores frecuentes en citas: dobles reservas, olvidos o mala comunicación','Maneja la agenda básica pero comete errores en situaciones de alta demanda','Agenda organizada, confirmaciones y reprogramaciones al día','Gestión eficiente incluso en días de alta demanda, cero cruces de citas','Optimiza la agenda proactivamente, reduce tiempos de espera del paciente']},
+      { id: 'c3', label: 'Tiempo de respuesta', desc: 'Rapidez en atender llamadas, mensajes y consultas',
+        escala: ['Demoras frecuentes en atender llamadas, mensajes o pacientes presenciales','Responde pero con demoras que generan incomodidad','Tiempos de respuesta aceptables dentro del estándar de la clínica','Respuesta rápida y efectiva en todos los canales de atención','Respuesta inmediata, nunca deja un paciente esperando sin atención']},
+      { id: 'c4', label: 'Comunicación interna', desc: 'Coordinación con doctores y área administrativa',
+        escala: ['Información no llega o llega tarde y con errores al equipo','Comunica pero de forma incompleta o informal','Coordina correctamente con doctores y administración','Comunicación proactiva, avisa con anticipación de cambios o novedades','Nodo clave de comunicación del área, evita malentendidos y errores']},
+      { id: 'c5', label: 'Presentación e imagen', desc: 'Cuidado de imagen personal y del espacio de recepción',
+        escala: ['Presentación descuidada de forma habitual, no refleja la imagen de la clínica','Presentación básica, no siempre alineada con el estándar de la clínica','Presentación adecuada y espacio de recepción limpio y ordenado','Siempre impecable, el espacio de recepción refleja profesionalismo','Imagen referente, cuida cada detalle de la presentación y el ambiente']},
+    ]
+  },
+  administrativo: {
+    label: 'Administrativo', jefe: 'Elizabeth Echeverria', color: '#6dbfa0', icon: '📁',
+    colaboradores: [
+      { id: 'COE-023', name: 'Veronica Elizabeth Echeverria Marin', cargo: 'Jefa / Administradora' },
+      { id: 'COE-011B', name: 'Jhohana Stephany Desiree Gonzalez Vargas', cargo: 'Asistente Administrativa' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Manejo de cobros y pagos', desc: 'Exactitud y control en la facturación y caja',
+        escala: ['Errores frecuentes en caja, descuadres o faltantes habituales','Maneja cobros básicos pero comete errores en facturación compleja','Caja cuadrada al cierre, facturación correcta en casos estándar','Control riguroso, detecta inconsistencias antes de que se conviertan en problemas','Cero errores, propone mejoras al proceso de facturación y cobro']},
+      { id: 'c2', label: 'Organización documental', desc: 'Archivos, contratos, historias clínicas al día',
+        escala: ['Documentos perdidos, atrasados o sin archivar de forma habitual','Archiva pero sin criterio claro, difícil encontrar documentos cuando se necesitan','Documentación al día y accesible para el equipo','Sistema de archivo claro y actualizado, digitaliza lo que puede','Documentación impecable, cualquier miembro del equipo puede encontrar lo que necesita']},
+      { id: 'c3', label: 'Cumplimiento de tareas', desc: 'Entrega puntual de reportes e informes',
+        escala: ['Incumple plazos de forma habitual, requiere seguimiento constante','Cumple algunas tareas pero olvida o demora otras sin avisar','Entrega lo que se le pide en los plazos establecidos','Entrega antes del plazo y avisa si hay algún inconveniente con anticipación','Cero tareas pendientes, gestiona su trabajo de forma completamente autónoma']},
+      { id: 'c4', label: 'Manejo de herramientas digitales', desc: 'Uso eficiente de sistemas y plataformas',
+        escala: ['Dificultades frecuentes con sistemas básicos, requiere asistencia constante','Usa las herramientas pero de forma limitada, no aprovecha todas sus funciones','Maneja correctamente los sistemas y plataformas requeridas para su cargo','Usuario avanzado, ayuda a otros cuando tienen dudas con los sistemas','Dominio total, propone mejoras o automatizaciones que ahorran tiempo al área']},
+      { id: 'c5', label: 'Discreción y confidencialidad', desc: 'Manejo responsable de información sensible',
+        escala: ['Ha compartido información sensible de forma inapropiada','Maneja información con cuidado básico pero sin criterio claro','Resguarda correctamente la información de pacientes y de la clínica','Alto criterio de confidencialidad, nunca comparte datos sin autorización','Referente de confianza del área, el equipo y la gerencia confían plenamente en su discreción']},
+    ]
+  },
+  ventas: {
+    label: 'Ventas', jefe: 'Ruben Bassallo', color: '#e08c8c', icon: '💼',
+    colaboradores: [
+      { id: 'COE-022', name: 'Ruben Elias Bassallo Palacios', cargo: 'Jefe de Ventas' },
+      { id: 'COE-019', name: 'Mayra Katherine Saldaña Vascones', cargo: 'Vendedora' },
+      { id: 'COE-009', name: 'Gladys Milagros Alva García', cargo: 'Vendedora' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Tasa de cierre', desc: 'Porcentaje de leads convertidos en pacientes',
+        escala: ['Cierra menos del 20% de los leads que recibe','Cierra entre el 20% y el 35% de los leads','Cierra entre el 35% y el 50% de los leads, dentro del promedio del área','Cierra entre el 50% y el 70% de los leads de forma consistente','Cierra más del 70% de los leads, mejor tasa del equipo de ventas']},
+      { id: 'c2', label: 'Seguimiento de prospectos', desc: 'Constancia y calidad en el seguimiento',
+        escala: ['No hace seguimiento, los leads se enfrían sin contacto posterior','Hace seguimiento básico pero sin estructura ni constancia','Seguimiento sistemático dentro de los plazos establecidos','Seguimiento personalizado y persistente sin resultar invasivo','Sistema de seguimiento propio que maximiza la conversión de cada lead']},
+      { id: 'c3', label: 'Manejo de objeciones', desc: 'Capacidad para superar resistencias del paciente',
+        escala: ['Se bloquea ante objeciones, no sabe cómo responderlas','Responde objeciones comunes pero cede ante presión del paciente','Maneja las objeciones más frecuentes con argumentos claros','Convierte objeciones en oportunidades de cierre de forma consistente','Dominio total, cualquier objeción refuerza la confianza del paciente en el tratamiento']},
+      { id: 'c4', label: 'Conocimiento del servicio', desc: 'Dominio de tratamientos y precios',
+        escala: ['No puede explicar los tratamientos ni los precios con claridad','Conocimiento básico, necesita consultar al doctor para responder preguntas','Explica correctamente los tratamientos y precios del catálogo estándar','Conocimiento profundo, responde con seguridad casos complejos o comparativos','Experto en el portafolio, su conocimiento genera confianza inmediata en el paciente']},
+      { id: 'c5', label: 'Actitud comercial', desc: 'Proactividad y orientación a resultados',
+        escala: ['Actitud pasiva, espera que el paciente decida sin impulsar la conversión','Hace el esfuerzo mínimo, no muestra entusiasmo por los resultados','Actitud positiva y orientada a resultados en la mayoría de los casos','Alta motivación, contagia energía al equipo y busca superar sus metas','Motor del área, su actitud eleva el rendimiento de todo el equipo de ventas']},
+    ]
+  },
+  marketing: {
+    label: 'Marketing', jefe: 'Daniela Gonzalez', color: '#f0a8c0', icon: '📣',
+    colaboradores: [
+      { id: 'COE-MKT', name: 'Daniela Gonzalez', cargo: 'Jefa de Marketing' },
+      { id: 'COE-031', name: 'Nayua Aliaga Pascual', cargo: 'Creadora de contenido' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Cumplimiento de entregables', desc: 'Entrega a tiempo de contenidos y campañas',
+        escala: ['Entrega tarde de forma habitual o no entrega sin avisar','Cumple algunos plazos pero frecuentemente pide extensiones','Entrega a tiempo los contenidos y piezas asignadas','Siempre puntual, avisa con anticipación si hay algún inconveniente','Entrega antes del plazo con margen para revisiones, nunca genera cuellos de botella']},
+      { id: 'c2', label: 'Calidad creativa', desc: 'Nivel estético y efectividad del contenido',
+        escala: ['Piezas con errores, mal diseño o que no representan la marca de la clínica','Calidad básica, piezas funcionales pero sin impacto visual','Piezas correctas, alineadas con la identidad visual de COE Dental','Piezas de alta calidad que generan engagement y reflejan profesionalismo','Nivel de agencia, cada pieza eleva la percepción de marca de la clínica']},
+      { id: 'c3', label: 'Métricas de campaña', desc: 'Resultados en alcance, leads y conversiones',
+        escala: ['Campañas sin resultados medibles o muy por debajo del objetivo','Resultados parciales, alcanza algunas métricas pero no las más importantes','Cumple los objetivos básicos de alcance y leads establecidos','Supera los objetivos de forma consistente, optimiza campañas en tiempo real','ROI excepcional, sus campañas son referente de resultados dentro del equipo']},
+      { id: 'c4', label: 'Iniciativa y propuestas', desc: 'Generación de ideas sin necesidad de pedirlas',
+        escala: ['Nunca propone ideas, espera que todo le sea indicado','Propone ocasionalmente pero sin seguimiento ni desarrollo de las ideas','Genera ideas regularmente y las presenta de forma estructurada','Propuestas constantes y bien fundamentadas, varias han sido implementadas','Fuente principal de ideas del área, su iniciativa impulsa la estrategia de marketing']},
+      { id: 'c5', label: 'Manejo de herramientas', desc: 'Dominio de plataformas de diseño y ads',
+        escala: ['Dificultades frecuentes con las plataformas básicas de diseño y ads','Manejo básico, no aprovecha las funciones avanzadas de las herramientas','Domina las herramientas necesarias para su cargo con autonomía','Usuario avanzado, optimiza procesos con funciones que otros no usan','Dominio experto, enseña a otros y propone nuevas herramientas que mejoran los resultados']},
+    ]
+  },
+  servicios: {
+    label: 'Servicios Generales', jefe: 'Elizabeth Echeverria', color: '#c4a46b', icon: '🧹',
+    colaboradores: [
+      { id: 'COE-023B', name: 'Veronica Elizabeth Echeverria Marin', cargo: 'Jefa / Supervisora' },
+      { id: 'COE-006', name: 'Estela Donatila Barrientos Mendoza', cargo: 'Personal de Limpieza' },
+      { id: 'COE-007', name: 'Fidel Eduardo Velasquez Carmona', cargo: 'Mantenimiento' },
+      { id: 'COE-012', name: 'José Antonio Manyari Geldres', cargo: 'Servicios Generales' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Limpieza e higiene', desc: 'Estado de limpieza de las instalaciones',
+        escala: ['Áreas bajo su responsabilidad frecuentemente sucias o en mal estado','Limpieza básica pero inconsistente, requiere recordatorio frecuente','Mantiene limpio su área de responsabilidad dentro del estándar esperado','Limpieza impecable y consistente, va más allá de lo asignado','Estándar de limpieza clínica de alto nivel, referente del área']},
+      { id: 'c2', label: 'Cumplimiento de rutinas', desc: 'Seguimiento del checklist y tareas asignadas',
+        escala: ['No sigue el checklist, omite tareas de forma habitual','Cumple algunas tareas del checklist pero no todas','Sigue el checklist completo dentro del horario establecido','Cumple todas las rutinas y avisa cuando detecta algo fuera de lo normal','Nunca omite una tarea, además propone mejoras a las rutinas existentes']},
+      { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales',
+        escala: ['Ha dañado o deteriorado equipos por mal uso','Usa los equipos sin mayor cuidado, no reporta fallas','Usa correctamente los equipos y reporta fallas cuando las detecta','Cuida los equipos como si fueran propios, los mantiene en buen estado','Referente en cuidado de equipos, prolonga su vida útil con mantenimiento preventivo']},
+      { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas',
+        escala: ['Nunca actúa sin que se le indique, aunque el problema sea evidente','Actúa solo en situaciones muy obvias o urgentes','Detecta problemas menores y los resuelve sin necesidad de indicación','Regularmente anticipa necesidades del área y actúa antes de que se lo pidan','Constantemente identifica y resuelve situaciones que nadie más nota']},
+      { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo',
+        escala: ['Actitud negativa, se queja o resiste ante tareas adicionales','Cumple lo mínimo sin disposición para colaborar más allá de su rol','Buena actitud general, dispuesto a apoyar cuando se le solicita','Siempre dispuesto, su actitud positiva es valorada por todo el equipo','Referente de actitud en la clínica, su energía impacta positivamente en el ambiente']},
+    ]
+  },
+  coe_lab: {
+    label: 'COE Lab / Técnicos', jefe: 'Erika Guizado', color: '#8898b8', icon: '🔬',
+    colaboradores: [
+      { id: 'COE-005', name: 'Erika Wendy Guizado Francia', cargo: 'Jefa COE Lab' },
+      { id: 'COE-026', name: 'Wilfredo Felix Negron Alva', cargo: 'Motorizado' },
+      { id: 'COE-014', name: 'Jose Luis Kenneth Culque Villar', cargo: 'Técnico Dental' },
+      { id: 'COE-024', name: 'Saldamando Balcazar Melanie Nicole', cargo: 'Radiólogo' },
+      { id: 'COE-008', name: 'George William Aguirre Yumbato', cargo: 'Técnico Dental' },
+      { id: 'COE-032', name: 'Dorcas Maly Godoy Broncano', cargo: 'Técnico Dental' },
+      { id: 'COE-021', name: 'Rosario del Pilar Cuzcano Hinojo', cargo: 'Encargada Área de Yeso' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Calidad técnica', desc: 'Precisión en los trabajos técnicos realizados',
+        escala: ['Trabajos con errores frecuentes que requieren rehacerse','Calidad irregular, algunos trabajos cumplen el estándar y otros no','Trabajos dentro del estándar de calidad requerido por la clínica','Alta calidad consistente, los doctores confían en sus entregas','Calidad de referencia, sus trabajos no requieren correcciones']},
+      { id: 'c2', label: 'Tiempo de entrega', desc: 'Cumplimiento de plazos en trabajos de laboratorio',
+        escala: ['Entregas frecuentemente fuera del plazo, genera demoras en la atención','Cumple algunos plazos pero falla en picos de trabajo','Entrega dentro de los plazos establecidos en la mayoría de los casos','Siempre a tiempo, avisa con anticipación si hay un retraso inevitable','Entrega antes del plazo, nunca ha generado un retraso en la atención']},
+      { id: 'c3', label: 'Manejo de equipos', desc: 'Uso correcto y cuidado de equipos especializados',
+        escala: ['Mal uso frecuente de equipos especializados, ha generado daños','Uso básico correcto pero sin mantenimiento ni cuidado adicional','Usa correctamente los equipos y los mantiene en buen estado','Cuidado riguroso, reporta fallas antes de que generen problemas','Referente en cuidado de equipos, extiende su vida útil con mantenimiento preventivo']},
+      { id: 'c4', label: 'Protocolos de seguridad', desc: 'Cumplimiento de normas de bioseguridad',
+        escala: ['Incumple normas de bioseguridad del laboratorio de forma habitual','Cumple lo básico pero omite pasos en situaciones de presión','Aplica correctamente los protocolos de seguridad del laboratorio','Cumplimiento riguroso, además verifica que otros los cumplan','Referente de seguridad en el lab, detecta y reporta riesgos proactivamente']},
+      { id: 'c5', label: 'Comunicación con doctores', desc: 'Coordinación efectiva para indicaciones',
+        escala: ['Malentendidos frecuentes con los doctores, genera retrabajos','Comunicación básica pero incompleta, a veces interpreta mal las indicaciones','Se comunica correctamente, pide aclaración cuando algo no queda claro','Comunicación proactiva, confirma detalles antes de iniciar el trabajo','Cero malentendidos, su comunicación con los doctores optimiza los tiempos del lab']},
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentUser = null; // { role:'admin'|'jefe', area:'doctores'|..., name:'' }
+let evaluaciones = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
+let currentRatings = {};
+let activeFilter = 'all';
+let loginArea = null;
+let pinInput = '';
+
+// ═══════════════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════════════
+function initAreaGrid() {
+  const grid = document.getElementById('area-select-grid');
+  grid.innerHTML = '';
+  Object.entries(AREAS).forEach(([key, data]) => {
+    const btn = document.createElement('button');
+    btn.className = 'area-select-btn';
+    btn.innerHTML = `<span class="area-btn-icon">${data.icon}</span>${data.label}`;
+    btn.onclick = () => selectArea(key, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function selectArea(key, btn) {
+  loginArea = key;
+  document.querySelectorAll('.area-select-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('pin-area-label').textContent = `Área: ${AREAS[key].label} — Jefe: ${AREAS[key].jefe}`;
+  goStep('step-pin');
+  pinInput = '';
+  updateDots();
+}
+
+function goAdminLogin() {
+  loginArea = 'admin';
+  document.getElementById('pin-area-label').textContent = 'Acceso administrador — PIN maestro';
+  goStep('step-pin');
+  pinInput = '';
+  updateDots();
+}
+
+function goStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function backToAreas() {
+  pinInput = '';
+  updateDots();
+  document.getElementById('pin-error').style.display = 'none';
+  goStep('step-area');
+}
+
+function pinKey(k) {
+  if (pinInput.length >= 4) return;
+  pinInput += k;
+  updateDots();
+  if (pinInput.length === 4) setTimeout(pinSubmit, 200);
+}
+
+function pinBack() {
+  pinInput = pinInput.slice(0, -1);
+  updateDots();
+}
+
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('dot-' + i).classList.toggle('filled', i < pinInput.length);
+  }
+}
+
+function pinSubmit() {
+  const correctPin = loginArea === 'admin' ? PINS.admin : PINS[loginArea];
+  if (pinInput === correctPin) {
+    document.getElementById('pin-error').style.display = 'none';
+    if (loginArea === 'admin') {
+      currentUser = { role: 'admin', area: null, name: 'Administrador', areaLabel: 'Acceso total' };
+    } else {
+      currentUser = { role: 'jefe', area: loginArea, name: AREAS[loginArea].jefe, areaLabel: AREAS[loginArea].label };
+    }
+    startApp();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    pinInput = '';
+    updateDots();
+  }
+}
+
+function startApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  // Sidebar user info
+  document.getElementById('sidebar-role').textContent = currentUser.role === 'admin' ? 'ADMINISTRADOR' : 'JEFE DE ÁREA';
+  document.getElementById('sidebar-name').textContent = currentUser.name;
+  document.getElementById('sidebar-area-label').textContent = currentUser.areaLabel;
+  // Nav visibility
+  if (currentUser.role === 'admin') {
+    document.getElementById('nav-print').classList.remove('hidden');
+  }
+  // Build form area selector
+  buildFormAreaSelector();
+  // Build result filters
+  buildResultFilters();
+  showView('dashboard');
+}
+
+function logout() {
+  currentUser = null; loginArea = null; pinInput = '';
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').style.display = 'flex';
+  resetForm();
+  goStep('step-area');
+  document.querySelectorAll('.area-select-btn').forEach(b => b.classList.remove('selected'));
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  const navMap = { dashboard: 'nav-dashboard', form: 'nav-form', results: 'nav-results' };
+  if (navMap[view]) document.getElementById(navMap[view]).classList.add('active');
+  const titles = {
+    dashboard: ['Dashboard', 'Resumen de evaluaciones'],
+    form: ['Nueva Evaluación', 'Completar formulario de desempeño'],
+    results: ['Resultados', 'Historial de evaluaciones']
+  };
+  document.getElementById('topbar-title').textContent = titles[view][0];
+  document.getElementById('topbar-sub').textContent = titles[view][1];
+  if (view === 'dashboard') renderDashboard();
+  if (view === 'results') renderResultsTable();
+}
+
+// ═══════════════════════════════════════════════════════
+// FORM
+// ═══════════════════════════════════════════════════════
+function buildFormAreaSelector() {
+  const sel = document.getElementById('sel-area');
+  sel.innerHTML = '<option value="">— Selecciona el área —</option>';
+  const areaKeys = currentUser.role === 'admin' ? Object.keys(AREAS) : [currentUser.area];
+  areaKeys.forEach(key => {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = AREAS[key].label;
+    sel.appendChild(opt);
+  });
+  // Auto-select if jefe
+  if (currentUser.role === 'jefe') {
+    sel.value = currentUser.area;
+    sel.disabled = true;
+    onAreaChange();
+  }
+}
+
+function onAreaChange() {
+  const area = document.getElementById('sel-area').value;
+  const selColab = document.getElementById('sel-colaborador');
+  const jefeInput = document.getElementById('input-jefe');
+  selColab.innerHTML = '<option value="">— Selecciona el colaborador —</option>';
+  document.getElementById('criteria-card').style.display = 'none';
+  document.getElementById('obs-card').style.display = 'none';
+  if (!area) { jefeInput.value = ''; return; }
+  const data = AREAS[area];
+  jefeInput.value = currentUser.name;
+  data.colaboradores.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = `${c.name} — ${c.cargo}`;
+    selColab.appendChild(opt);
+  });
+  selColab.onchange = () => { if (selColab.value) buildCriteria(area); };
+}
+
+function buildCriteria(area) {
+  const data = AREAS[area];
+  const grid = document.getElementById('criteria-grid');
+  document.getElementById('criteria-area-tag').textContent = data.label;
+  currentRatings = {};
+  grid.innerHTML = '';
+  const allCrit = [...data.criterios, ...CRITERIOS_UNIVERSALES];
+  allCrit.forEach(c => {
+    currentRatings[c.id] = 0;
+    const isU = CRITERIOS_UNIVERSALES.find(u => u.id === c.id);
+    const escala = c.escala || [];
+    const escalaHTML = escala.length ? `
+      <div id="escala-${c.id}" style="margin-top:10px;display:none;">
+        <div style="font-size:10px;font-weight:600;color:#8f82a8;margin-bottom:6px;letter-spacing:0.05em">GUÍA DE PUNTAJE</div>
+        ${escala.map((e,i) => `
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:5px">
+            <span style="min-width:20px;height:20px;border-radius:50%;background:${['#f5d4d4','#fdefc8','#fef9dc','#d4ecf8','#c8f0dd'][i]};color:${['#a04040','#a07828','#8a7820','#3a7fa8','#3a9e6e'][i]};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</span>
+            <span style="font-size:11.5px;color:#5a4f72;line-height:1.4">${e}</span>
+          </div>`).join('')}
+      </div>
+      <button onclick="toggleEscala('${c.id}')" style="margin-top:8px;background:none;border:none;font-size:11px;color:#a78bd4;cursor:pointer;font-family:inherit;padding:0;font-weight:600">▾ Ver guía de puntaje</button>
+    ` : '';
+    const el = document.createElement('div');
+    el.className = 'criterion';
+    if (isU) { el.style.borderColor = '#c9b8e8'; el.style.background = '#f5f0fa'; }
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="crit-label">${c.label}</div>
+        ${isU ? '<span style="font-size:9.5px;background:#a78bd4;color:#fff;padding:1px 6px;border-radius:8px;font-weight:600">Universal</span>' : ''}
+      </div>
+      <div class="crit-desc">${c.desc}</div>
+      <div class="rating-row" id="rating-${c.id}" style="margin-top:10px">
+        ${[1,2,3,4,5].map(n => `<button class="rating-btn" onclick="setRating('${c.id}',${n},this)">${n}</button>`).join('')}
+      </div>
+      <div class="rating-labels"><span>Muy bajo</span><span>Bajo</span><span>Regular</span><span>Bueno</span><span>Excelente</span></div>
+      ${escalaHTML}
+    `;
+    grid.appendChild(el);
+  });
+  document.getElementById('criteria-card').style.display = 'block';
+  document.getElementById('obs-card').style.display = 'block';
+}
+
+function toggleEscala(id) {
+  const el = document.getElementById('escala-' + id);
+  const btn = el.nextElementSibling;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = '▴ Ocultar guía';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = '▾ Ver guía de puntaje';
+  }
+}
+
+function setRating(id, val, btn) {
+  currentRatings[id] = val;
+  document.getElementById('rating-' + id).querySelectorAll('.rating-btn').forEach(b => b.className = 'rating-btn');
+  btn.className = `rating-btn selected-${val}`;
+}
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE SHEETS — URL del Web App
+// ═══════════════════════════════════════════════════════
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzZ5wYgJzGM17R_rp1ESncCMPgljm7EQRTuhdIbxopxmrL8FQlBFVP3i_AFfEfzL2M/exec';
+
+function enviarASheets(record) {
+  const payload = {
+    fecha: record.fecha,
+    colaboradorName: record.colaboradorName,
+    colaboradorId: record.colaboradorId,
+    cargo: record.cargo,
+    areaLabel: record.areaLabel,
+    jefe: record.jefe,
+    avg: record.avg,
+    nivel: record.nivel,
+    periodo: record.periodo,
+    fortalezas: record.fortalezas || '',
+    mejora: record.mejora || ''
+  };
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn('Error enviando a Sheets:', err));
+}
+
+function submitForm() {
+  const area = document.getElementById('sel-area').value;
+  const colabId = document.getElementById('sel-colaborador').value;
+  if (!area || !colabId) { alert('Selecciona el área y el colaborador.'); return; }
+  const missing = Object.values(currentRatings).filter(v => v === 0).length;
+  if (missing > 0) { alert(`Faltan ${missing} criterio(s) por calificar.`); return; }
+  const aData = AREAS[area];
+  const colab = aData.colaboradores.find(c => c.id === colabId);
+  const scores = Object.values(currentRatings);
+  const avg = parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2));
+  const lv = scoreLevel(avg);
+  const record = {
+    id: Date.now(), area, areaLabel: aData.label, areaColor: aData.color,
+    colaboradorId: colabId, colaboradorName: colab.name, cargo: colab.cargo,
+    jefe: currentUser.name, ratings: { ...currentRatings },
+    criteriosDetalle: [...aData.criterios, ...CRITERIOS_UNIVERSALES].map(c => ({
+      label: c.label, score: currentRatings[c.id]
+    })),
+    avg,
+    nivel: lv.label,
+    periodo: document.getElementById('input-periodo').value,
+    fortalezas: document.getElementById('obs-fortalezas').value,
+    mejora: document.getElementById('obs-mejora').value,
+    general: document.getElementById('obs-general').value,
+    fecha: new Date().toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    ts: Date.now()
+  };
+  evaluaciones.push(record);
+  localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
+  // Enviar a Google Sheets en segundo plano
+  enviarASheets(record);
+  document.getElementById('success-msg').textContent = `${colab.name} — Puntaje: ${avg}/5.0`;
+  document.getElementById('success-modal').classList.add('show');
+}
+
+function resetForm() {
+  const sel = document.getElementById('sel-area');
+  if (currentUser && currentUser.role === 'jefe') { sel.value = currentUser.area; onAreaChange(); }
+  else { sel.value = ''; }
+  document.getElementById('sel-colaborador').innerHTML = '<option value="">— Selecciona primero el área —</option>';
+  document.getElementById('input-jefe').value = '';
+  document.getElementById('criteria-card').style.display = 'none';
+  document.getElementById('obs-card').style.display = 'none';
+  ['obs-fortalezas', 'obs-mejora', 'obs-general'].forEach(id => document.getElementById(id).value = '');
+  currentRatings = {};
+}
+
+function closeSuccess() {
+  document.getElementById('success-modal').classList.remove('show');
+  resetForm();
+  showView('dashboard');
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function scoreLevel(avg) {
+  if (avg >= 4.5) return { label: 'Excelente', cls: 'excelente', color: '#3a9e6e' };
+  if (avg >= 3.5) return { label: 'Bueno', cls: 'bueno', color: '#3a7fa8' };
+  if (avg >= 2.5) return { label: 'Regular', cls: 'regular', color: '#c4952a' };
+  return { label: 'Bajo', cls: 'bajo', color: '#b85555' };
+}
+
+function getVisibleAreas() {
+  return currentUser.role === 'admin' ? Object.keys(AREAS) : [currentUser.area];
+}
+
+function getVisibleEvals() {
+  if (currentUser.role === 'admin') return evaluaciones;
+  return evaluaciones.filter(e => e.area === currentUser.area);
+}
+
+function renderDashboard() {
+  const visibleAreas = getVisibleAreas();
+  const visibleEvals = getVisibleEvals();
+  const totalPersonal = visibleAreas.reduce((s, k) => s + AREAS[k].colaboradores.length, 0);
+  document.getElementById('stat-total').textContent = totalPersonal;
+  document.getElementById('stat-total-sub').textContent = visibleAreas.length === 1 ? 'en tu área' : 'total personal';
+  document.getElementById('stat-eval').textContent = visibleEvals.length;
+  document.getElementById('stat-eval-pct').textContent = `${Math.round(visibleEvals.length / totalPersonal * 100)}% evaluado`;
+  if (visibleEvals.length > 0) {
+    const avg = (visibleEvals.reduce((a, b) => a + b.avg, 0) / visibleEvals.length).toFixed(2);
+    const lv = scoreLevel(parseFloat(avg));
+    document.getElementById('stat-avg').textContent = avg;
+    document.getElementById('stat-avg').className = 'value s-' + lv.cls;
+    const best = [...visibleEvals].sort((a, b) => b.avg - a.avg)[0];
+    document.getElementById('stat-best').textContent = best.colaboradorName.split(' ')[0] + ' ' + best.colaboradorName.split(' ')[1];
+    document.getElementById('stat-best-score').textContent = best.avg + '/5.0';
+  } else {
+    document.getElementById('stat-avg').textContent = '—';
+    document.getElementById('stat-best').textContent = '—';
+    document.getElementById('stat-best-score').textContent = 'sin datos';
+  }
+
+  // Areas grid
+  const grid = document.getElementById('areas-grid');
+  const isAdmin = currentUser.role === 'admin';
+  document.getElementById('dash-areas-title').style.display = isAdmin ? 'flex' : 'none';
+  grid.style.display = isAdmin ? 'grid' : 'none';
+  document.getElementById('areas-count').textContent = visibleAreas.length + ' áreas';
+  grid.innerHTML = '';
+  visibleAreas.forEach(key => {
+    const data = AREAS[key];
+    const aEvals = evaluaciones.filter(e => e.area === key);
+    const avg = aEvals.length > 0 ? (aEvals.reduce((a, b) => a + b.avg, 0) / aEvals.length).toFixed(2) : null;
+    const lv = avg ? scoreLevel(parseFloat(avg)) : null;
+    const pct = avg ? parseFloat(avg) / 5 * 100 : 0;
+    const card = document.createElement('div');
+    card.className = 'area-card';
+    card.onclick = () => { activeFilter = key; showView('results'); };
+    card.innerHTML = `
+      <div class="area-name">${data.icon} ${data.label}</div>
+      <div class="area-jefe">Jefe: ${data.jefe}</div>
+      <div class="area-score" style="color:${avg ? data.color : '#ccc'}">${avg || '—'}</div>
+      ${lv ? `<span class="badge ${lv.cls}">${lv.label}</span>` : '<span style="font-size:11px;color:var(--text-muted)">Sin evaluaciones</span>'}
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${data.color}"></div></div>
+      <div class="area-meta"><span>${aEvals.length}/${data.colaboradores.length} evaluados</span><span>/5.0</span></div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Recent table
+  const recent = [...visibleEvals].sort((a, b) => b.ts - a.ts).slice(0, 8);
+  document.getElementById('recent-count').textContent = visibleEvals.length;
+  const tbody = document.getElementById('recent-table');
+  if (!recent.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="icon">📋</div><p>Sin evaluaciones aún.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = recent.map(e => {
+    const lv = scoreLevel(e.avg);
+    return `<tr>
+      <td><strong>${e.colaboradorName}</strong></td>
+      <td style="color:var(--text-muted);font-size:11.5px">${e.areaLabel}</td>
+      <td><span class="score-pill" style="background:${lv.color}20;color:${lv.color}">${e.avg}</span></td>
+      <td><span class="badge ${lv.cls}">${lv.label}</span></td>
+      <td style="font-size:11.5px;color:var(--text-muted)">${e.periodo || '—'}</td>
+      <td style="color:var(--text-muted);font-size:11.5px">${e.fecha}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════════════
+function buildResultFilters() {
+  const container = document.getElementById('results-filters');
+  container.innerHTML = '<button class="filter-btn active" onclick="filterResults(\'all\',this)">Todas</button>';
+  const areas = currentUser && currentUser.role === 'admin' ? Object.keys(AREAS) : (currentUser ? [currentUser.area] : []);
+  areas.forEach(key => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = AREAS[key].icon + ' ' + AREAS[key].label;
+    btn.onclick = function() { filterResults(key, this); };
+    container.appendChild(btn);
+  });
+  const inp = document.createElement('input');
+  inp.className = 'search-input';
+  inp.placeholder = '🔍 Buscar...';
+  inp.oninput = e => { searchTerm = e.target.value; renderResultsTable(); };
+  container.appendChild(inp);
+}
+
+let searchTerm = '';
+function filterResults(area, btn) {
+  activeFilter = area;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderResultsTable();
+}
+
+function renderResultsTable() {
+  let evals = getVisibleEvals().filter(e => {
+    const matchArea = activeFilter === 'all' || e.area === activeFilter;
+    const matchSearch = !searchTerm || e.colaboradorName.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchArea && matchSearch;
+  }).sort((a, b) => b.ts - a.ts);
+  const tbody = document.getElementById('results-table');
+  if (!evals.length) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><div class="icon">📊</div><p>Sin evaluaciones.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = evals.map(e => {
+    const lv = scoreLevel(e.avg);
+    return `<tr>
+      <td><strong>${e.colaboradorName}</strong><br><span style="font-size:10.5px;color:var(--text-muted)">${e.colaboradorId}</span></td>
+      <td style="font-size:11.5px;color:var(--text-muted)">${e.cargo}</td>
+      <td><span style="background:${e.areaColor}20;color:${e.areaColor};padding:2px 8px;border-radius:8px;font-size:10.5px;font-weight:600">${e.areaLabel}</span></td>
+      <td style="font-size:11.5px">${e.jefe}</td>
+      <td><span class="score-pill" style="background:${lv.color}20;color:${lv.color}">${e.avg}</span></td>
+      <td><span class="badge ${lv.cls}">${lv.label}</span></td>
+      <td style="font-size:11px;color:var(--text-muted)">${e.periodo || '—'}</td>
+      <td style="font-size:11px;color:var(--text-muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.fortalezas}">${e.fortalezas || '—'}</td>
+      <td style="color:var(--text-muted);font-size:11px">${e.fecha}</td>
+      <td>${currentUser.role==='admin'?`<button onclick="deleteEval(${e.id})" style="border:none;background:none;cursor:pointer;color:#b85555;font-size:13px" title="Eliminar">🗑</button>`:''}
+      <button onclick="quickPrintOne(${e.id})" style="border:none;background:none;cursor:pointer;font-size:13px" title="Imprimir ficha">🖨️</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function deleteEval(id) {
+  if (!confirm('¿Eliminar esta evaluación?')) return;
+  evaluaciones = evaluaciones.filter(e => e.id !== id);
+  localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
+  renderResultsTable();
+}
+
+// ═══════════════════════════════════════════════════════
+// PRINT — overlay interno (sin window.open)
+// ═══════════════════════════════════════════════════════
+function openPrintModal() {
+  const opt = document.getElementById('print-all-opt');
+  opt.style.display = currentUser.role === 'admin' ? 'flex' : 'none';
+  document.getElementById('print-modal').classList.add('show');
+}
+function closePrintModal() { document.getElementById('print-modal').classList.remove('show'); }
+
+function printIndividual() {
+  closePrintModal();
+  const sel = document.getElementById('sel-print-colab');
+  sel.innerHTML = '<option value="">— Selecciona —</option>';
+  getVisibleEvals().sort((a,b) => a.colaboradorName.localeCompare(b.colaboradorName)).forEach(e => {
+    const opt = document.createElement('option');
+    opt.value = e.id;
+    opt.textContent = `${e.colaboradorName} — ${e.areaLabel} (${e.fecha})`;
+    sel.appendChild(opt);
+  });
+  document.getElementById('individual-modal').classList.add('show');
+}
+function closeIndividualModal() { document.getElementById('individual-modal').classList.remove('show'); }
+
+function doPrintIndividual() {
+  const id = parseInt(document.getElementById('sel-print-colab').value);
+  if (!id) { alert('Selecciona un colaborador.'); return; }
+  const ev = evaluaciones.find(e => e.id === id);
+  closeIndividualModal();
+  showPrintOverlay(buildFichaHTML(ev));
+}
+
+function quickPrintOne(id) {
+  const ev = evaluaciones.find(e => e.id === id);
+  if (ev) showPrintOverlay(buildFichaHTML(ev));
+}
+
+function printArea() {
+  closePrintModal();
+  const areas = currentUser.role === 'admin' ? Object.keys(AREAS) : [currentUser.area];
+  showPrintOverlay(buildAreaReportHTML(areas, false));
+}
+
+function printAll() {
+  closePrintModal();
+  showPrintOverlay(buildAreaReportHTML(Object.keys(AREAS), true));
+}
+
+function showPrintOverlay(html) {
+  // Crear overlay encima de la app
+  let overlay = document.getElementById('print-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'print-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:9999;overflow-y:auto;padding:0;';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div style="background:#f5f0fa;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #e4ddf2;position:sticky;top:0;z-index:10000">
+      <span style="font-size:13px;color:#8f82a8;font-family:Inter,sans-serif">🦷 COE Dental — Vista previa de impresión</span>
+      <div style="display:flex;gap:10px">
+        <button onclick="doPrint()" style="background:#a78bd4;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">⬇️ Descargar para imprimir</button>
+        <button onclick="closePrintOverlay()" style="background:transparent;border:1.5px solid #e4ddf2;color:#8f82a8;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">✕ Cerrar</button>
+      </div>
+    </div>
+    <div id="print-content" style="padding:32px;max-width:900px;margin:0 auto">${html}</div>
+  `;
+  overlay.style.display = 'block';
+}
+
+function closePrintOverlay() {
+  const overlay = document.getElementById('print-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function doPrint() {
+  // Obtener el contenido del overlay
+  const content = document.getElementById('print-content').innerHTML;
+  const html = `<!DOCTYPE html><html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>COE Dental — Evaluación de Desempeño</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #3d3550; margin: 0; padding: 32px; background: #fff; }
+    @media print {
+      .no-print { display: none !important; }
+      body { padding: 16px; }
+    }
+  </style>
+  </head><body>
+  <div class="no-print" style="background:#a78bd4;padding:14px 24px;margin:-32px -32px 28px;display:flex;align-items:center;justify-content:space-between">
+    <span style="color:#fff;font-size:13px;font-weight:600">🦷 COE Dental — Abre este archivo y usa Ctrl+P (o Cmd+P en Mac) para imprimir</span>
+    <button onclick="window.print()" style="background:#fff;color:#a78bd4;border:none;padding:9px 20px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ Imprimir / PDF</button>
+  </div>
+  ${content}
+  </body></html>`;
+
+  // Descargar como archivo .html
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'COE-Dental-Evaluacion.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function buildFichaHTML(ev) {
+  const lv = scoreLevel(ev.avg);
+  const barColor = lv.color;
+  const rows = (ev.criteriosDetalle || []).map(c => `
+    <tr>
+      <td style="padding:8px 10px;font-size:13px;border-bottom:1px solid #f0e8f8">${c.label}</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:14px;border-bottom:1px solid #f0e8f8;color:${scoreLevel(c.score).color}">${c.score}/5</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #f0e8f8;width:200px">
+        <div style="background:#eee;border-radius:4px;height:9px;width:100%"><div style="background:${scoreLevel(c.score).color};width:${c.score*20}%;height:9px;border-radius:4px"></div></div>
+      </td>
+    </tr>`).join('');
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #a78bd4;padding-bottom:16px;margin-bottom:22px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#8f82a8;letter-spacing:.08em;margin-bottom:6px">🦷 COE DENTAL — EVALUACIÓN DE DESEMPEÑO</div>
+        <div style="font-size:22px;font-weight:700;color:#3d3550;margin-bottom:4px">${ev.colaboradorName}</div>
+        <div style="font-size:13px;color:#8f82a8">${ev.cargo} · ${ev.areaLabel}</div>
+      </div>
+      <div style="text-align:center;background:#f5f0fa;border-radius:12px;padding:16px 22px;min-width:100px">
+        <div style="font-size:38px;font-weight:800;color:${barColor};line-height:1">${ev.avg}</div>
+        <div style="font-size:11px;color:#8f82a8;margin:3px 0">sobre 5.0</div>
+        <div style="font-size:12px;font-weight:700;color:${barColor}">${lv.label}</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px">
+      <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">EVALUADO POR</div><div style="font-size:14px;font-weight:600">${ev.jefe}</div></div>
+      <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">PERÍODO</div><div style="font-size:14px;font-weight:600">${ev.periodo || '—'}</div></div>
+      <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">FECHA</div><div style="font-size:14px;font-weight:600">${ev.fecha}</div></div>
+      <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">ID COLABORADOR</div><div style="font-size:14px;font-weight:600">${ev.colaboradorId}</div></div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:22px">
+      <thead><tr style="background:#f0e8f8">
+        <th style="padding:9px 10px;text-align:left;font-size:11px;color:#8f82a8;font-weight:600">Criterio</th>
+        <th style="padding:9px 10px;text-align:center;font-size:11px;color:#8f82a8;font-weight:600;width:80px">Puntaje</th>
+        <th style="padding:9px 10px;font-size:11px;color:#8f82a8;font-weight:600;width:200px">Barra</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    ${ev.fortalezas ? `<div style="background:#f0fdf6;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#3a9e6e;font-weight:700;margin-bottom:6px">✅ FORTALEZAS</div><div style="font-size:13px;color:#3d3550">${ev.fortalezas}</div></div>` : ''}
+    ${ev.mejora ? `<div style="background:#fffbf0;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#c4952a;font-weight:700;margin-bottom:6px">⚡ ÁREAS DE MEJORA</div><div style="font-size:13px;color:#3d3550">${ev.mejora}</div></div>` : ''}
+    ${ev.general ? `<div style="background:#f5f0fa;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#a78bd4;font-weight:700;margin-bottom:6px">💬 COMENTARIO GENERAL</div><div style="font-size:13px;color:#3d3550">${ev.general}</div></div>` : ''}
+    <div style="text-align:center;font-size:10px;color:#b8b0cc;margin-top:28px;padding-top:12px;border-top:1px solid #e4ddf2">
+      COE Dental · Sistema de Evaluación de Desempeño · Generado el ${new Date().toLocaleDateString('es-PE')}
+    </div>`;
+}
+function buildAreaReportHTML(areaKeys, isGeneral) {
+  const allEvals = areaKeys.flatMap(key => evaluaciones.filter(e => e.area === key));
+  const globalAvg = allEvals.length ? (allEvals.reduce((a,b) => a + b.avg, 0) / allEvals.length).toFixed(2) : '—';
+  const areaSections = areaKeys.map(key => {
+    const data = AREAS[key];
+    const aEvals = evaluaciones.filter(e => e.area === key);
+    const aAvg = aEvals.length ? (aEvals.reduce((a,b)=>a+b.avg,0)/aEvals.length).toFixed(2) : null;
+    const rows = aEvals.sort((a,b)=>b.avg-a.avg).map(e => {
+      const lv = scoreLevel(e.avg);
+      return `<tr>
+        <td style="padding:7px 10px;font-size:12px;border-bottom:1px solid #f0e8f8">${e.colaboradorName}</td>
+        <td style="padding:7px 10px;font-size:11px;color:#8f82a8;border-bottom:1px solid #f0e8f8">${e.cargo}</td>
+        <td style="padding:7px 10px;font-weight:700;font-size:13px;color:${lv.color};border-bottom:1px solid #f0e8f8;text-align:center">${e.avg}</td>
+        <td style="padding:7px 10px;border-bottom:1px solid #f0e8f8;text-align:center"><span style="background:${lv.color}20;color:${lv.color};padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600">${lv.label}</span></td>
+        <td style="padding:7px 10px;font-size:11px;color:#8f82a8;border-bottom:1px solid #f0e8f8">${e.periodo||'—'}</td>
+        <td style="padding:7px 10px;font-size:11px;color:#8f82a8;border-bottom:1px solid #f0e8f8">${e.fecha}</td>
+      </tr>`;
+    }).join('');
+    const noEval = data.colaboradores.filter(c => !aEvals.find(e => e.colaboradorId === c.id));
+    const pendientes = noEval.map(c => `<span style="display:inline-block;background:#f0e8f8;color:#8f82a8;padding:2px 9px;border-radius:8px;font-size:11px;margin:2px">${c.name}</span>`).join('');
+    return `<div style="margin-bottom:32px;page-break-inside:avoid">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f5f0fa;border-radius:10px;padding:12px 16px;margin-bottom:12px">
+        <div>
+          <div style="font-size:15px;font-weight:700">${data.icon} ${data.label}</div>
+          <div style="font-size:11px;color:#8f82a8;margin-top:2px">Jefe: ${data.jefe} · ${aEvals.length}/${data.colaboradores.length} evaluados</div>
+        </div>
+        ${aAvg ? `<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:${scoreLevel(parseFloat(aAvg)).color}">${aAvg}</div><div style="font-size:10px;color:#8f82a8">promedio</div></div>` : '<div style="font-size:12px;color:#ccc">Sin datos</div>'}
+      </div>
+      ${aEvals.length ? `<table style="width:100%;border-collapse:collapse;margin-bottom:10px">
+        <thead><tr style="background:#f0e8f8">
+          <th style="padding:7px 10px;text-align:left;font-size:11px;color:#8f82a8">Colaborador</th>
+          <th style="padding:7px 10px;text-align:left;font-size:11px;color:#8f82a8">Cargo</th>
+          <th style="padding:7px 10px;text-align:center;font-size:11px;color:#8f82a8">Puntaje</th>
+          <th style="padding:7px 10px;text-align:center;font-size:11px;color:#8f82a8">Nivel</th>
+          <th style="padding:7px 10px;text-align:left;font-size:11px;color:#8f82a8">Período</th>
+          <th style="padding:7px 10px;text-align:left;font-size:11px;color:#8f82a8">Fecha</th>
+        </tr></thead><tbody>${rows}</tbody>
+      </table>` : '<p style="font-size:12px;color:#ccc;text-align:center;padding:16px">Sin evaluaciones registradas</p>'}
+      ${noEval.length ? `<div style="margin-top:6px"><span style="font-size:10.5px;color:#8f82a8;font-weight:600">Pendientes: </span>${pendientes}</div>` : ''}
+    </div>`;
+  }).join('');
+  return `
+    <div style="border-bottom:3px solid #a78bd4;padding-bottom:16px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#8f82a8;letter-spacing:.1em;margin-bottom:6px">🦷 COE DENTAL — EVALUACIÓN DE DESEMPEÑO</div>
+        <div style="font-size:22px;font-weight:700;color:#3d3550;margin-bottom:4px">${isGeneral ? 'Reporte General' : 'Resumen de Área'}</div>
+        <div style="font-size:12px;color:#8f82a8">Generado el ${new Date().toLocaleDateString('es-PE')} · ${allEvals.length} evaluaciones</div>
+      </div>
+      ${allEvals.length ? `<div style="text-align:center;background:#f5f0fa;border-radius:10px;padding:14px 22px">
+        <div style="font-size:32px;font-weight:800;color:${scoreLevel(parseFloat(globalAvg)).color}">${globalAvg}</div>
+        <div style="font-size:10px;color:#8f82a8">promedio general</div>
+      </div>` : ''}
+    </div>
+    ${areaSections}
+    <div style="text-align:center;font-size:10px;color:#b8b0cc;margin-top:28px;padding-top:12px;border-top:1px solid #e4ddf2">
+      COE Dental · Sistema de Evaluación de Desempeño · ${new Date().toLocaleDateString('es-PE')}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+initAreaGrid();
+</script>
+</body>
+</html>
