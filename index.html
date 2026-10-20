@@ -1233,7 +1233,7 @@ async function sincronizarDesdeSheets() {
   btn.disabled = true;
 
   try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Hoja%201`;
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const res = await fetch(url);
     const raw = await res.text();
     // La respuesta de gviz viene envuelta: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
@@ -1250,10 +1250,12 @@ async function sincronizarDesdeSheets() {
     // Mapeo de columnas del Sheet → campos del registro local
     // Columnas esperadas (según enviarASheets): fecha, colaborador, id, cargo, area, jefe, promedio, nivel, periodo, fortalezas, mejora
     const idx = {};
-    cols.forEach((label, i) => { idx[label.trim().toLowerCase()] = i; });
+    const normalize = s => s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    cols.forEach((label, i) => { idx[normalize(label)] = i; });
+    console.log('Columnas del Sheet:', cols, '→ idx:', idx);
 
     const getVal = (row, label) => {
-      const i = idx[label.trim().toLowerCase()];
+      const i = idx[normalize(label)];
       if (i === undefined || !row.c[i]) return '';
       return row.c[i].v !== null && row.c[i].v !== undefined ? String(row.c[i].v) : (row.c[i].f || '');
     };
@@ -1267,11 +1269,11 @@ async function sincronizarDesdeSheets() {
       const colabName = getVal(row, 'colaborador');
       const colabId   = getVal(row, 'id');
       const cargo     = getVal(row, 'cargo');
-      const areaLabel = getVal(row, 'area');
+      const areaLabel = getVal(row, 'área') || getVal(row, 'area');
       const jefe      = getVal(row, 'jefe');
-      const avgStr    = getVal(row, 'promedio');
+      const avgStr    = getVal(row, 'puntaje') || getVal(row, 'promedio');
       const nivel     = getVal(row, 'nivel');
-      const periodo   = getVal(row, 'periodo');
+      const periodo   = getVal(row, 'período') || getVal(row, 'periodo');
       const fortalezas= getVal(row, 'fortalezas');
       const mejora    = getVal(row, 'mejora');
 
