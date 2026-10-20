@@ -352,6 +352,7 @@
         <div class="topbar-sub" id="topbar-sub">Resumen de evaluaciones</div>
       </div>
       <div class="topbar-right">
+        <button class="print-btn" id="btn-sync" onclick="sincronizarDesdeSheets()" style="display:none;background:#3a9e6e">☁️ Sincronizar con Sheet</button>
         <button class="print-btn" onclick="openPrintModal()">🖨️ Imprimir / Exportar</button>
         <div class="topbar-badge" id="topbar-badge">2026</div>
       </div>
@@ -878,6 +879,9 @@ function showView(view) {
   };
   document.getElementById('topbar-title').textContent = titles[view][0];
   document.getElementById('topbar-sub').textContent = titles[view][1];
+  // Mostrar botón sync solo a admin en dashboard
+  const syncBtn = document.getElementById('btn-sync');
+  if (syncBtn) syncBtn.style.display = (view === 'dashboard' && currentUser && currentUser.role === 'admin') ? 'flex' : 'none';
   if (view === 'dashboard') renderDashboard();
   if (view === 'results') renderResultsTable();
 }
@@ -1215,6 +1219,116 @@ function deleteEval(id) {
   evaluaciones = evaluaciones.filter(e => e.id !== id);
   localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
   renderResultsTable();
+}
+
+// ═══════════════════════════════════════════════════════
+// SINCRONIZAR DESDE GOOGLE SHEETS (solo admin)
+// ═══════════════════════════════════════════════════════
+const SHEET_ID = '1SARNvCAkmysrYD8f-BrQGeHnG-J0v38hsLsA7HXPHMA';
+
+async function sincronizarDesdeSheets() {
+  const btn = document.getElementById('btn-sync');
+  const original = btn.innerHTML;
+  btn.innerHTML = '⏳ Sincronizando...';
+  btn.disabled = true;
+
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Evaluaciones`;
+    const res = await fetch(url);
+    const raw = await res.text();
+    // La respuesta de gviz viene envuelta: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
+    const jsonText = raw.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
+    const data = JSON.parse(jsonText);
+    const rows = data.table.rows;
+    const cols = data.table.cols.map(c => c.label);
+
+    if (!rows || rows.length === 0) {
+      alert('El Sheet está vacío o no tiene datos en la hoja "Evaluaciones".');
+      btn.innerHTML = original; btn.disabled = false; return;
+    }
+
+    // Mapeo de columnas del Sheet → campos del registro local
+    // Columnas esperadas (según enviarASheets): fecha, colaborador, id, cargo, area, jefe, promedio, nivel, periodo, fortalezas, mejora
+    const idx = {};
+    cols.forEach((label, i) => { idx[label.trim().toLowerCase()] = i; });
+
+    const getVal = (row, label) => {
+      const i = idx[label.trim().toLowerCase()];
+      if (i === undefined || !row.c[i]) return '';
+      return row.c[i].v !== null && row.c[i].v !== undefined ? String(row.c[i].v) : (row.c[i].f || '');
+    };
+
+    let nuevas = 0, duplicadas = 0;
+
+    rows.forEach(row => {
+      if (!row.c || row.c.every(c => !c)) return; // fila vacía
+
+      const fecha     = getVal(row, 'fecha');
+      const colabName = getVal(row, 'colaborador');
+      const colabId   = getVal(row, 'id');
+      const cargo     = getVal(row, 'cargo');
+      const areaLabel = getVal(row, 'area');
+      const jefe      = getVal(row, 'jefe');
+      const avgStr    = getVal(row, 'promedio');
+      const nivel     = getVal(row, 'nivel');
+      const periodo   = getVal(row, 'periodo');
+      const fortalezas= getVal(row, 'fortalezas');
+      const mejora    = getVal(row, 'mejora');
+
+      if (!colabName || !areaLabel) return;
+
+      // Buscar la key del área por label
+      const areaKey = Object.keys(AREAS).find(k => AREAS[k].label === areaLabel) || areaLabel.toLowerCase().replace(/\s+/g,'_');
+      const areaData = AREAS[areaKey] || { color: '#a78bd4', icon: '📋' };
+      const avg = parseFloat(avgStr) || 0;
+
+      // Generar ID único basado en colaborador + fecha para evitar duplicados
+      const uid = `sheet_${colabId || colabName}_${fecha}`.replace(/\s+/g,'_');
+
+      if (evaluaciones.find(e => e.id === uid)) { duplicadas++; return; }
+
+      const record = {
+        id: uid,
+        area: areaKey,
+        areaLabel: areaLabel,
+        areaColor: areaData.color || '#a78bd4',
+        colaboradorId: colabId || colabName,
+        colaboradorName: colabName,
+        cargo: cargo,
+        jefe: jefe,
+        ratings: {},
+        criteriosDetalle: [],
+        avg: avg,
+        nivel: nivel,
+        periodo: periodo,
+        fortalezas: fortalezas,
+        mejora: mejora,
+        general: '',
+        fecha: fecha,
+        ts: fecha ? new Date(fecha.split('/').reverse().join('-')).getTime() || Date.now() : Date.now(),
+        _fromSheet: true
+      };
+
+      evaluaciones.push(record);
+      nuevas++;
+    });
+
+    // Guardar en localStorage
+    localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
+    renderDashboard();
+
+    const msg = nuevas > 0
+      ? `✅ Sincronización completa.\n\n• ${nuevas} evaluación(es) importada(s) desde el Sheet.\n${duplicadas > 0 ? `• ${duplicadas} ya existían (omitidas).` : ''}`
+      : `ℹ️ No hay evaluaciones nuevas.\n${duplicadas > 0 ? `${duplicadas} registro(s) ya estaban en este dispositivo.` : 'El Sheet puede estar vacío.'}`;
+    alert(msg);
+
+  } catch (err) {
+    console.error('Sync error:', err);
+    alert('❌ Error al sincronizar.\n\nVerifica que el Sheet sea público (Lector).\n\nDetalle: ' + err.message);
+  }
+
+  btn.innerHTML = original;
+  btn.disabled = false;
 }
 
 // ═══════════════════════════════════════════════════════
