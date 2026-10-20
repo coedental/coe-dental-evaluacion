@@ -1233,7 +1233,7 @@ async function sincronizarDesdeSheets() {
   btn.disabled = true;
 
   try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Evaluaciones`;
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Hoja%201`;
     const res = await fetch(url);
     const raw = await res.text();
     // La respuesta de gviz viene envuelta: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
