@@ -264,14 +264,9 @@
 <!-- ══════════════ LOGIN ══════════════ -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-logo">
-      <svg viewBox="0 0 300 160" width="160" height="90" xmlns="http://www.w3.org/2000/svg">
-        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="100" fill="#3d3550">COE</text>
-        <text x="50%" y="83%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-weight="400" font-size="20" letter-spacing="12" fill="#3d3550">DENTAL</text>
-        <path d="M 70 145 Q 150 168 230 145" stroke="#3d3550" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="login-title" style="margin-top:4px">Evaluación de Desempeño</div>
+    <div class="login-logo">🦷</div>
+    <div class="login-brand">COE DENTAL</div>
+    <div class="login-title">Evaluación de Desempeño</div>
     <div class="login-sub">Selecciona tu área e ingresa tu PIN para continuar</div>
 
     <!-- STEP 1: Selección de área -->
@@ -314,11 +309,7 @@
 <div id="app">
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <svg viewBox="0 0 300 160" width="120" height="64" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-bottom:6px">
-        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="100" fill="#3d3550">COE</text>
-        <text x="50%" y="83%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,sans-serif" font-weight="400" font-size="20" letter-spacing="12" fill="#3d3550">DENTAL</text>
-        <path d="M 70 145 Q 150 168 230 145" stroke="#3d3550" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-      </svg>
+      <div class="brand">COE DENTAL</div>
       <h1>Evaluación de Desempeño</h1>
       <div class="year" id="sidebar-year">2026</div>
     </div>
@@ -352,7 +343,6 @@
         <div class="topbar-sub" id="topbar-sub">Resumen de evaluaciones</div>
       </div>
       <div class="topbar-right">
-        <button class="print-btn" id="btn-sync" onclick="sincronizarDesdeSheets()" style="display:none;background:#3a9e6e">☁️ Sincronizar con Sheet</button>
         <button class="print-btn" onclick="openPrintModal()">🖨️ Imprimir / Exportar</button>
         <div class="topbar-badge" id="topbar-badge">2026</div>
       </div>
@@ -553,22 +543,8 @@ const PINS = {
 // CRITERIOS UNIVERSALES
 // ═══════════════════════════════════════════════════════
 const CRITERIOS_UNIVERSALES = [
-  { id: 'u1', label: 'Puntualidad y asistencia', desc: 'Cumplimiento de horarios, registro de entrada/salida y presencia efectiva',
-    escala: [
-      'Llega tarde o falta más de 3 veces por semana sin justificación',
-      'Llega tarde o falta 1-2 veces por semana, justificaciones inconsistentes',
-      'Ocasionalmente tarde, faltas siempre justificadas con anticipación',
-      'Puntual casi siempre, ausencias muy esporádicas y bien comunicadas',
-      'Puntualidad ejemplar, nunca ha llegado tarde ni faltado sin aviso previo'
-    ]},
-  { id: 'u2', label: 'Orden y limpieza', desc: 'Mantenimiento del espacio de trabajo limpio, ordenado y presentable en todo momento',
-    escala: [
-      'Espacio de trabajo desordenado y sucio de forma habitual',
-      'Mantiene cierto orden pero requiere recordatorio frecuente',
-      'Espacio generalmente ordenado, limpia al final del turno',
-      'Espacio siempre limpio y ordenado, cuida materiales y equipos',
-      'Referente del área en orden y limpieza, promueve buenas prácticas en el equipo'
-    ]},
+  { id: 'u1', label: 'Puntualidad y asistencia', desc: 'Cumplimiento de horarios, registro de entrada/salida y presencia efectiva' },
+  { id: 'u2', label: 'Orden y limpieza', desc: 'Mantenimiento del espacio de trabajo limpio, ordenado y presentable en todo momento' },
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -588,16 +564,11 @@ const AREAS = {
       { id: 'COE-029', name: 'Gabriela Edith Huamanciza Alva', cargo: 'Dentista Cirujano' },
     ],
     criterios: [
-      { id: 'c1', label: 'Calidad clínica', desc: 'Precisión, técnica y resultados de los tratamientos realizados',
-        escala: ['Comete errores frecuentes, requiere supervisión constante','Resultados irregulares, necesita orientación en casos de mediana complejidad','Ejecuta correctamente los procedimientos estándar de la clínica','Alta precisión técnica, maneja bien casos complejos con mínima supervisión','Excelencia clínica consistente, referente técnico dentro del equipo médico']},
-      { id: 'c2', label: 'Trato al paciente', desc: 'Empatía, comunicación y satisfacción del paciente',
-        escala: ['Recibe quejas frecuentes, actitud fría o poco empática','Trato básico, no genera confianza ni vínculo con el paciente','Trato cordial y profesional, pacientes satisfechos en general','Pacientes expresan satisfacción activa, genera confianza y fidelidad','Pacientes lo recomiendan espontáneamente, cero quejas registradas']},
-      { id: 'c3', label: 'Trabajo en equipo', desc: 'Colaboración con asistentes, administración y otros doctores',
-        escala: ['No colabora, genera roces o conflictos con el resto del equipo','Trabaja de forma aislada, colabora solo cuando se le pide','Apoya al equipo cuando es necesario y mantiene buenas relaciones','Promueve la colaboración, facilita el trabajo de asistentes y administración','Pieza clave del equipo, su actitud eleva el rendimiento colectivo']},
-      { id: 'c4', label: 'Cumplimiento de protocolos', desc: 'Adherencia a los procedimientos y normas de la clínica',
-        escala: ['Incumple protocolos de forma reiterada, representa un riesgo','Cumple protocolos básicos pero omite pasos en situaciones de presión','Sigue los protocolos establecidos en la mayoría de los casos','Cumplimiento riguroso, nunca omite pasos aunque haya presión de tiempo','Cumplimiento ejemplar, además sugiere mejoras a los protocolos existentes']},
-      { id: 'c5', label: 'Productividad', desc: 'Número de pacientes atendidos y tratamientos completados',
-        escala: ['Atiende menos pacientes de lo esperado de forma habitual','Productividad por debajo del promedio del área','Cumple con el volumen de atención esperado para su cargo','Supera el promedio de atención sin comprometer la calidad clínica','Máxima productividad del área, optimiza tiempos sin perder calidad']},
+      { id: 'c1', label: 'Calidad clínica', desc: 'Precisión, técnica y resultados de los tratamientos realizados' },
+      { id: 'c2', label: 'Trato al paciente', desc: 'Empatía, comunicación y satisfacción del paciente' },
+      { id: 'c3', label: 'Trabajo en equipo', desc: 'Colaboración con asistentes, administración y otros doctores' },
+      { id: 'c4', label: 'Cumplimiento de protocolos', desc: 'Adherencia a los procedimientos y normas de la clínica' },
+      { id: 'c5', label: 'Productividad', desc: 'Número de pacientes atendidos y tratamientos completados' },
     ]
   },
   asistentes: {
@@ -609,16 +580,11 @@ const AREAS = {
       { id: 'COE-030', name: 'Daiana Jaqueline Huangal Flores', cargo: 'Asistente Dental' },
     ],
     criterios: [
-      { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental',
-        escala: ['Materiales frecuentemente incompletos o incorrectos antes del procedimiento','Prepara lo básico pero olvida elementos en casos complejos','Materiales listos y completos para los procedimientos estándar','Siempre preparado con anticipación, incluye materiales de contingencia','Anticipa necesidades del doctor sin que se le indique, cero improvisaciones']},
-      { id: 'c2', label: 'Apoyo al doctor', desc: 'Eficiencia y coordinación durante los procedimientos',
-        escala: ['Lento, descoordinado, interrumpe el flujo del procedimiento','Apoya pero requiere instrucciones paso a paso durante el procedimiento','Coordina bien en procedimientos rutinarios','Coordinación fluida, anticipa los movimientos del doctor','Apoyo experto, el doctor trabaja con mayor velocidad y precisión gracias a él/ella']},
-      { id: 'c3', label: 'Protocolo de esterilización', desc: 'Cumplimiento de normas de bioseguridad e higiene',
-        escala: ['Incumple normas de bioseguridad de forma habitual, representa un riesgo','Conoce los protocolos pero los aplica de forma incompleta','Aplica correctamente los protocolos de esterilización establecidos','Riguroso con bioseguridad, registra y documenta correctamente','Referente de bioseguridad en el área, detecta y reporta riesgos proactivamente']},
-      { id: 'c4', label: 'Trato al paciente', desc: 'Amabilidad y contención con los pacientes',
-        escala: ['Pacientes incómodos o con quejas por su actitud','Trato neutro, no genera confianza ni tranquiliza al paciente','Amable y profesional, paciente se siente cómodo','Contiene la ansiedad del paciente, genera ambiente de confianza','Pacientes solicitan ser atendidos por él/ella, referente de calidez humana']},
-      { id: 'c5', label: 'Proactividad', desc: 'Iniciativa y anticipación a las necesidades del equipo',
-        escala: ['Espera siempre instrucciones, no actúa por iniciativa propia','Actúa solo en tareas conocidas, no anticipa necesidades nuevas','Identifica necesidades básicas y actúa sin que se le indique','Regularmente propone mejoras o detecta problemas antes que ocurran','Constantemente un paso adelante, su iniciativa mejora el flujo del área']},
+      { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental' },
+      { id: 'c2', label: 'Apoyo al doctor', desc: 'Eficiencia y coordinación durante los procedimientos' },
+      { id: 'c3', label: 'Protocolo de esterilización', desc: 'Cumplimiento de normas de bioseguridad e higiene' },
+      { id: 'c4', label: 'Trato al paciente', desc: 'Amabilidad y contención con los pacientes' },
+      { id: 'c5', label: 'Proactividad', desc: 'Iniciativa y anticipación a las necesidades del equipo' },
     ]
   },
   recepcion: {
@@ -629,16 +595,11 @@ const AREAS = {
       { id: 'COE-034', name: 'Tiffany Eliana Clausen Moscayza', cargo: 'Psicóloga' },
     ],
     criterios: [
-      { id: 'c1', label: 'Atención al paciente', desc: 'Calidad de bienvenida, escucha y resolución de consultas',
-        escala: ['Trato frío o descortés, pacientes han presentado quejas formales','Atención básica, no resuelve consultas sin escalar al jefe','Atención cordial, resuelve consultas frecuentes con autonomía','Pacientes se sienten bienvenidos y bien atendidos de forma consistente','Primera impresión excelente, pacientes destacan el trato en reseñas o comentarios']},
-      { id: 'c2', label: 'Gestión de agenda', desc: 'Manejo eficiente de citas, confirmaciones y reprogramaciones',
-        escala: ['Errores frecuentes en citas: dobles reservas, olvidos o mala comunicación','Maneja la agenda básica pero comete errores en situaciones de alta demanda','Agenda organizada, confirmaciones y reprogramaciones al día','Gestión eficiente incluso en días de alta demanda, cero cruces de citas','Optimiza la agenda proactivamente, reduce tiempos de espera del paciente']},
-      { id: 'c3', label: 'Tiempo de respuesta', desc: 'Rapidez en atender llamadas, mensajes y consultas',
-        escala: ['Demoras frecuentes en atender llamadas, mensajes o pacientes presenciales','Responde pero con demoras que generan incomodidad','Tiempos de respuesta aceptables dentro del estándar de la clínica','Respuesta rápida y efectiva en todos los canales de atención','Respuesta inmediata, nunca deja un paciente esperando sin atención']},
-      { id: 'c4', label: 'Comunicación interna', desc: 'Coordinación con doctores y área administrativa',
-        escala: ['Información no llega o llega tarde y con errores al equipo','Comunica pero de forma incompleta o informal','Coordina correctamente con doctores y administración','Comunicación proactiva, avisa con anticipación de cambios o novedades','Nodo clave de comunicación del área, evita malentendidos y errores']},
-      { id: 'c5', label: 'Presentación e imagen', desc: 'Cuidado de imagen personal y del espacio de recepción',
-        escala: ['Presentación descuidada de forma habitual, no refleja la imagen de la clínica','Presentación básica, no siempre alineada con el estándar de la clínica','Presentación adecuada y espacio de recepción limpio y ordenado','Siempre impecable, el espacio de recepción refleja profesionalismo','Imagen referente, cuida cada detalle de la presentación y el ambiente']},
+      { id: 'c1', label: 'Atención al paciente', desc: 'Calidad de bienvenida, escucha y resolución de consultas' },
+      { id: 'c2', label: 'Gestión de agenda', desc: 'Manejo eficiente de citas, confirmaciones y reprogramaciones' },
+      { id: 'c3', label: 'Tiempo de respuesta', desc: 'Rapidez en atender llamadas, mensajes y consultas' },
+      { id: 'c4', label: 'Comunicación interna', desc: 'Coordinación con doctores y área administrativa' },
+      { id: 'c5', label: 'Presentación e imagen', desc: 'Cuidado de imagen personal y del espacio de recepción' },
     ]
   },
   administrativo: {
@@ -648,16 +609,11 @@ const AREAS = {
       { id: 'COE-011B', name: 'Jhohana Stephany Desiree Gonzalez Vargas', cargo: 'Asistente Administrativa' },
     ],
     criterios: [
-      { id: 'c1', label: 'Manejo de cobros y pagos', desc: 'Exactitud y control en la facturación y caja',
-        escala: ['Errores frecuentes en caja, descuadres o faltantes habituales','Maneja cobros básicos pero comete errores en facturación compleja','Caja cuadrada al cierre, facturación correcta en casos estándar','Control riguroso, detecta inconsistencias antes de que se conviertan en problemas','Cero errores, propone mejoras al proceso de facturación y cobro']},
-      { id: 'c2', label: 'Organización documental', desc: 'Archivos, contratos, historias clínicas al día',
-        escala: ['Documentos perdidos, atrasados o sin archivar de forma habitual','Archiva pero sin criterio claro, difícil encontrar documentos cuando se necesitan','Documentación al día y accesible para el equipo','Sistema de archivo claro y actualizado, digitaliza lo que puede','Documentación impecable, cualquier miembro del equipo puede encontrar lo que necesita']},
-      { id: 'c3', label: 'Cumplimiento de tareas', desc: 'Entrega puntual de reportes e informes',
-        escala: ['Incumple plazos de forma habitual, requiere seguimiento constante','Cumple algunas tareas pero olvida o demora otras sin avisar','Entrega lo que se le pide en los plazos establecidos','Entrega antes del plazo y avisa si hay algún inconveniente con anticipación','Cero tareas pendientes, gestiona su trabajo de forma completamente autónoma']},
-      { id: 'c4', label: 'Manejo de herramientas digitales', desc: 'Uso eficiente de sistemas y plataformas',
-        escala: ['Dificultades frecuentes con sistemas básicos, requiere asistencia constante','Usa las herramientas pero de forma limitada, no aprovecha todas sus funciones','Maneja correctamente los sistemas y plataformas requeridas para su cargo','Usuario avanzado, ayuda a otros cuando tienen dudas con los sistemas','Dominio total, propone mejoras o automatizaciones que ahorran tiempo al área']},
-      { id: 'c5', label: 'Discreción y confidencialidad', desc: 'Manejo responsable de información sensible',
-        escala: ['Ha compartido información sensible de forma inapropiada','Maneja información con cuidado básico pero sin criterio claro','Resguarda correctamente la información de pacientes y de la clínica','Alto criterio de confidencialidad, nunca comparte datos sin autorización','Referente de confianza del área, el equipo y la gerencia confían plenamente en su discreción']},
+      { id: 'c1', label: 'Manejo de cobros y pagos', desc: 'Exactitud y control en la facturación y caja' },
+      { id: 'c2', label: 'Organización documental', desc: 'Archivos, contratos, historias clínicas al día' },
+      { id: 'c3', label: 'Cumplimiento de tareas', desc: 'Entrega puntual de reportes e informes' },
+      { id: 'c4', label: 'Manejo de herramientas digitales', desc: 'Uso eficiente de sistemas y plataformas' },
+      { id: 'c5', label: 'Discreción y confidencialidad', desc: 'Manejo responsable de información sensible' },
     ]
   },
   ventas: {
@@ -668,16 +624,11 @@ const AREAS = {
       { id: 'COE-009', name: 'Gladys Milagros Alva García', cargo: 'Vendedora' },
     ],
     criterios: [
-      { id: 'c1', label: 'Tasa de cierre', desc: 'Porcentaje de leads convertidos en pacientes',
-        escala: ['Cierra menos del 20% de los leads que recibe','Cierra entre el 20% y el 35% de los leads','Cierra entre el 35% y el 50% de los leads, dentro del promedio del área','Cierra entre el 50% y el 70% de los leads de forma consistente','Cierra más del 70% de los leads, mejor tasa del equipo de ventas']},
-      { id: 'c2', label: 'Seguimiento de prospectos', desc: 'Constancia y calidad en el seguimiento',
-        escala: ['No hace seguimiento, los leads se enfrían sin contacto posterior','Hace seguimiento básico pero sin estructura ni constancia','Seguimiento sistemático dentro de los plazos establecidos','Seguimiento personalizado y persistente sin resultar invasivo','Sistema de seguimiento propio que maximiza la conversión de cada lead']},
-      { id: 'c3', label: 'Manejo de objeciones', desc: 'Capacidad para superar resistencias del paciente',
-        escala: ['Se bloquea ante objeciones, no sabe cómo responderlas','Responde objeciones comunes pero cede ante presión del paciente','Maneja las objeciones más frecuentes con argumentos claros','Convierte objeciones en oportunidades de cierre de forma consistente','Dominio total, cualquier objeción refuerza la confianza del paciente en el tratamiento']},
-      { id: 'c4', label: 'Conocimiento del servicio', desc: 'Dominio de tratamientos y precios',
-        escala: ['No puede explicar los tratamientos ni los precios con claridad','Conocimiento básico, necesita consultar al doctor para responder preguntas','Explica correctamente los tratamientos y precios del catálogo estándar','Conocimiento profundo, responde con seguridad casos complejos o comparativos','Experto en el portafolio, su conocimiento genera confianza inmediata en el paciente']},
-      { id: 'c5', label: 'Actitud comercial', desc: 'Proactividad y orientación a resultados',
-        escala: ['Actitud pasiva, espera que el paciente decida sin impulsar la conversión','Hace el esfuerzo mínimo, no muestra entusiasmo por los resultados','Actitud positiva y orientada a resultados en la mayoría de los casos','Alta motivación, contagia energía al equipo y busca superar sus metas','Motor del área, su actitud eleva el rendimiento de todo el equipo de ventas']},
+      { id: 'c1', label: 'Tasa de cierre', desc: 'Porcentaje de leads convertidos en pacientes' },
+      { id: 'c2', label: 'Seguimiento de prospectos', desc: 'Constancia y calidad en el seguimiento' },
+      { id: 'c3', label: 'Manejo de objeciones', desc: 'Capacidad para superar resistencias del paciente' },
+      { id: 'c4', label: 'Conocimiento del servicio', desc: 'Dominio de tratamientos y precios' },
+      { id: 'c5', label: 'Actitud comercial', desc: 'Proactividad y orientación a resultados' },
     ]
   },
   marketing: {
@@ -687,16 +638,11 @@ const AREAS = {
       { id: 'COE-031', name: 'Nayua Aliaga Pascual', cargo: 'Creadora de contenido' },
     ],
     criterios: [
-      { id: 'c1', label: 'Cumplimiento de entregables', desc: 'Entrega a tiempo de contenidos y campañas',
-        escala: ['Entrega tarde de forma habitual o no entrega sin avisar','Cumple algunos plazos pero frecuentemente pide extensiones','Entrega a tiempo los contenidos y piezas asignadas','Siempre puntual, avisa con anticipación si hay algún inconveniente','Entrega antes del plazo con margen para revisiones, nunca genera cuellos de botella']},
-      { id: 'c2', label: 'Calidad creativa', desc: 'Nivel estético y efectividad del contenido',
-        escala: ['Piezas con errores, mal diseño o que no representan la marca de la clínica','Calidad básica, piezas funcionales pero sin impacto visual','Piezas correctas, alineadas con la identidad visual de COE Dental','Piezas de alta calidad que generan engagement y reflejan profesionalismo','Nivel de agencia, cada pieza eleva la percepción de marca de la clínica']},
-      { id: 'c3', label: 'Métricas de campaña', desc: 'Resultados en alcance, leads y conversiones',
-        escala: ['Campañas sin resultados medibles o muy por debajo del objetivo','Resultados parciales, alcanza algunas métricas pero no las más importantes','Cumple los objetivos básicos de alcance y leads establecidos','Supera los objetivos de forma consistente, optimiza campañas en tiempo real','ROI excepcional, sus campañas son referente de resultados dentro del equipo']},
-      { id: 'c4', label: 'Iniciativa y propuestas', desc: 'Generación de ideas sin necesidad de pedirlas',
-        escala: ['Nunca propone ideas, espera que todo le sea indicado','Propone ocasionalmente pero sin seguimiento ni desarrollo de las ideas','Genera ideas regularmente y las presenta de forma estructurada','Propuestas constantes y bien fundamentadas, varias han sido implementadas','Fuente principal de ideas del área, su iniciativa impulsa la estrategia de marketing']},
-      { id: 'c5', label: 'Manejo de herramientas', desc: 'Dominio de plataformas de diseño y ads',
-        escala: ['Dificultades frecuentes con las plataformas básicas de diseño y ads','Manejo básico, no aprovecha las funciones avanzadas de las herramientas','Domina las herramientas necesarias para su cargo con autonomía','Usuario avanzado, optimiza procesos con funciones que otros no usan','Dominio experto, enseña a otros y propone nuevas herramientas que mejoran los resultados']},
+      { id: 'c1', label: 'Cumplimiento de entregables', desc: 'Entrega a tiempo de contenidos y campañas' },
+      { id: 'c2', label: 'Calidad creativa', desc: 'Nivel estético y efectividad del contenido' },
+      { id: 'c3', label: 'Métricas de campaña', desc: 'Resultados en alcance, leads y conversiones' },
+      { id: 'c4', label: 'Iniciativa y propuestas', desc: 'Generación de ideas sin necesidad de pedirlas' },
+      { id: 'c5', label: 'Manejo de herramientas', desc: 'Dominio de plataformas de diseño y ads' },
     ]
   },
   servicios: {
@@ -708,16 +654,11 @@ const AREAS = {
       { id: 'COE-012', name: 'José Antonio Manyari Geldres', cargo: 'Servicios Generales' },
     ],
     criterios: [
-      { id: 'c1', label: 'Limpieza e higiene', desc: 'Estado de limpieza de las instalaciones',
-        escala: ['Áreas bajo su responsabilidad frecuentemente sucias o en mal estado','Limpieza básica pero inconsistente, requiere recordatorio frecuente','Mantiene limpio su área de responsabilidad dentro del estándar esperado','Limpieza impecable y consistente, va más allá de lo asignado','Estándar de limpieza clínica de alto nivel, referente del área']},
-      { id: 'c2', label: 'Cumplimiento de rutinas', desc: 'Seguimiento del checklist y tareas asignadas',
-        escala: ['No sigue el checklist, omite tareas de forma habitual','Cumple algunas tareas del checklist pero no todas','Sigue el checklist completo dentro del horario establecido','Cumple todas las rutinas y avisa cuando detecta algo fuera de lo normal','Nunca omite una tarea, además propone mejoras a las rutinas existentes']},
-      { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales',
-        escala: ['Ha dañado o deteriorado equipos por mal uso','Usa los equipos sin mayor cuidado, no reporta fallas','Usa correctamente los equipos y reporta fallas cuando las detecta','Cuida los equipos como si fueran propios, los mantiene en buen estado','Referente en cuidado de equipos, prolonga su vida útil con mantenimiento preventivo']},
-      { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas',
-        escala: ['Nunca actúa sin que se le indique, aunque el problema sea evidente','Actúa solo en situaciones muy obvias o urgentes','Detecta problemas menores y los resuelve sin necesidad de indicación','Regularmente anticipa necesidades del área y actúa antes de que se lo pidan','Constantemente identifica y resuelve situaciones que nadie más nota']},
-      { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo',
-        escala: ['Actitud negativa, se queja o resiste ante tareas adicionales','Cumple lo mínimo sin disposición para colaborar más allá de su rol','Buena actitud general, dispuesto a apoyar cuando se le solicita','Siempre dispuesto, su actitud positiva es valorada por todo el equipo','Referente de actitud en la clínica, su energía impacta positivamente en el ambiente']},
+      { id: 'c1', label: 'Limpieza e higiene', desc: 'Estado de limpieza de las instalaciones' },
+      { id: 'c2', label: 'Cumplimiento de rutinas', desc: 'Seguimiento del checklist y tareas asignadas' },
+      { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales' },
+      { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas' },
+      { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo' },
     ]
   },
   coe_lab: {
@@ -732,16 +673,11 @@ const AREAS = {
       { id: 'COE-021', name: 'Rosario del Pilar Cuzcano Hinojo', cargo: 'Encargada Área de Yeso' },
     ],
     criterios: [
-      { id: 'c1', label: 'Calidad técnica', desc: 'Precisión en los trabajos técnicos realizados',
-        escala: ['Trabajos con errores frecuentes que requieren rehacerse','Calidad irregular, algunos trabajos cumplen el estándar y otros no','Trabajos dentro del estándar de calidad requerido por la clínica','Alta calidad consistente, los doctores confían en sus entregas','Calidad de referencia, sus trabajos no requieren correcciones']},
-      { id: 'c2', label: 'Tiempo de entrega', desc: 'Cumplimiento de plazos en trabajos de laboratorio',
-        escala: ['Entregas frecuentemente fuera del plazo, genera demoras en la atención','Cumple algunos plazos pero falla en picos de trabajo','Entrega dentro de los plazos establecidos en la mayoría de los casos','Siempre a tiempo, avisa con anticipación si hay un retraso inevitable','Entrega antes del plazo, nunca ha generado un retraso en la atención']},
-      { id: 'c3', label: 'Manejo de equipos', desc: 'Uso correcto y cuidado de equipos especializados',
-        escala: ['Mal uso frecuente de equipos especializados, ha generado daños','Uso básico correcto pero sin mantenimiento ni cuidado adicional','Usa correctamente los equipos y los mantiene en buen estado','Cuidado riguroso, reporta fallas antes de que generen problemas','Referente en cuidado de equipos, extiende su vida útil con mantenimiento preventivo']},
-      { id: 'c4', label: 'Protocolos de seguridad', desc: 'Cumplimiento de normas de bioseguridad',
-        escala: ['Incumple normas de bioseguridad del laboratorio de forma habitual','Cumple lo básico pero omite pasos en situaciones de presión','Aplica correctamente los protocolos de seguridad del laboratorio','Cumplimiento riguroso, además verifica que otros los cumplan','Referente de seguridad en el lab, detecta y reporta riesgos proactivamente']},
-      { id: 'c5', label: 'Comunicación con doctores', desc: 'Coordinación efectiva para indicaciones',
-        escala: ['Malentendidos frecuentes con los doctores, genera retrabajos','Comunicación básica pero incompleta, a veces interpreta mal las indicaciones','Se comunica correctamente, pide aclaración cuando algo no queda claro','Comunicación proactiva, confirma detalles antes de iniciar el trabajo','Cero malentendidos, su comunicación con los doctores optimiza los tiempos del lab']},
+      { id: 'c1', label: 'Calidad técnica', desc: 'Precisión en los trabajos técnicos realizados' },
+      { id: 'c2', label: 'Tiempo de entrega', desc: 'Cumplimiento de plazos en trabajos de laboratorio' },
+      { id: 'c3', label: 'Manejo de equipos', desc: 'Uso correcto y cuidado de equipos especializados' },
+      { id: 'c4', label: 'Protocolos de seguridad', desc: 'Cumplimiento de normas de bioseguridad' },
+      { id: 'c5', label: 'Comunicación con doctores', desc: 'Coordinación efectiva para indicaciones' },
     ]
   }
 };
@@ -879,9 +815,6 @@ function showView(view) {
   };
   document.getElementById('topbar-title').textContent = titles[view][0];
   document.getElementById('topbar-sub').textContent = titles[view][1];
-  // Mostrar botón sync solo a admin en dashboard
-  const syncBtn = document.getElementById('btn-sync');
-  if (syncBtn) syncBtn.style.display = (view === 'dashboard' && currentUser && currentUser.role === 'admin') ? 'flex' : 'none';
   if (view === 'dashboard') renderDashboard();
   if (view === 'results') renderResultsTable();
 }
@@ -936,18 +869,6 @@ function buildCriteria(area) {
   allCrit.forEach(c => {
     currentRatings[c.id] = 0;
     const isU = CRITERIOS_UNIVERSALES.find(u => u.id === c.id);
-    const escala = c.escala || [];
-    const escalaHTML = escala.length ? `
-      <div id="escala-${c.id}" style="margin-top:10px;display:none;">
-        <div style="font-size:10px;font-weight:600;color:#8f82a8;margin-bottom:6px;letter-spacing:0.05em">GUÍA DE PUNTAJE</div>
-        ${escala.map((e,i) => `
-          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:5px">
-            <span style="min-width:20px;height:20px;border-radius:50%;background:${['#f5d4d4','#fdefc8','#fef9dc','#d4ecf8','#c8f0dd'][i]};color:${['#a04040','#a07828','#8a7820','#3a7fa8','#3a9e6e'][i]};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</span>
-            <span style="font-size:11.5px;color:#5a4f72;line-height:1.4">${e}</span>
-          </div>`).join('')}
-      </div>
-      <button onclick="toggleEscala('${c.id}')" style="margin-top:8px;background:none;border:none;font-size:11px;color:#a78bd4;cursor:pointer;font-family:inherit;padding:0;font-weight:600">▾ Ver guía de puntaje</button>
-    ` : '';
     const el = document.createElement('div');
     el.className = 'criterion';
     if (isU) { el.style.borderColor = '#c9b8e8'; el.style.background = '#f5f0fa'; }
@@ -957,11 +878,10 @@ function buildCriteria(area) {
         ${isU ? '<span style="font-size:9.5px;background:#a78bd4;color:#fff;padding:1px 6px;border-radius:8px;font-weight:600">Universal</span>' : ''}
       </div>
       <div class="crit-desc">${c.desc}</div>
-      <div class="rating-row" id="rating-${c.id}" style="margin-top:10px">
+      <div class="rating-row" id="rating-${c.id}">
         ${[1,2,3,4,5].map(n => `<button class="rating-btn" onclick="setRating('${c.id}',${n},this)">${n}</button>`).join('')}
       </div>
       <div class="rating-labels"><span>Muy bajo</span><span>Bajo</span><span>Regular</span><span>Bueno</span><span>Excelente</span></div>
-      ${escalaHTML}
     `;
     grid.appendChild(el);
   });
@@ -969,49 +889,10 @@ function buildCriteria(area) {
   document.getElementById('obs-card').style.display = 'block';
 }
 
-function toggleEscala(id) {
-  const el = document.getElementById('escala-' + id);
-  const btn = el.nextElementSibling;
-  if (el.style.display === 'none') {
-    el.style.display = 'block';
-    btn.textContent = '▴ Ocultar guía';
-  } else {
-    el.style.display = 'none';
-    btn.textContent = '▾ Ver guía de puntaje';
-  }
-}
-
 function setRating(id, val, btn) {
   currentRatings[id] = val;
   document.getElementById('rating-' + id).querySelectorAll('.rating-btn').forEach(b => b.className = 'rating-btn');
   btn.className = `rating-btn selected-${val}`;
-}
-
-// ═══════════════════════════════════════════════════════
-// GOOGLE SHEETS — URL del Web App
-// ═══════════════════════════════════════════════════════
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzZ5wYgJzGM17R_rp1ESncCMPgljm7EQRTuhdIbxopxmrL8FQlBFVP3i_AFfEfzL2M/exec';
-
-function enviarASheets(record) {
-  const payload = {
-    fecha: record.fecha,
-    colaboradorName: record.colaboradorName,
-    colaboradorId: record.colaboradorId,
-    cargo: record.cargo,
-    areaLabel: record.areaLabel,
-    jefe: record.jefe,
-    avg: record.avg,
-    nivel: record.nivel,
-    periodo: record.periodo,
-    fortalezas: record.fortalezas || '',
-    mejora: record.mejora || ''
-  };
-  fetch(SHEETS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(err => console.warn('Error enviando a Sheets:', err));
 }
 
 function submitForm() {
@@ -1024,7 +905,6 @@ function submitForm() {
   const colab = aData.colaboradores.find(c => c.id === colabId);
   const scores = Object.values(currentRatings);
   const avg = parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2));
-  const lv = scoreLevel(avg);
   const record = {
     id: Date.now(), area, areaLabel: aData.label, areaColor: aData.color,
     colaboradorId: colabId, colaboradorName: colab.name, cargo: colab.cargo,
@@ -1033,7 +913,6 @@ function submitForm() {
       label: c.label, score: currentRatings[c.id]
     })),
     avg,
-    nivel: lv.label,
     periodo: document.getElementById('input-periodo').value,
     fortalezas: document.getElementById('obs-fortalezas').value,
     mejora: document.getElementById('obs-mejora').value,
@@ -1043,8 +922,6 @@ function submitForm() {
   };
   evaluaciones.push(record);
   localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
-  // Enviar a Google Sheets en segundo plano
-  enviarASheets(record);
   document.getElementById('success-msg').textContent = `${colab.name} — Puntaje: ${avg}/5.0`;
   document.getElementById('success-modal').classList.add('show');
 }
@@ -1198,7 +1075,7 @@ function renderResultsTable() {
   }
   tbody.innerHTML = evals.map(e => {
     const lv = scoreLevel(e.avg);
-    return `<tr>
+    return `<tr onclick="verDetalleEval('${e.id}')" style="cursor:pointer" onmouseover="this.style.background='#f8f6ff'" onmouseout="this.style.background=''">
       <td><strong>${e.colaboradorName}</strong><br><span style="font-size:10.5px;color:var(--text-muted)">${e.colaboradorId}</span></td>
       <td style="font-size:11.5px;color:var(--text-muted)">${e.cargo}</td>
       <td><span style="background:${e.areaColor}20;color:${e.areaColor};padding:2px 8px;border-radius:8px;font-size:10.5px;font-weight:600">${e.areaLabel}</span></td>
@@ -1208,129 +1085,20 @@ function renderResultsTable() {
       <td style="font-size:11px;color:var(--text-muted)">${e.periodo || '—'}</td>
       <td style="font-size:11px;color:var(--text-muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.fortalezas}">${e.fortalezas || '—'}</td>
       <td style="color:var(--text-muted);font-size:11px">${e.fecha}</td>
-      <td>${currentUser.role==='admin'?`<button onclick="deleteEval(${e.id})" style="border:none;background:none;cursor:pointer;color:#b85555;font-size:13px" title="Eliminar">🗑</button>`:''}
-      <button onclick="quickPrintOne(${e.id})" style="border:none;background:none;cursor:pointer;font-size:13px" title="Imprimir ficha">🖨️</button></td>
+      <td style="white-space:nowrap" onclick="event.stopPropagation()">
+        <button onclick="verDetalleEval('${e.id}')" style="border:none;background:#a78bd420;color:#a78bd4;cursor:pointer;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;font-family:inherit" title="Ver detalle completo">👁️ Ver</button>
+        <button onclick="quickPrintOne('${e.id}')" style="border:none;background:none;cursor:pointer;font-size:13px;margin-left:4px" title="Imprimir ficha">🖨️</button>
+        ${currentUser.role==='admin'?`<button onclick="deleteEval('${e.id}')" style="border:none;background:none;cursor:pointer;color:#b85555;font-size:13px" title="Eliminar">🗑</button>`:''}
+      </td>
     </tr>`;
   }).join('');
 }
 
 function deleteEval(id) {
   if (!confirm('¿Eliminar esta evaluación?')) return;
-  evaluaciones = evaluaciones.filter(e => e.id !== id);
+  evaluaciones = evaluaciones.filter(e => String(e.id) !== String(id));
   localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
   renderResultsTable();
-}
-
-// ═══════════════════════════════════════════════════════
-// SINCRONIZAR DESDE GOOGLE SHEETS (solo admin)
-// ═══════════════════════════════════════════════════════
-const SHEET_ID = '1SARNvCAkmysrYD8f-BrQGeHnG-J0v38hsLsA7HXPHMA';
-
-async function sincronizarDesdeSheets() {
-  const btn = document.getElementById('btn-sync');
-  const original = btn.innerHTML;
-  btn.innerHTML = '⏳ Sincronizando...';
-  btn.disabled = true;
-
-  try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-    const res = await fetch(url);
-    const raw = await res.text();
-    // La respuesta de gviz viene envuelta: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
-    const jsonText = raw.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
-    const data = JSON.parse(jsonText);
-    const rows = data.table.rows;
-    const cols = data.table.cols.map(c => c.label);
-
-    if (!rows || rows.length === 0) {
-      alert('El Sheet está vacío o no tiene datos en la hoja "Evaluaciones".');
-      btn.innerHTML = original; btn.disabled = false; return;
-    }
-
-    // Mapeo de columnas del Sheet → campos del registro local
-    // Columnas esperadas (según enviarASheets): fecha, colaborador, id, cargo, area, jefe, promedio, nivel, periodo, fortalezas, mejora
-    const idx = {};
-    const normalize = s => s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-    cols.forEach((label, i) => { idx[normalize(label)] = i; });
-    console.log('Columnas del Sheet:', cols, '→ idx:', idx);
-
-    const getVal = (row, label) => {
-      const i = idx[normalize(label)];
-      if (i === undefined || !row.c[i]) return '';
-      return row.c[i].v !== null && row.c[i].v !== undefined ? String(row.c[i].v) : (row.c[i].f || '');
-    };
-
-    let nuevas = 0, duplicadas = 0;
-
-    rows.forEach(row => {
-      if (!row.c || row.c.every(c => !c)) return; // fila vacía
-
-      const fecha     = getVal(row, 'fecha');
-      const colabName = getVal(row, 'colaborador');
-      const colabId   = getVal(row, 'id');
-      const cargo     = getVal(row, 'cargo');
-      const areaLabel = getVal(row, 'área') || getVal(row, 'area');
-      const jefe      = getVal(row, 'jefe');
-      const avgStr    = getVal(row, 'puntaje') || getVal(row, 'promedio');
-      const nivel     = getVal(row, 'nivel');
-      const periodo   = getVal(row, 'período') || getVal(row, 'periodo');
-      const fortalezas= getVal(row, 'fortalezas');
-      const mejora    = getVal(row, 'mejora');
-
-      if (!colabName || !areaLabel) return;
-
-      // Buscar la key del área por label
-      const areaKey = Object.keys(AREAS).find(k => AREAS[k].label === areaLabel) || areaLabel.toLowerCase().replace(/\s+/g,'_');
-      const areaData = AREAS[areaKey] || { color: '#a78bd4', icon: '📋' };
-      const avg = parseFloat(avgStr) || 0;
-
-      // Generar ID único basado en colaborador + fecha para evitar duplicados
-      const uid = `sheet_${colabId || colabName}_${fecha}`.replace(/\s+/g,'_');
-
-      if (evaluaciones.find(e => e.id === uid)) { duplicadas++; return; }
-
-      const record = {
-        id: uid,
-        area: areaKey,
-        areaLabel: areaLabel,
-        areaColor: areaData.color || '#a78bd4',
-        colaboradorId: colabId || colabName,
-        colaboradorName: colabName,
-        cargo: cargo,
-        jefe: jefe,
-        ratings: {},
-        criteriosDetalle: [],
-        avg: avg,
-        nivel: nivel,
-        periodo: periodo,
-        fortalezas: fortalezas,
-        mejora: mejora,
-        general: '',
-        fecha: fecha,
-        ts: fecha ? new Date(fecha.split('/').reverse().join('-')).getTime() || Date.now() : Date.now(),
-        _fromSheet: true
-      };
-
-      evaluaciones.push(record);
-      nuevas++;
-    });
-
-    // Guardar en localStorage
-    localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
-    renderDashboard();
-
-    const msg = nuevas > 0
-      ? `✅ Sincronización completa.\n\n• ${nuevas} evaluación(es) importada(s) desde el Sheet.\n${duplicadas > 0 ? `• ${duplicadas} ya existían (omitidas).` : ''}`
-      : `ℹ️ No hay evaluaciones nuevas.\n${duplicadas > 0 ? `${duplicadas} registro(s) ya estaban en este dispositivo.` : 'El Sheet puede estar vacío.'}`;
-    alert(msg);
-
-  } catch (err) {
-    console.error('Sync error:', err);
-    alert('❌ Error al sincronizar.\n\nVerifica que el Sheet sea público (Lector).\n\nDetalle: ' + err.message);
-  }
-
-  btn.innerHTML = original;
-  btn.disabled = false;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1366,8 +1134,108 @@ function doPrintIndividual() {
 }
 
 function quickPrintOne(id) {
-  const ev = evaluaciones.find(e => e.id === id);
+  const ev = evaluaciones.find(e => String(e.id) === String(id));
   if (ev) showPrintOverlay(buildFichaHTML(ev));
+}
+
+function verDetalleEval(id) {
+  const ev = evaluaciones.find(e => String(e.id) === String(id));
+  if (!ev) return;
+  const lv = scoreLevel(ev.avg);
+
+  let criteriosSection = '';
+  if (ev.criteriosDetalle && ev.criteriosDetalle.length > 0) {
+    const rows = ev.criteriosDetalle.map(c => `
+      <tr>
+        <td style="padding:9px 12px;font-size:13px;border-bottom:1px solid #f0e8f8">${c.label}</td>
+        <td style="padding:9px 12px;text-align:center;font-weight:700;font-size:14px;border-bottom:1px solid #f0e8f8;color:${scoreLevel(c.score).color}">${c.score}/5</td>
+        <td style="padding:9px 12px;border-bottom:1px solid #f0e8f8;width:180px">
+          <div style="background:#eee;border-radius:4px;height:9px;width:100%"><div style="background:${scoreLevel(c.score).color};width:${c.score*20}%;height:9px;border-radius:4px"></div></div>
+        </td>
+      </tr>`).join('');
+    criteriosSection = `
+      <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+        <thead><tr style="background:#f0e8f8">
+          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8f82a8;font-weight:600">Criterio</th>
+          <th style="padding:8px 12px;text-align:center;font-size:11px;color:#8f82a8;font-weight:600;width:80px">Puntaje</th>
+          <th style="padding:8px 12px;font-size:11px;color:#8f82a8;font-weight:600;width:180px">Barra</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } else {
+    criteriosSection = `
+      <div style="background:#fff8e1;border:1.5px solid #f0c040;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#7a6000">
+        ⚠️ <strong>Desglose por criterio no disponible.</strong> Esta evaluación fue registrada de forma resumida (solo puntaje promedio). Para ver el detalle completo, el jefe de área debe abrir la evaluación desde el dispositivo donde fue completada.
+      </div>`;
+  }
+
+  const html = `
+    <div style="padding:28px;max-width:720px;margin:0 auto;font-family:Inter,sans-serif">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #a78bd4;padding-bottom:16px;margin-bottom:20px">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#8f82a8;letter-spacing:.08em;margin-bottom:6px">🦷 COE DENTAL — EVALUACIÓN DE DESEMPEÑO</div>
+          <div style="font-size:22px;font-weight:700;color:#3d3550;margin-bottom:4px">${ev.colaboradorName}</div>
+          <div style="font-size:13px;color:#8f82a8">${ev.cargo} · <span style="background:${ev.areaColor}20;color:${ev.areaColor};padding:2px 8px;border-radius:8px;font-weight:600">${ev.areaLabel}</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+          <div style="text-align:center;background:#f5f0fa;border-radius:12px;padding:14px 20px;min-width:90px">
+            <div style="font-size:36px;font-weight:800;color:${lv.color};line-height:1">${ev.avg}</div>
+            <div style="font-size:10px;color:#8f82a8;margin:2px 0">sobre 5.0</div>
+            <div style="font-size:12px;font-weight:700;color:${lv.color}">${lv.label}</div>
+          </div>
+          <button onclick="quickPrintOne('${ev.id}')" style="background:#a78bd4;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🖨️ Imprimir ficha</button>
+        </div>
+      </div>
+      <!-- Info grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+        <div style="background:#f8f6ff;border-radius:8px;padding:10px 14px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">EVALUADO POR</div><div style="font-size:13px;font-weight:600">${ev.jefe}</div></div>
+        <div style="background:#f8f6ff;border-radius:8px;padding:10px 14px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">PERÍODO</div><div style="font-size:13px;font-weight:600">${ev.periodo || '—'}</div></div>
+        <div style="background:#f8f6ff;border-radius:8px;padding:10px 14px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">FECHA</div><div style="font-size:13px;font-weight:600">${ev.fecha}</div></div>
+      </div>
+      <!-- Criteria -->
+      ${criteriosSection}
+      <!-- Observaciones -->
+      ${ev.fortalezas ? `<div style="background:#f0fdf6;border-radius:8px;padding:12px 16px;margin-bottom:10px"><div style="font-size:10px;color:#3a9e6e;font-weight:700;margin-bottom:5px">✅ FORTALEZAS</div><div style="font-size:13px;color:#3d3550">${ev.fortalezas}</div></div>` : ''}
+      ${ev.mejora ? `<div style="background:#fffbf0;border-radius:8px;padding:12px 16px;margin-bottom:10px"><div style="font-size:10px;color:#c4952a;font-weight:700;margin-bottom:5px">⚡ ÁREAS DE MEJORA</div><div style="font-size:13px;color:#3d3550">${ev.mejora}</div></div>` : ''}
+      ${ev.general ? `<div style="background:#f5f0fa;border-radius:8px;padding:12px 16px;margin-bottom:10px"><div style="font-size:10px;color:#a78bd4;font-weight:700;margin-bottom:5px">💬 COMENTARIO GENERAL</div><div style="font-size:13px;color:#3d3550">${ev.general}</div></div>` : ''}
+      <!-- Firma -->
+      <div style="border:2px dashed #e4ddf2;border-radius:10px;padding:20px 24px;margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+        <div>
+          <div style="font-size:10px;color:#8f82a8;font-weight:700;letter-spacing:.06em;margin-bottom:28px">FIRMA DEL COLABORADOR</div>
+          <div style="border-top:1.5px solid #3d3550;padding-top:6px;font-size:12px;color:#8f82a8">${ev.colaboradorName}</div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:#8f82a8;font-weight:700;letter-spacing:.06em;margin-bottom:28px">FIRMA DEL EVALUADOR</div>
+          <div style="border-top:1.5px solid #3d3550;padding-top:6px;font-size:12px;color:#8f82a8">${ev.jefe || 'Jefe de área'}</div>
+        </div>
+      </div>
+      <!-- Footer buttons -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+        <button onclick="quickPrintOne('${ev.id}')" style="background:#a78bd4;color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🖨️ Imprimir para firmar</button>
+        <button onclick="cerrarDetalleEval()" style="background:transparent;border:1.5px solid #e4ddf2;color:#8f82a8;padding:11px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">✕ Cerrar</button>
+      </div>
+    </div>`;
+
+  let overlay = document.getElementById('detalle-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'detalle-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(61,53,80,0.55);z-index:9998;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:32px 16px';
+    overlay.onclick = function(e) { if (e.target === overlay) cerrarDetalleEval(); };
+    document.body.appendChild(overlay);
+  }
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:16px;width:100%;max-width:760px;box-shadow:0 8px 40px rgba(61,53,80,0.22);';
+  box.innerHTML = html;
+  overlay.innerHTML = '';
+  overlay.appendChild(box);
+  overlay.style.display = 'flex';
+}
+
+function cerrarDetalleEval() {
+  const overlay = document.getElementById('detalle-overlay');
+  if (overlay) overlay.style.display = 'none';
 }
 
 function printArea() {
@@ -1445,14 +1313,31 @@ function doPrint() {
 function buildFichaHTML(ev) {
   const lv = scoreLevel(ev.avg);
   const barColor = lv.color;
-  const rows = (ev.criteriosDetalle || []).map(c => `
-    <tr>
-      <td style="padding:8px 10px;font-size:13px;border-bottom:1px solid #f0e8f8">${c.label}</td>
-      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:14px;border-bottom:1px solid #f0e8f8;color:${scoreLevel(c.score).color}">${c.score}/5</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #f0e8f8;width:200px">
-        <div style="background:#eee;border-radius:4px;height:9px;width:100%"><div style="background:${scoreLevel(c.score).color};width:${c.score*20}%;height:9px;border-radius:4px"></div></div>
-      </td>
-    </tr>`).join('');
+  let criteriosSection = '';
+  if (ev.criteriosDetalle && ev.criteriosDetalle.length > 0) {
+    const rows = ev.criteriosDetalle.map(c => `
+      <tr>
+        <td style="padding:8px 10px;font-size:13px;border-bottom:1px solid #f0e8f8">${c.label}</td>
+        <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:14px;border-bottom:1px solid #f0e8f8;color:${scoreLevel(c.score).color}">${c.score}/5</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #f0e8f8;width:200px">
+          <div style="background:#eee;border-radius:4px;height:9px;width:100%"><div style="background:${scoreLevel(c.score).color};width:${c.score*20}%;height:9px;border-radius:4px"></div></div>
+        </td>
+      </tr>`).join('');
+    criteriosSection = `
+      <table style="width:100%;border-collapse:collapse;margin-bottom:22px">
+        <thead><tr style="background:#f0e8f8">
+          <th style="padding:9px 10px;text-align:left;font-size:11px;color:#8f82a8;font-weight:600">Criterio</th>
+          <th style="padding:9px 10px;text-align:center;font-size:11px;color:#8f82a8;font-weight:600;width:80px">Puntaje</th>
+          <th style="padding:9px 10px;font-size:11px;color:#8f82a8;font-weight:600;width:200px">Barra</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } else {
+    criteriosSection = `
+      <div style="background:#fff8e1;border:1.5px solid #f0c040;border-radius:10px;padding:16px 20px;margin-bottom:22px;font-size:13px;color:#7a6000">
+        ⚠️ <strong>Desglose por criterio no disponible.</strong> Esta evaluación fue registrada de forma resumida (solo puntaje promedio). Para ver el detalle completo, el jefe de área debe abrir la evaluación desde el dispositivo donde fue completada.
+      </div>`;
+  }
   return `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #a78bd4;padding-bottom:16px;margin-bottom:22px">
       <div>
@@ -1472,17 +1357,20 @@ function buildFichaHTML(ev) {
       <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">FECHA</div><div style="font-size:14px;font-weight:600">${ev.fecha}</div></div>
       <div style="background:#f8f6ff;border-radius:8px;padding:12px 16px"><div style="font-size:10px;color:#8f82a8;font-weight:600;margin-bottom:3px">ID COLABORADOR</div><div style="font-size:14px;font-weight:600">${ev.colaboradorId}</div></div>
     </div>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:22px">
-      <thead><tr style="background:#f0e8f8">
-        <th style="padding:9px 10px;text-align:left;font-size:11px;color:#8f82a8;font-weight:600">Criterio</th>
-        <th style="padding:9px 10px;text-align:center;font-size:11px;color:#8f82a8;font-weight:600;width:80px">Puntaje</th>
-        <th style="padding:9px 10px;font-size:11px;color:#8f82a8;font-weight:600;width:200px">Barra</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+    ${criteriosSection}
     ${ev.fortalezas ? `<div style="background:#f0fdf6;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#3a9e6e;font-weight:700;margin-bottom:6px">✅ FORTALEZAS</div><div style="font-size:13px;color:#3d3550">${ev.fortalezas}</div></div>` : ''}
     ${ev.mejora ? `<div style="background:#fffbf0;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#c4952a;font-weight:700;margin-bottom:6px">⚡ ÁREAS DE MEJORA</div><div style="font-size:13px;color:#3d3550">${ev.mejora}</div></div>` : ''}
     ${ev.general ? `<div style="background:#f5f0fa;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:#a78bd4;font-weight:700;margin-bottom:6px">💬 COMENTARIO GENERAL</div><div style="font-size:13px;color:#3d3550">${ev.general}</div></div>` : ''}
+    <div style="border:2px dashed #e4ddf2;border-radius:10px;padding:20px 24px;margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+      <div>
+        <div style="font-size:10px;color:#8f82a8;font-weight:700;letter-spacing:.06em;margin-bottom:32px">FIRMA DEL COLABORADOR</div>
+        <div style="border-top:1.5px solid #3d3550;padding-top:6px;font-size:12px;color:#8f82a8">${ev.colaboradorName}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:#8f82a8;font-weight:700;letter-spacing:.06em;margin-bottom:32px">FIRMA DEL EVALUADOR</div>
+        <div style="border-top:1.5px solid #3d3550;padding-top:6px;font-size:12px;color:#8f82a8">${ev.jefe || 'Jefe de área'}</div>
+      </div>
+    </div>
     <div style="text-align:center;font-size:10px;color:#b8b0cc;margin-top:28px;padding-top:12px;border-top:1px solid #e4ddf2">
       COE Dental · Sistema de Evaluación de Desempeño · Generado el ${new Date().toLocaleDateString('es-PE')}
     </div>`;
