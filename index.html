@@ -667,8 +667,10 @@ const PINS = {
 // CRITERIOS UNIVERSALES
 // ═══════════════════════════════════════════════════════
 const CRITERIOS_UNIVERSALES = [
-  { id: 'u1', label: 'Puntualidad y asistencia', desc: 'Cumplimiento de horarios, registro de entrada/salida y presencia efectiva' },
-  { id: 'u2', label: 'Orden y limpieza', desc: 'Mantenimiento del espacio de trabajo limpio, ordenado y presentable en todo momento' },
+  { id: 'u1', label: 'Puntualidad y asistencia', desc: 'Cumplimiento de horarios, registro de entrada/salida y presencia efectiva',
+    escala: ['Llega tarde o falta más de 3 veces por semana sin justificación','Llega tarde o falta 1-2 veces por semana, justificaciones inconsistentes','Ocasionalmente tarde, faltas siempre justificadas con anticipación','Puntual casi siempre, ausencias muy esporádicas y bien comunicadas','Puntualidad ejemplar, nunca ha llegado tarde ni faltado sin aviso previo'] },
+  { id: 'u2', label: 'Orden y limpieza', desc: 'Mantenimiento del espacio de trabajo limpio, ordenado y presentable en todo momento',
+    escala: ['Espacio de trabajo desordenado y sucio de forma habitual','Mantiene cierto orden pero requiere recordatorio frecuente','Espacio generalmente ordenado, limpia al final del turno','Espacio siempre limpio y ordenado, cuida materiales y equipos','Referente del área en orden y limpieza, promueve buenas prácticas en el equipo'] },
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -688,11 +690,11 @@ const AREAS = {
       { id: 'COE-029', name: 'Gabriela Edith Huamanciza Alva', cargo: 'Dentista Cirujano' },
     ],
     criterios: [
-      { id: 'c1', label: 'Calidad clínica', desc: 'Precisión, técnica y resultados de los tratamientos realizados' },
-      { id: 'c2', label: 'Trato al paciente', desc: 'Empatía, comunicación y satisfacción del paciente' },
-      { id: 'c3', label: 'Trabajo en equipo', desc: 'Colaboración con asistentes, administración y otros doctores' },
-      { id: 'c4', label: 'Cumplimiento de protocolos', desc: 'Adherencia a los procedimientos y normas de la clínica' },
-      { id: 'c5', label: 'Productividad', desc: 'Número de pacientes atendidos y tratamientos completados' },
+      { id: 'c1', label: 'Calidad clínica', desc: 'Precisión, técnica y resultados de los tratamientos realizados', escala: ['Comete errores frecuentes, requiere supervisión constante','Resultados irregulares, necesita orientación en casos de mediana complejidad','Ejecuta correctamente los procedimientos estándar de la clínica','Alta precisión técnica, maneja bien casos complejos con mínima supervisión','Excelencia clínica consistente, referente técnico dentro del equipo médico'] },
+      { id: 'c2', label: 'Trato al paciente', desc: 'Empatía, comunicación y satisfacción del paciente', escala: ['Recibe quejas frecuentes, actitud fría o poco empática','Trato básico, no genera confianza ni vínculo con el paciente','Trato cordial y profesional, pacientes satisfechos en general','Pacientes expresan satisfacción activa, genera confianza y fidelidad','Pacientes lo recomiendan espontáneamente, cero quejas registradas'] },
+      { id: 'c3', label: 'Trabajo en equipo', desc: 'Colaboración con asistentes, administración y otros doctores', escala: ['No colabora, genera roces o conflictos con el resto del equipo','Trabaja de forma aislada, colabora solo cuando se le pide','Apoya al equipo cuando es necesario y mantiene buenas relaciones','Promueve la colaboración, facilita el trabajo de asistentes y administración','Pieza clave del equipo, su actitud eleva el rendimiento colectivo'] },
+      { id: 'c4', label: 'Cumplimiento de protocolos', desc: 'Adherencia a los procedimientos y normas de la clínica', escala: ['Incumple protocolos de forma reiterada, representa un riesgo','Cumple protocolos básicos pero omite pasos en situaciones de presión','Sigue los protocolos establecidos en la mayoría de los casos','Cumplimiento riguroso, nunca omite pasos aunque haya presión de tiempo','Cumplimiento ejemplar, además sugiere mejoras a los protocolos existentes'] },
+      { id: 'c5', label: 'Productividad', desc: 'Número de pacientes atendidos y tratamientos completados', escala: ['Atiende menos pacientes de lo esperado de forma habitual','Productividad por debajo del promedio del área','Cumple con el volumen de atención esperado para su cargo','Supera el promedio de atención sin comprometer la calidad clínica','Máxima productividad del área, optimiza tiempos sin perder calidad'] },
     ]
   },
   asistentes: {
@@ -704,11 +706,11 @@ const AREAS = {
       { id: 'COE-030', name: 'Daiana Jaqueline Huangal Flores', cargo: 'Asistente Dental' },
     ],
     criterios: [
-      { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental' },
-      { id: 'c2', label: 'Apoyo al doctor', desc: 'Eficiencia y coordinación durante los procedimientos' },
-      { id: 'c3', label: 'Protocolo de esterilización', desc: 'Cumplimiento de normas de bioseguridad e higiene' },
-      { id: 'c4', label: 'Trato al paciente', desc: 'Amabilidad y contención con los pacientes' },
-      { id: 'c5', label: 'Proactividad', desc: 'Iniciativa y anticipación a las necesidades del equipo' },
+      { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental', escala: ['Materiales frecuentemente incompletos o incorrectos antes del procedimiento','Prepara lo básico pero olvida elementos en casos complejos','Materiales listos y completos para los procedimientos estándar','Siempre preparado con anticipación, incluye materiales de contingencia','Anticipa necesidades del doctor sin que se le indique, cero improvisaciones'] },
+      { id: 'c2', label: 'Apoyo al doctor', desc: 'Eficiencia y coordinación durante los procedimientos', escala: ['Lento, descoordinado, interrumpe el flujo del procedimiento','Apoya pero requiere instrucciones paso a paso durante el procedimiento','Coordina bien en procedimientos rutinarios','Coordinación fluida, anticipa los movimientos del doctor','Apoyo experto, el doctor trabaja con mayor velocidad y precisión gracias a él/ella'] },
+      { id: 'c3', label: 'Protocolo de esterilización', desc: 'Cumplimiento de normas de bioseguridad e higiene', escala: ['Incumple normas de bioseguridad de forma habitual, representa un riesgo','Conoce los protocolos pero los aplica de forma incompleta','Aplica correctamente los protocolos de esterilización establecidos','Riguroso con bioseguridad, registra y documenta correctamente','Referente de bioseguridad en el área, detecta y reporta riesgos proactivamente'] },
+      { id: 'c4', label: 'Trato al paciente', desc: 'Amabilidad y contención con los pacientes', escala: ['Pacientes incómodos o con quejas por su actitud','Trato neutro, no genera confianza ni tranquiliza al paciente','Amable y profesional, paciente se siente cómodo','Contiene la ansiedad del paciente, genera ambiente de confianza','Pacientes solicitan ser atendidos por él/ella, referente de calidez humana'] },
+      { id: 'c5', label: 'Proactividad', desc: 'Iniciativa y anticipación a las necesidades del equipo', escala: ['Espera siempre instrucciones, no actúa por iniciativa propia','Actúa solo en tareas conocidas, no anticipa necesidades nuevas','Identifica necesidades básicas y actúa sin que se le indique','Regularmente propone mejoras o detecta problemas antes que ocurran','Constantemente un paso adelante, su iniciativa mejora el flujo del área'] },
     ]
   },
   recepcion: {
@@ -719,11 +721,11 @@ const AREAS = {
       { id: 'COE-034', name: 'Tiffany Eliana Clausen Moscayza', cargo: 'Psicóloga' },
     ],
     criterios: [
-      { id: 'c1', label: 'Atención al paciente', desc: 'Calidad de bienvenida, escucha y resolución de consultas' },
-      { id: 'c2', label: 'Gestión de agenda', desc: 'Manejo eficiente de citas, confirmaciones y reprogramaciones' },
-      { id: 'c3', label: 'Tiempo de respuesta', desc: 'Rapidez en atender llamadas, mensajes y consultas' },
-      { id: 'c4', label: 'Comunicación interna', desc: 'Coordinación con doctores y área administrativa' },
-      { id: 'c5', label: 'Presentación e imagen', desc: 'Cuidado de imagen personal y del espacio de recepción' },
+      { id: 'c1', label: 'Atención al paciente', desc: 'Calidad de bienvenida, escucha y resolución de consultas', escala: ['Trato frío o descortés, pacientes han presentado quejas formales','Atención básica, no resuelve consultas sin escalar al jefe','Atención cordial, resuelve consultas frecuentes con autonomía','Pacientes se sienten bienvenidos y bien atendidos de forma consistente','Primera impresión excelente, pacientes destacan el trato en reseñas o comentarios'] },
+      { id: 'c2', label: 'Gestión de agenda', desc: 'Manejo eficiente de citas, confirmaciones y reprogramaciones', escala: ['Errores frecuentes en citas: dobles reservas, olvidos o mala comunicación','Maneja la agenda básica pero comete errores en situaciones de alta demanda','Agenda organizada, confirmaciones y reprogramaciones al día','Gestión eficiente incluso en días de alta demanda, cero cruces de citas','Optimiza la agenda proactivamente, reduce tiempos de espera del paciente'] },
+      { id: 'c3', label: 'Tiempo de respuesta', desc: 'Rapidez en atender llamadas, mensajes y consultas', escala: ['Demoras frecuentes en atender llamadas, mensajes o pacientes presenciales','Responde pero con demoras que generan incomodidad','Tiempos de respuesta aceptables dentro del estándar de la clínica','Respuesta rápida y efectiva en todos los canales de atención','Respuesta inmediata, nunca deja un paciente esperando sin atención'] },
+      { id: 'c4', label: 'Comunicación interna', desc: 'Coordinación con doctores y área administrativa', escala: ['Información no llega o llega tarde y con errores al equipo','Comunica pero de forma incompleta o informal','Coordina correctamente con doctores y administración','Comunicación proactiva, avisa con anticipación de cambios o novedades','Nodo clave de comunicación del área, evita malentendidos y errores'] },
+      { id: 'c5', label: 'Presentación e imagen', desc: 'Cuidado de imagen personal y del espacio de recepción', escala: ['Presentación descuidada de forma habitual, no refleja la imagen de la clínica','Presentación básica, no siempre alineada con el estándar de la clínica','Presentación adecuada y espacio de recepción limpio y ordenado','Siempre impecable, el espacio de recepción refleja profesionalismo','Imagen referente, cuida cada detalle de la presentación y el ambiente'] },
     ]
   },
   administrativo: {
@@ -733,11 +735,11 @@ const AREAS = {
       { id: 'COE-011B', name: 'Jhohana Stephany Desiree Gonzalez Vargas', cargo: 'Asistente Administrativa' },
     ],
     criterios: [
-      { id: 'c1', label: 'Manejo de cobros y pagos', desc: 'Exactitud y control en la facturación y caja' },
-      { id: 'c2', label: 'Organización documental', desc: 'Archivos, contratos, historias clínicas al día' },
-      { id: 'c3', label: 'Cumplimiento de tareas', desc: 'Entrega puntual de reportes e informes' },
-      { id: 'c4', label: 'Manejo de herramientas digitales', desc: 'Uso eficiente de sistemas y plataformas' },
-      { id: 'c5', label: 'Discreción y confidencialidad', desc: 'Manejo responsable de información sensible' },
+      { id: 'c1', label: 'Manejo de cobros y pagos', desc: 'Exactitud y control en la facturación y caja', escala: ['Errores frecuentes en caja, descuadres o faltantes habituales','Maneja cobros básicos pero comete errores en facturación compleja','Caja cuadrada al cierre, facturación correcta en casos estándar','Control riguroso, detecta inconsistencias antes de que se conviertan en problemas','Cero errores, propone mejoras al proceso de facturación y cobro'] },
+      { id: 'c2', label: 'Organización documental', desc: 'Archivos, contratos, historias clínicas al día', escala: ['Documentos perdidos, atrasados o sin archivar de forma habitual','Archiva pero sin criterio claro, difícil encontrar documentos cuando se necesitan','Documentación al día y accesible para el equipo','Sistema de archivo claro y actualizado, digitaliza lo que puede','Documentación impecable, cualquier miembro del equipo puede encontrar lo que necesita'] },
+      { id: 'c3', label: 'Cumplimiento de tareas', desc: 'Entrega puntual de reportes e informes', escala: ['Incumple plazos de forma habitual, requiere seguimiento constante','Cumple algunas tareas pero olvida o demora otras sin avisar','Entrega lo que se le pide en los plazos establecidos','Entrega antes del plazo y avisa si hay algún inconveniente con anticipación','Cero tareas pendientes, gestiona su trabajo de forma completamente autónoma'] },
+      { id: 'c4', label: 'Manejo de herramientas digitales', desc: 'Uso eficiente de sistemas y plataformas', escala: ['Dificultades frecuentes con sistemas básicos, requiere asistencia constante','Usa las herramientas pero de forma limitada, no aprovecha todas sus funciones','Maneja correctamente los sistemas y plataformas requeridas para su cargo','Usuario avanzado, ayuda a otros cuando tienen dudas con los sistemas','Dominio total, propone mejoras o automatizaciones que ahorran tiempo al área'] },
+      { id: 'c5', label: 'Discreción y confidencialidad', desc: 'Manejo responsable de información sensible', escala: ['Ha compartido información sensible de forma inapropiada','Maneja información con cuidado básico pero sin criterio claro','Resguarda correctamente la información de pacientes y de la clínica','Alto criterio de confidencialidad, nunca comparte datos sin autorización','Referente de confianza del área, el equipo y la gerencia confían plenamente en su discreción'] },
     ]
   },
   ventas: {
@@ -748,11 +750,11 @@ const AREAS = {
       { id: 'COE-009', name: 'Gladys Milagros Alva García', cargo: 'Vendedora' },
     ],
     criterios: [
-      { id: 'c1', label: 'Tasa de cierre', desc: 'Porcentaje de leads convertidos en pacientes' },
-      { id: 'c2', label: 'Seguimiento de prospectos', desc: 'Constancia y calidad en el seguimiento' },
-      { id: 'c3', label: 'Manejo de objeciones', desc: 'Capacidad para superar resistencias del paciente' },
-      { id: 'c4', label: 'Conocimiento del servicio', desc: 'Dominio de tratamientos y precios' },
-      { id: 'c5', label: 'Actitud comercial', desc: 'Proactividad y orientación a resultados' },
+      { id: 'c1', label: 'Tasa de cierre', desc: 'Porcentaje de leads convertidos en pacientes', escala: ['Cierra menos del 20% de los leads que recibe','Cierra entre el 20% y el 35% de los leads','Cierra entre el 35% y el 50% de los leads, dentro del promedio del área','Cierra entre el 50% y el 70% de los leads de forma consistente','Cierra más del 70% de los leads, mejor tasa del equipo de ventas'] },
+      { id: 'c2', label: 'Seguimiento de prospectos', desc: 'Constancia y calidad en el seguimiento', escala: ['No hace seguimiento, los leads se enfrían sin contacto posterior','Hace seguimiento básico pero sin estructura ni constancia','Seguimiento sistemático dentro de los plazos establecidos','Seguimiento personalizado y persistente sin resultar invasivo','Sistema de seguimiento propio que maximiza la conversión de cada lead'] },
+      { id: 'c3', label: 'Manejo de objeciones', desc: 'Capacidad para superar resistencias del paciente', escala: ['Se bloquea ante objeciones, no sabe cómo responderlas','Responde objeciones comunes pero cede ante presión del paciente','Maneja las objeciones más frecuentes con argumentos claros','Convierte objeciones en oportunidades de cierre de forma consistente','Dominio total, cualquier objeción refuerza la confianza del paciente en el tratamiento'] },
+      { id: 'c4', label: 'Conocimiento del servicio', desc: 'Dominio de tratamientos y precios', escala: ['No puede explicar los tratamientos ni los precios con claridad','Conocimiento básico, necesita consultar al doctor para responder preguntas','Explica correctamente los tratamientos y precios del catálogo estándar','Conocimiento profundo, responde con seguridad casos complejos o comparativos','Experto en el portafolio, su conocimiento genera confianza inmediata en el paciente'] },
+      { id: 'c5', label: 'Actitud comercial', desc: 'Proactividad y orientación a resultados', escala: ['Actitud pasiva, espera que el paciente decida sin impulsar la conversión','Hace el esfuerzo mínimo, no muestra entusiasmo por los resultados','Actitud positiva y orientada a resultados en la mayoría de los casos','Alta motivación, contagia energía al equipo y busca superar sus metas','Motor del área, su actitud eleva el rendimiento de todo el equipo de ventas'] },
     ]
   },
   marketing: {
@@ -762,34 +764,35 @@ const AREAS = {
       { id: 'COE-031', name: 'Nayua Aliaga Pascual', cargo: 'Creadora de contenido' },
     ],
     criterios: [
-      { id: 'c1', label: 'Cumplimiento de entregables', desc: 'Entrega a tiempo de contenidos y campañas' },
-      { id: 'c2', label: 'Calidad creativa', desc: 'Nivel estético y efectividad del contenido' },
-      { id: 'c3', label: 'Métricas de campaña', desc: 'Resultados en alcance, leads y conversiones' },
-      { id: 'c4', label: 'Iniciativa y propuestas', desc: 'Generación de ideas sin necesidad de pedirlas' },
-      { id: 'c5', label: 'Manejo de herramientas', desc: 'Dominio de plataformas de diseño y ads' },
+      { id: 'c1', label: 'Cumplimiento de entregables', desc: 'Entrega a tiempo de contenidos y campañas', escala: ['Entrega tarde de forma habitual o no entrega sin avisar','Cumple algunos plazos pero frecuentemente pide extensiones','Entrega a tiempo los contenidos y piezas asignadas','Siempre puntual, avisa con anticipación si hay algún inconveniente','Entrega antes del plazo con margen para revisiones, nunca genera cuellos de botella'] },
+      { id: 'c2', label: 'Calidad creativa', desc: 'Nivel estético y efectividad del contenido', escala: ['Piezas con errores, mal diseño o que no representan la marca de la clínica','Calidad básica, piezas funcionales pero sin impacto visual','Piezas correctas, alineadas con la identidad visual de COE Dental','Piezas de alta calidad que generan engagement y reflejan profesionalismo','Nivel de agencia, cada pieza eleva la percepción de marca de la clínica'] },
+      { id: 'c3', label: 'Métricas de campaña', desc: 'Resultados en alcance, leads y conversiones', escala: ['Campañas sin resultados medibles o muy por debajo del objetivo','Resultados parciales, alcanza algunas métricas pero no las más importantes','Cumple los objetivos básicos de alcance y leads establecidos','Supera los objetivos de forma consistente, optimiza campañas en tiempo real','ROI excepcional, sus campañas son referente de resultados dentro del equipo'] },
+      { id: 'c4', label: 'Iniciativa y propuestas', desc: 'Generación de ideas sin necesidad de pedirlas', escala: ['Nunca propone ideas, espera que todo le sea indicado','Propone ocasionalmente pero sin seguimiento ni desarrollo de las ideas','Genera ideas regularmente y las presenta de forma estructurada','Propuestas constantes y bien fundamentadas, varias han sido implementadas','Fuente principal de ideas del área, su iniciativa impulsa la estrategia de marketing'] },
+      { id: 'c5', label: 'Manejo de herramientas', desc: 'Dominio de plataformas de diseño y ads', escala: ['Dificultades frecuentes con las plataformas básicas de diseño y ads','Manejo básico, no aprovecha las funciones avanzadas de las herramientas','Domina las herramientas necesarias para su cargo con autonomía','Usuario avanzado, optimiza procesos con funciones que otros no usan','Dominio experto, enseña a otros y propone nuevas herramientas que mejoran los resultados'] },
     ]
   },
   servicios: {
     label: 'Servicios Generales', jefe: 'Elizabeth Echeverria', color: '#c4a46b', icon: '🧹',
     colaboradores: [
       { id: 'COE-023B', name: 'Veronica Elizabeth Echeverria Marin', cargo: 'Jefa / Supervisora' },
-      { id: 'COE-006', name: 'Estela Donatila Barrientos Mendoza', cargo: 'Personal de Limpieza' },
-      { id: 'COE-007', name: 'Fidel Eduardo Velasquez Carmona', cargo: 'Mantenimiento' },
+      { id: 'COE-006', name: 'Estela Donatila Barrientos Mendoza', cargo: 'Servicios Generales' },
+      { id: 'COE-007', name: 'Fidel Eduardo Velasquez Carmona', cargo: 'Servicios Generales' },
+      { id: 'COE-026', name: 'Wilfredo Felix Negron Alva', cargo: 'Servicios Generales' },
       { id: 'COE-012', name: 'José Antonio Manyari Geldres', cargo: 'Servicios Generales' },
     ],
     criterios: [
-      { id: 'c1', label: 'Limpieza e higiene', desc: 'Estado de limpieza de las instalaciones' },
-      { id: 'c2', label: 'Cumplimiento de rutinas', desc: 'Seguimiento del checklist y tareas asignadas' },
-      { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales' },
-      { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas' },
-      { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo' },
+      { id: 'c1', label: 'Limpieza e higiene', desc: 'Estado de limpieza de las instalaciones', escala: ['Áreas bajo su responsabilidad frecuentemente sucias o en mal estado','Limpieza básica pero inconsistente, requiere recordatorio frecuente','Mantiene limpio su área de responsabilidad dentro del estándar esperado','Limpieza impecable y consistente, va más allá de lo asignado','Estándar de limpieza clínica de alto nivel, referente del área'] },
+      { id: 'c2', label: 'Cumplimiento de rutinas', desc: 'Seguimiento del checklist y tareas asignadas', escala: ['No sigue el checklist, omite tareas de forma habitual','Cumple algunas tareas del checklist pero no todas','Sigue el checklist completo dentro del horario establecido','Cumple todas las rutinas y avisa cuando detecta algo fuera de lo normal','Nunca omite una tarea, además propone mejoras a las rutinas existentes'] },
+      { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales', escala: ['Ha dañado o deteriorado equipos por mal uso','Usa los equipos sin mayor cuidado, no reporta fallas','Usa correctamente los equipos y reporta fallas cuando las detecta','Cuida los equipos como si fueran propios, los mantiene en buen estado','Referente en cuidado de equipos, prolonga su vida útil con mantenimiento preventivo'] },
+      { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas', escala: ['Nunca actúa sin que se le indique, aunque el problema sea evidente','Actúa solo en situaciones muy obvias o urgentes','Detecta problemas menores y los resuelve sin necesidad de indicación','Regularmente anticipa necesidades del área y actúa antes de que se lo pidan','Constantemente identifica y resuelve situaciones que nadie más nota'] },
+      { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo', escala: ['Actitud negativa, se queja o resiste ante tareas adicionales','Cumple lo mínimo sin disposición para colaborar más allá de su rol','Buena actitud general, dispuesto a apoyar cuando se le solicita','Siempre dispuesto, su actitud positiva es valorada por todo el equipo','Referente de actitud en la clínica, su energía impacta positivamente en el ambiente'] },
     ]
   },
   coe_lab: {
     label: 'COE Lab / Técnicos', jefe: 'Erika Guizado', color: '#8898b8', icon: '🔬',
     colaboradores: [
       { id: 'COE-005', name: 'Erika Wendy Guizado Francia', cargo: 'Jefa COE Lab' },
-      { id: 'COE-026', name: 'Wilfredo Felix Negron Alva', cargo: 'Motorizado' },
+
       { id: 'COE-014', name: 'Jose Luis Kenneth Culque Villar', cargo: 'Técnico Dental' },
       { id: 'COE-024', name: 'Saldamando Balcazar Melanie Nicole', cargo: 'Radiólogo' },
       { id: 'COE-008', name: 'George William Aguirre Yumbato', cargo: 'Técnico Dental' },
@@ -797,11 +800,11 @@ const AREAS = {
       { id: 'COE-021', name: 'Rosario del Pilar Cuzcano Hinojo', cargo: 'Encargada Área de Yeso' },
     ],
     criterios: [
-      { id: 'c1', label: 'Calidad técnica', desc: 'Precisión en los trabajos técnicos realizados' },
-      { id: 'c2', label: 'Tiempo de entrega', desc: 'Cumplimiento de plazos en trabajos de laboratorio' },
-      { id: 'c3', label: 'Manejo de equipos', desc: 'Uso correcto y cuidado de equipos especializados' },
-      { id: 'c4', label: 'Protocolos de seguridad', desc: 'Cumplimiento de normas de bioseguridad' },
-      { id: 'c5', label: 'Comunicación con doctores', desc: 'Coordinación efectiva para indicaciones' },
+      { id: 'c1', label: 'Calidad técnica', desc: 'Precisión en los trabajos técnicos realizados', escala: ['Trabajos con errores frecuentes que requieren rehacerse','Calidad irregular, algunos trabajos cumplen el estándar y otros no','Trabajos dentro del estándar de calidad requerido por la clínica','Alta calidad consistente, los doctores confían en sus entregas','Calidad de referencia, sus trabajos no requieren correcciones'] },
+      { id: 'c2', label: 'Tiempo de entrega', desc: 'Cumplimiento de plazos en trabajos de laboratorio', escala: ['Entregas frecuentemente fuera del plazo, genera demoras en la atención','Cumple algunos plazos pero falla en picos de trabajo','Entrega dentro de los plazos establecidos en la mayoría de los casos','Siempre a tiempo, avisa con anticipación si hay un retraso inevitable','Entrega antes del plazo, nunca ha generado un retraso en la atención'] },
+      { id: 'c3', label: 'Manejo de equipos', desc: 'Uso correcto y cuidado de equipos especializados', escala: ['Mal uso frecuente de equipos especializados, ha generado daños','Uso básico correcto pero sin mantenimiento ni cuidado adicional','Usa correctamente los equipos y los mantiene en buen estado','Cuidado riguroso, reporta fallas antes de que generen problemas','Referente en cuidado de equipos, extiende su vida útil con mantenimiento preventivo'] },
+      { id: 'c4', label: 'Protocolos de seguridad', desc: 'Cumplimiento de normas de bioseguridad', escala: ['Incumple normas de bioseguridad de forma habitual','Conoce los protocolos pero los aplica de forma incompleta','Aplica los protocolos de bioseguridad establecidos correctamente','Riguroso con bioseguridad, registra incidencias correctamente','Referente de seguridad en el laboratorio, detecta y reporta riesgos proactivamente'] },
+      { id: 'c5', label: 'Comunicación con doctores', desc: 'Coordinación efectiva para indicaciones', escala: ['No consulta indicaciones, genera errores por suposiciones','Consulta solo cuando tiene dudas grandes, omite detalles importantes','Coordina correctamente indicaciones en casos estándar','Comunicación proactiva, confirma detalles antes de iniciar trabajos complejos','Coordinación ejemplar, nunca ha generado un trabajo incorrecto por falta de comunicación'] },
     ]
   }
 };
@@ -999,21 +1002,46 @@ function buildCriteria(area) {
     const el = document.createElement('div');
     el.className = 'criterion';
     if (isU) { el.style.borderColor = '#c9b8e8'; el.style.background = '#f5f0fa'; }
+    const escala = c.escala || [];
+    const escalaHTML = escala.length ? `
+      <div id="escala-${c.id}" style="margin-top:10px;display:none;">
+        <div style="font-size:10px;font-weight:600;color:#8f82a8;margin-bottom:6px;letter-spacing:0.05em">GUÍA DE PUNTAJE</div>
+        ${escala.map((e,i) => `
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:5px">
+            <span style="min-width:20px;height:20px;border-radius:50%;background:${['#f5d4d4','#fdefc8','#fef9dc','#d4ecf8','#c8f0dd'][i]};color:${['#a04040','#a07828','#8a7820','#3a7fa8','#3a9e6e'][i]};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</span>
+            <span style="font-size:11.5px;color:#5a4f72;line-height:1.4">${e}</span>
+          </div>`).join('')}
+      </div>
+      <button onclick="toggleEscala('${c.id}')" style="margin-top:8px;background:none;border:none;font-size:11px;color:#a78bd4;cursor:pointer;font-family:inherit;padding:0;font-weight:600">▾ Ver guía de puntaje</button>
+    ` : '';
     el.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
         <div class="crit-label">${c.label}</div>
         ${isU ? '<span style="font-size:9.5px;background:#a78bd4;color:#fff;padding:1px 6px;border-radius:8px;font-weight:600">Universal</span>' : ''}
       </div>
       <div class="crit-desc">${c.desc}</div>
-      <div class="rating-row" id="rating-${c.id}">
+      <div class="rating-row" id="rating-${c.id}" style="margin-top:10px">
         ${[1,2,3,4,5].map(n => `<button class="rating-btn" onclick="setRating('${c.id}',${n},this)">${n}</button>`).join('')}
       </div>
       <div class="rating-labels"><span>Muy bajo</span><span>Bajo</span><span>Regular</span><span>Bueno</span><span>Excelente</span></div>
+      ${escalaHTML}
     `;
     grid.appendChild(el);
   });
   document.getElementById('criteria-card').style.display = 'block';
   document.getElementById('obs-card').style.display = 'block';
+}
+
+function toggleEscala(id) {
+  const el = document.getElementById('escala-' + id);
+  const btn = el.nextElementSibling;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = '▴ Ocultar guía';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = '▾ Ver guía de puntaje';
+  }
 }
 
 function setRating(id, val, btn) {
