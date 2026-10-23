@@ -343,6 +343,7 @@
         <div class="topbar-sub" id="topbar-sub">Resumen de evaluaciones</div>
       </div>
       <div class="topbar-right">
+        <button class="print-btn" id="btn-sync" onclick="sincronizarDesdeSheets()" style="display:none;background:#3a9e6e;margin-right:6px">☁️ Sincronizar Sheet</button>
         <button class="print-btn" onclick="openPrintModal()">🖨️ Imprimir / Exportar</button>
         <div class="topbar-badge" id="topbar-badge">2026</div>
       </div>
@@ -524,6 +525,129 @@
 <div id="print-frame" style="display:none;"></div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+// GOOGLE SHEETS CONFIG
+// ═══════════════════════════════════════════════════════
+const SHEET_ID   = '1SARNvCAkmysrYD8f-BrQGeHnG-J0v38hsLsA7HXPHMA';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzZ5wYgJzGM17R_rp1ESncCMPgljm7EQRTuhdIbxopxmrL8FQlBFVP3i_AFfEfzL2M/exec';
+
+function enviarASheets(record) {
+  // Envía el detalle COMPLETO: criterio por criterio + observaciones
+  const criteriosObj = {};
+  (record.criteriosDetalle || []).forEach((c, i) => {
+    criteriosObj['criterio_' + (i + 1)] = c.label;
+    criteriosObj['puntaje_' + (i + 1)]  = c.score;
+  });
+  const payload = {
+    fecha:           record.fecha,
+    colaborador:     record.colaboradorName,
+    id:              record.colaboradorId,
+    cargo:           record.cargo,
+    area:            record.areaLabel,
+    jefe:            record.jefe,
+    puntaje:         record.avg,
+    nivel:           scoreLevel(record.avg).label,
+    periodo:         record.periodo || '',
+    fortalezas:      record.fortalezas || '',
+    mejora:          record.mejora || '',
+    general:         record.general || '',
+    criteriosJson:   JSON.stringify(record.criteriosDetalle || []),
+    ...criteriosObj
+  };
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn('Error enviando a Sheets:', err));
+}
+
+async function sincronizarDesdeSheets() {
+  const btn = document.getElementById('btn-sync');
+  const original = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '⏳ Sincronizando...'; btn.disabled = true; }
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const res = await fetch(url);
+    const raw = await res.text();
+    const jsonText = raw.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, '');
+    const data = JSON.parse(jsonText);
+    const rows = data.table.rows;
+    const cols = data.table.cols.map(c => c.label);
+    if (!rows || rows.length === 0) {
+      alert('El Sheet está vacío o no tiene datos.');
+      if (btn) { btn.innerHTML = original; btn.disabled = false; }
+      return;
+    }
+    const idx = {};
+    const normalize = s => s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    cols.forEach((label, i) => { idx[normalize(label)] = i; });
+
+    const getVal = (row, label) => {
+      const i = idx[normalize(label)];
+      if (i === undefined || !row.c || !row.c[i]) return '';
+      const cell = row.c[i];
+      if (cell.v === null || cell.v === undefined) return cell.f || '';
+      // Arreglar fechas Date(año,mes,dia) que vienen del Sheet
+      if (typeof cell.v === 'string' && cell.v.startsWith('Date(')) {
+        const parts = cell.v.replace('Date(','').replace(')','').split(',');
+        if (parts.length >= 3) {
+          const d = new Date(+parts[0], +parts[1], +parts[2]);
+          return d.toLocaleDateString('es-PE', {day:'2-digit',month:'2-digit',year:'numeric'});
+        }
+      }
+      if (cell.f) return cell.f; // formatted value (ej. fecha ya formateada)
+      return String(cell.v);
+    };
+
+    let nuevas = 0, duplicadas = 0;
+    rows.forEach(row => {
+      if (!row.c || row.c.every(c => !c)) return;
+      const fecha      = getVal(row, 'fecha');
+      const colabName  = getVal(row, 'colaborador');
+      const colabId    = getVal(row, 'id');
+      const cargo      = getVal(row, 'cargo');
+      const areaLabel  = getVal(row, 'area') || getVal(row, 'área');
+      const jefe       = getVal(row, 'jefe');
+      const avgStr     = getVal(row, 'puntaje') || getVal(row, 'promedio');
+      const periodo    = getVal(row, 'periodo') || getVal(row, 'período');
+      const fortalezas = getVal(row, 'fortalezas');
+      const mejora     = getVal(row, 'mejora');
+      const general    = getVal(row, 'general');
+      const criteriosJsonStr = getVal(row, 'criteriosjson') || getVal(row, 'criterios');
+      if (!colabName || !areaLabel) return;
+      const areaKey  = Object.keys(AREAS).find(k => AREAS[k].label === areaLabel) || 'administrativo';
+      const areaData = AREAS[areaKey] || { color: '#a78bd4' };
+      const avg      = parseFloat(avgStr) || 0;
+      const uid      = `sheet_${(colabId||colabName).replace(/\s+/g,'_')}_${fecha.replace(/\//g,'-')}`;
+      if (evaluaciones.find(e => String(e.id) === uid)) { duplicadas++; return; }
+      // Intentar recuperar criteriosDetalle desde columna JSON si existe
+      let criteriosDetalle = [];
+      if (criteriosJsonStr) {
+        try { criteriosDetalle = JSON.parse(criteriosJsonStr); } catch(e) {}
+      }
+      evaluaciones.push({
+        id: uid, area: areaKey, areaLabel, areaColor: areaData.color || '#a78bd4',
+        colaboradorId: colabId || colabName, colaboradorName: colabName, cargo,
+        jefe, ratings: {}, criteriosDetalle, avg,
+        nivel: scoreLevel(avg).label, periodo, fortalezas, mejora, general,
+        fecha, ts: new Date(fecha.split('/').reverse().join('-')).getTime() || Date.now()
+      });
+      nuevas++;
+    });
+    localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
+    renderDashboard();
+    if (btn) { btn.innerHTML = original; btn.disabled = false; }
+    alert(nuevas > 0
+      ? `✅ ${nuevas} evaluación(es) importada(s) desde el Sheet.${duplicadas > 0 ? ` (${duplicadas} ya existían)` : ''}`
+      : `ℹ️ No hay evaluaciones nuevas. ${duplicadas} ya estaban importadas.`);
+  } catch(err) {
+    console.error('Error sync Sheet:', err);
+    if (btn) { btn.innerHTML = original; btn.disabled = false; }
+    alert('Error al conectar con Google Sheets. Verifica tu conexión.');
+  }
+}
+
 // ═══════════════════════════════════════════════════════
 // CONFIG: PINs — cambia estos valores antes de distribuir
 // ═══════════════════════════════════════════════════════
@@ -815,6 +939,9 @@ function showView(view) {
   };
   document.getElementById('topbar-title').textContent = titles[view][0];
   document.getElementById('topbar-sub').textContent = titles[view][1];
+  // Mostrar botón sync solo a admin en dashboard
+  const btnSync = document.getElementById('btn-sync');
+  if (btnSync) btnSync.style.display = (view === 'dashboard' && currentUser && currentUser.role === 'admin') ? '' : 'none';
   if (view === 'dashboard') renderDashboard();
   if (view === 'results') renderResultsTable();
 }
@@ -922,6 +1049,7 @@ function submitForm() {
   };
   evaluaciones.push(record);
   localStorage.setItem('coe_eval_v2', JSON.stringify(evaluaciones));
+  enviarASheets(record); // Enviar a Google Sheets con detalle completo
   document.getElementById('success-msg').textContent = `${colab.name} — Puntaje: ${avg}/5.0`;
   document.getElementById('success-modal').classList.add('show');
 }
@@ -1126,9 +1254,9 @@ function printIndividual() {
 function closeIndividualModal() { document.getElementById('individual-modal').classList.remove('show'); }
 
 function doPrintIndividual() {
-  const id = parseInt(document.getElementById('sel-print-colab').value);
+  const id = document.getElementById('sel-print-colab').value;
   if (!id) { alert('Selecciona un colaborador.'); return; }
-  const ev = evaluaciones.find(e => e.id === id);
+  const ev = evaluaciones.find(e => String(e.id) === String(id));
   closeIndividualModal();
   showPrintOverlay(buildFichaHTML(ev));
 }
