@@ -344,6 +344,7 @@
       </div>
       <div class="topbar-right">
         <button class="print-btn" id="btn-sync" onclick="sincronizarDesdeSheets()" style="display:none;background:#3a9e6e;margin-right:6px">☁️ Sincronizar Sheet</button>
+        <button class="print-btn" id="btn-limpiar" onclick="limpiarDuplicados()" style="display:none;background:#c0392b;margin-right:6px">🗑️ Limpiar duplicados</button>
         <button class="print-btn" onclick="openPrintModal()">🖨️ Imprimir / Exportar</button>
         <div class="topbar-badge" id="topbar-badge">2026</div>
       </div>
@@ -562,6 +563,28 @@ function enviarASheets(record) {
   }).catch(err => console.warn('Error enviando a Sheets:', err));
 }
 
+function limpiarDuplicados() {
+  const evaluaciones = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
+  const vistos = new Map();
+  const limpias = [];
+  evaluaciones.forEach(e => {
+    const key = `${e.colaboradorId||e.colaboradorName}_${e.periodo||e.fecha}`;
+    if (!vistos.has(key)) {
+      vistos.set(key, true);
+      limpias.push(e);
+    }
+  });
+  const eliminadas = evaluaciones.length - limpias.length;
+  if (eliminadas === 0) {
+    alert('✅ No se encontraron duplicados.');
+    return;
+  }
+  if (!confirm(`⚠️ Se encontraron ${eliminadas} registro(s) duplicado(s).\n¿Deseas eliminarlos? Esta acción no se puede deshacer.`)) return;
+  localStorage.setItem('coe_eval_v2', JSON.stringify(limpias));
+  renderDashboard();
+  alert(`✅ Se eliminaron ${eliminadas} duplicado(s). Quedan ${limpias.length} evaluaciones.`);
+}
+
 async function sincronizarDesdeSheets() {
   const btn = document.getElementById('btn-sync');
   const original = btn ? btn.innerHTML : '';
@@ -620,7 +643,13 @@ async function sincronizarDesdeSheets() {
       const areaData = AREAS[areaKey] || { color: '#a78bd4' };
       const avg      = parseFloat(avgStr) || 0;
       const uid      = `sheet_${(colabId||colabName).replace(/\s+/g,'_')}_${fecha.replace(/\//g,'-')}`;
-      if (evaluaciones.find(e => String(e.id) === uid)) { duplicadas++; return; }
+      // Deduplicar: comparar por colaboradorId + periodo (cubre registros locales Y del sheet)
+      const yaExiste = evaluaciones.find(e =>
+        String(e.colaboradorId) === String(colabId) &&
+        (e.periodo || '') === (periodo || '') &&
+        e.avg === (parseFloat(avgStr) || 0)
+      );
+      if (yaExiste) { duplicadas++; return; }
       // Intentar recuperar criteriosDetalle desde columna JSON si existe
       let criteriosDetalle = [];
       if (criteriosJsonStr) {
@@ -944,7 +973,10 @@ function showView(view) {
   document.getElementById('topbar-sub').textContent = titles[view][1];
   // Mostrar botón sync solo a admin en dashboard
   const btnSync = document.getElementById('btn-sync');
-  if (btnSync) btnSync.style.display = (view === 'dashboard' && currentUser && currentUser.role === 'admin') ? '' : 'none';
+  const btnLimpiar = document.getElementById('btn-limpiar');
+  const isAdmin = view === 'dashboard' && currentUser && currentUser.role === 'admin';
+  if (btnSync) btnSync.style.display = isAdmin ? '' : 'none';
+  if (btnLimpiar) btnLimpiar.style.display = isAdmin ? '' : 'none';
   if (view === 'dashboard') renderDashboard();
   if (view === 'results') renderResultsTable();
 }
