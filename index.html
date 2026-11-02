@@ -551,27 +551,52 @@
       <div class="view" id="view-votos">
         <div class="votos-container">
           <div class="voto-card">
-            <h3>🤝 Voto de Pares — COE Destaca</h3>
-            <div class="voto-sub">Elige a un compañero que haya destacado por su actitud, apoyo y compromiso este período. Tu voto es anónimo.</div>
-            <div id="voto-badge" class="voto-badge">✅ Ya registraste tu voto este período. Puedes cambiar tu selección hasta el final del período.</div>
-            <div class="form-row" style="margin-bottom:14px">
-              <label>Período</label>
+            <h3>🤝 Reconocimiento al Desempeño Mensual</h3>
+            <div class="voto-sub">Nomina a tus compañeros que destacaron este mes. Tu voto es anónimo y contribuye al programa COE Destaca.</div>
+            <div id="voto-badge" class="voto-badge">✅ Ya registraste tu voto este período. Puedes actualizar tu selección hasta el cierre del período.</div>
+            <div class="form-row" style="margin-bottom:20px">
+              <label>MES / AÑO — Período</label>
               <select id="voto-periodo" onchange="buildNominees()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
                 <option value="">— Selecciona el período —</option>
               </select>
             </div>
             <div id="nominees-section" style="display:none">
-              <div class="form-row" style="margin-bottom:10px">
-                <label>¿A quién nominás? <span style="color:#b85555">*</span></label>
-                <p style="font-size:12px;color:#8f82a8;margin-bottom:10px">Selecciona la persona que más ha aportado al equipo, más allá de sus funciones.</p>
+
+              <!-- PREGUNTA 01 -->
+              <div style="background:#1a1a1a;border-radius:8px;padding:12px 16px;margin-bottom:16px">
+                <div style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.1em">01</div>
+                <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px">TRABAJO EN EQUIPO</div>
               </div>
-              <div class="nominee-grid" id="nominee-grid"></div>
-              <div class="form-row">
-                <label>¿Por qué la nominás? <span style="font-weight:400;color:#8f82a8">(opcional)</span></label>
-                <textarea id="voto-razon" placeholder="Describe brevemente por qué esta persona merece ser reconocida..." style="width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;min-height:72px;outline:none;background:#fafbfd"></textarea>
+              <div class="form-row" style="margin-bottom:6px">
+                <label style="font-size:14px;font-weight:700;color:#3d3550">¿Qué compañero/a te apoyó más este mes?</label>
+                <p style="font-size:12px;color:#8f82a8;margin-bottom:12px;font-style:italic">Considera quién te ayudó con un caso difícil, te cubrió en un imprevisto o aportó al equipo.</p>
               </div>
-              <div class="form-actions" style="margin-top:16px">
-                <button class="btn-primary" onclick="submitVoto()">✓ Enviar voto</button>
+              <div class="nominee-grid" id="nominee-grid-01" style="margin-bottom:20px"></div>
+
+              <!-- PREGUNTA 02 -->
+              <div style="background:#1a1a1a;border-radius:8px;padding:12px 16px;margin-bottom:16px">
+                <div style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.1em">02</div>
+                <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px">ATENCIÓN AL PACIENTE</div>
+              </div>
+              <div class="form-row" style="margin-bottom:6px">
+                <label style="font-size:14px;font-weight:700;color:#3d3550">¿Quién destacó por su trato con los pacientes?</label>
+                <p style="font-size:12px;color:#8f82a8;margin-bottom:12px;font-style:italic">Piensa en quién mostró mayor empatía, paciencia y profesionalismo con los pacientes este mes.</p>
+              </div>
+              <div class="nominee-grid" id="nominee-grid-02" style="margin-bottom:20px"></div>
+
+              <!-- PREGUNTA 03 -->
+              <div style="background:#1a1a1a;border-radius:8px;padding:12px 16px;margin-bottom:16px">
+                <div style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.1em">03</div>
+                <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px">ACTITUD Y COMPROMISO</div>
+              </div>
+              <div class="form-row" style="margin-bottom:6px">
+                <label style="font-size:14px;font-weight:700;color:#3d3550">¿Quién mostró la mejor actitud e iniciativa?</label>
+                <p style="font-size:12px;color:#8f82a8;margin-bottom:12px;font-style:italic">Considera quién propuso ideas, ayudó sin que se lo pidieran o asumió tareas fuera de su rol.</p>
+              </div>
+              <div class="nominee-grid" id="nominee-grid-03" style="margin-bottom:20px"></div>
+
+              <div class="form-actions" style="margin-top:8px">
+                <button class="btn-primary" onclick="submitVoto()">✓ Enviar votos</button>
                 <button class="btn-secondary" onclick="resetVoto()">Limpiar</button>
               </div>
             </div>
@@ -1837,7 +1862,7 @@ const FECHAS_INGRESO = {
   'COE-037': { nombre: 'Camila Calderon Abril',          fecha: '2026-09-28', area: 'Clínico' }
 };
 
-const HITOS_ANIVERSARIO = [1, 5, 10, 15, 20];
+const HITOS_ANIVERSARIO = [5, 10, 15, 20];
 const DESTACA_CATEGORIAS = [
   { id: 'calidad',      label: 'Calidad Clínica/Técnica', icon: '⭐' },
   { id: 'trato',        label: 'Trato y Atención',        icon: '💛' },
@@ -1894,8 +1919,9 @@ function computeDestacaWinners(periodo) {
   // Compute average score per collaborator
   const byColab = {};
   filtered.forEach(ev => {
-    const key = ev.colaborador + '|' + ev.area;
-    if (!byColab[key]) byColab[key] = { nombre: ev.colaborador, area: ev.area, scores: [], count: 0 };
+    const nombre = ev.colaboradorName || ev.colaborador || '?';
+    const key = nombre + '|' + ev.area;
+    if (!byColab[key]) byColab[key] = { nombre, area: ev.area, scores: [], count: 0 };
     const criterios = ev.criterios || {};
     const vals = Object.values(criterios).filter(v => typeof v === 'number' && v > 0);
     if (vals.length) {
@@ -1964,10 +1990,17 @@ function renderDestaca() {
 }
 
 // ═══════════════════════════════════════════════════════
-// VOTO DE PARES
+// VOTO DE PARES — 3 preguntas con lista fija de personal
 // ═══════════════════════════════════════════════════════
 let votoPeriodo = '';
-let votoSeleccionado = '';
+// Selecciones por pregunta: { q01: nombre, q02: nombre, q03: nombre }
+let votoSelecciones = { q01: '', q02: '', q03: '' };
+
+// Lista completa del personal para votación (tomada de FECHAS_INGRESO)
+function getPersonalParaVotar() {
+  return Object.entries(FECHAS_INGRESO).map(([id, d]) => ({ id, nombre: d.nombre, area: d.area }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+}
 
 function buildNominees() {
   const periodoSel = document.getElementById('voto-periodo');
@@ -1977,80 +2010,61 @@ function buildNominees() {
   if (!votoPeriodo) { section.style.display = 'none'; return; }
   section.style.display = 'block';
 
-  // Get collaborators from evaluations of this period (excluding self)
-  const evals = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
-  const periodoEvals = evals.filter(e => e.periodo === votoPeriodo);
-  const names = new Set();
-  periodoEvals.forEach(e => { if (e.colaborador) names.add(e.colaborador + '||' + (e.area || '')); });
-
-  // Also add from other areas (all collaborators in the system for this area)
-  const currentAreaColab = periodoEvals
-    .filter(e => currentUser && e.area === currentUser.area)
-    .map(e => e.colaborador);
-
-  const grid = document.getElementById('nominee-grid');
-  if (!grid) return;
-
-  // Show previous vote if any
+  // Recuperar votos previos
   const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
   const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
   const prevVoto = (votos[votoPeriodo] || {})[votoKey];
   if (prevVoto) {
-    votoSeleccionado = prevVoto.nominado;
+    votoSelecciones = { q01: prevVoto.q01 || '', q02: prevVoto.q02 || '', q03: prevVoto.q03 || '' };
     document.getElementById('voto-badge').style.display = 'block';
-    if (prevVoto.razon) document.getElementById('voto-razon').value = prevVoto.razon;
   } else {
-    votoSeleccionado = '';
+    votoSelecciones = { q01: '', q02: '', q03: '' };
     document.getElementById('voto-badge').style.display = 'none';
   }
 
-  const allNames = [...names];
-  if (!allNames.length) {
-    grid.innerHTML = '<p style="color:#8f82a8;font-size:13px;grid-column:1/-1">No hay evaluados registrados para este período.</p>';
-    return;
-  }
+  const personal = getPersonalParaVotar();
+  ['01','02','03'].forEach(n => {
+    const grid = document.getElementById('nominee-grid-' + n);
+    if (!grid) return;
+    const qKey = 'q' + n;
+    grid.innerHTML = personal.map(p => {
+      const isSelected = votoSelecciones[qKey] === p.nombre;
+      const safe = p.nombre.replace(/'/g,"\\'");
+      return `<button class="nominee-btn ${isSelected ? 'selected' : ''}" onclick="selectNomineeQ('${n}',this,'${safe}')">
+        <div class="nom-name">${p.nombre}</div>
+        <div class="nom-area">${p.area}</div>
+      </button>`;
+    }).join('');
+  });
 
-  grid.innerHTML = allNames.map(entry => {
-    const [nombre, area] = entry.split('||');
-    // Don't show yourself
-    if (currentUser && nombre === currentUser.name) return '';
-    const isSelected = votoSeleccionado === nombre;
-    return `<button class="nominee-btn ${isSelected ? 'selected' : ''}" onclick="selectNominee(this,'${nombre.replace(/'/g,"\\'")}')">
-      <div class="nom-name">${nombre}</div>
-      <div class="nom-area">${(AREAS[area]||{}).label || area || 'COE Dental'}</div>
-    </button>`;
-  }).filter(Boolean).join('');
-
-  // Admin: show vote summary
-  if (currentUser && currentUser.role === 'admin') {
-    renderVotosSummary(votoPeriodo);
-  }
+  // Admin: mostrar resumen
+  if (currentUser?.role === 'admin') renderVotosSummary(votoPeriodo);
 }
 
-function selectNominee(btn, nombre) {
-  document.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
+function selectNomineeQ(qNum, btn, nombre) {
+  const grid = document.getElementById('nominee-grid-' + qNum);
+  if (grid) grid.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  votoSeleccionado = nombre;
+  votoSelecciones['q' + qNum] = nombre;
 }
 
 function submitVoto() {
   if (!votoPeriodo) { alert('Selecciona un período primero.'); return; }
-  if (!votoSeleccionado) { alert('Selecciona a un compañero para nominar.'); return; }
-  const razon = document.getElementById('voto-razon')?.value || '';
+  const { q01, q02, q03 } = votoSelecciones;
+  if (!q01 && !q02 && !q03) { alert('Selecciona al menos una nominación para enviar.'); return; }
   const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
   if (!votos[votoPeriodo]) votos[votoPeriodo] = {};
   const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
-  votos[votoPeriodo][votoKey] = { nominado: votoSeleccionado, razon, ts: new Date().toISOString() };
+  votos[votoPeriodo][votoKey] = { q01, q02, q03, ts: new Date().toISOString() };
   localStorage.setItem('coe_votos_v1', JSON.stringify(votos));
   document.getElementById('voto-badge').style.display = 'block';
-  alert(`✅ Voto registrado para ${votoSeleccionado}. ¡Gracias por participar!`);
+  alert('✅ ¡Votos registrados! Gracias por participar en el reconocimiento mensual.');
   if (currentUser?.role === 'admin') renderVotosSummary(votoPeriodo);
 }
 
 function resetVoto() {
-  votoSeleccionado = '';
+  votoSelecciones = { q01: '', q02: '', q03: '' };
   document.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('voto-razon').value = '';
 }
 
 function renderVotosSummary(periodo) {
@@ -2060,28 +2074,41 @@ function renderVotosSummary(periodo) {
   section.style.display = 'block';
   const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
   const periodoVotos = votos[periodo] || {};
-  const count = {};
-  const razones = {};
-  Object.values(periodoVotos).forEach(v => {
-    count[v.nominado] = (count[v.nominado] || 0) + 1;
-    if (v.razon) { if (!razones[v.nominado]) razones[v.nominado] = []; razones[v.nominado].push(v.razon); }
-  });
-  const total = Object.values(count).reduce((a, b) => a + b, 0);
-  if (!total) {
+
+  // Contar votos por pregunta
+  const cats = [
+    { key: 'q01', label: 'Trabajo en Equipo' },
+    { key: 'q02', label: 'Atención al Paciente' },
+    { key: 'q03', label: 'Actitud y Compromiso' }
+  ];
+  const totalVotantes = Object.keys(periodoVotos).length;
+  if (!totalVotantes) {
     container.innerHTML = '<p style="color:#8f82a8;font-size:13px">No hay votos registrados para este período.</p>';
     return;
   }
-  const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
-  container.innerHTML = `<p style="font-size:12px;color:#8f82a8;margin-bottom:12px">Total de votos registrados: <strong>${total}</strong></p>` +
-    sorted.map(([nom, cnt]) => {
-      const pct = Math.round(cnt / total * 100);
-      return `<div style="margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:13px;font-weight:600;color:#3d3550">${nom}</span>
-          <span style="font-size:13px;font-weight:700;color:#a78bd4">${cnt} voto${cnt !== 1 ? 's' : ''} (${pct}%)</span>
-        </div>
-        <div style="background:#ede8f8;border-radius:6px;height:8px"><div style="background:#a78bd4;width:${pct}%;height:100%;border-radius:6px"></div></div>
-        ${razones[nom] ? `<div style="font-size:11px;color:#8f82a8;margin-top:4px;font-style:italic">"${razones[nom][0]}"</div>` : ''}
+
+  container.innerHTML = `<p style="font-size:12px;color:#8f82a8;margin-bottom:16px">Participantes: <strong>${totalVotantes}</strong></p>` +
+    cats.map(cat => {
+      const count = {};
+      Object.values(periodoVotos).forEach(v => {
+        const nom = v[cat.key];
+        if (nom) count[nom] = (count[nom] || 0) + 1;
+      });
+      const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
+      const max = sorted[0]?.[1] || 1;
+      if (!sorted.length) return `<div style="margin-bottom:16px"><div style="font-size:12px;font-weight:700;color:#a78bd4;margin-bottom:8px">${cat.label}</div><p style="font-size:12px;color:#8f82a8">Sin votos aún.</p></div>`;
+      return `<div style="margin-bottom:20px">
+        <div style="font-size:12px;font-weight:700;color:#a78bd4;margin-bottom:8px;letter-spacing:.05em">${cat.label}</div>
+        ${sorted.map(([nom, cnt]) => {
+          const pct = Math.round(cnt / max * 100);
+          return `<div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+              <span style="font-size:13px;color:#3d3550">${nom}</span>
+              <span style="font-size:12px;font-weight:700;color:#a78bd4">${cnt}</span>
+            </div>
+            <div style="background:#ede8f8;border-radius:4px;height:6px"><div style="background:#a78bd4;width:${pct}%;height:100%;border-radius:4px"></div></div>
+          </div>`;
+        }).join('')}
       </div>`;
     }).join('');
 }
