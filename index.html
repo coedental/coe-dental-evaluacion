@@ -563,15 +563,30 @@ function enviarASheets(record) {
   }).catch(err => console.warn('Error enviando a Sheets:', err));
 }
 
+function normalizarFecha(fecha) {
+  if (!fecha) return '';
+  // Date(2026,9,23) → convierte mes base-0 a dd/mm/yyyy
+  if (typeof fecha === 'string' && fecha.startsWith('Date(')) {
+    const parts = fecha.replace('Date(','').replace(')','').split(',');
+    if (parts.length >= 3) {
+      const d = new Date(+parts[0], +parts[1], +parts[2]);
+      return d.toLocaleDateString('es-PE', {day:'2-digit',month:'2-digit',year:'numeric'});
+    }
+  }
+  return fecha;
+}
+
 function limpiarDuplicados() {
   const evaluaciones = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
   const vistos = new Map();
   const limpias = [];
   evaluaciones.forEach(e => {
-    const key = `${e.colaboradorId||e.colaboradorName}_${e.periodo||e.fecha}`;
+    const fechaNorm = normalizarFecha(e.fecha);
+    const key = `${e.colaboradorId||e.colaboradorName}_${e.periodo||''}_${fechaNorm}`;
     if (!vistos.has(key)) {
       vistos.set(key, true);
-      limpias.push(e);
+      // Normalizar la fecha al guardar
+      limpias.push({...e, fecha: fechaNorm});
     }
   });
   const eliminadas = evaluaciones.length - limpias.length;
