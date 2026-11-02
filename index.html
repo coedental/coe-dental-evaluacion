@@ -705,6 +705,7 @@ const PINS = {
   marketing:      '6666',
   servicios:      '7777',
   coe_lab:        '8888',
+  mensajeria:      '9999',
 };
 
 // ═══════════════════════════════════════════════════════
@@ -748,6 +749,7 @@ const AREAS = {
       { id: 'COE-025', name: 'Anghi Yorye Rojas Pariona', cargo: 'Asistente Dental' },
       { id: 'COE-028', name: "Fiorella O'Brien Chavez Arroyo", cargo: 'Asistente Dental' },
       { id: 'COE-030', name: 'Daiana Jaqueline Huangal Flores', cargo: 'Asistente Dental' },
+      { id: 'COE-037', name: 'Camila Yasumi Calderón Abril', cargo: 'Asistente Dental' },
     ],
     criterios: [
       { id: 'c1', label: 'Preparación de materiales', desc: 'Organización y preparación previa de instrumental', escala: ['Materiales frecuentemente incompletos o incorrectos antes del procedimiento','Prepara lo básico pero olvida elementos en casos complejos','Materiales listos y completos para los procedimientos estándar','Siempre preparado con anticipación, incluye materiales de contingencia','Anticipa necesidades del doctor sin que se le indique, cero improvisaciones'] },
@@ -821,7 +823,6 @@ const AREAS = {
       { id: 'COE-023B', name: 'Veronica Elizabeth Echeverria Marin', cargo: 'Jefa / Supervisora' },
       { id: 'COE-006', name: 'Estela Donatila Barrientos Mendoza', cargo: 'Servicios Generales' },
       { id: 'COE-007', name: 'Fidel Eduardo Velasquez Carmona', cargo: 'Servicios Generales' },
-      { id: 'COE-026', name: 'Wilfredo Felix Negron Alva', cargo: 'Servicios Generales' },
       { id: 'COE-012', name: 'José Antonio Manyari Geldres', cargo: 'Servicios Generales' },
     ],
     criterios: [
@@ -830,6 +831,19 @@ const AREAS = {
       { id: 'c3', label: 'Cuidado de equipos', desc: 'Uso correcto y mantenimiento de materiales', escala: ['Ha dañado o deteriorado equipos por mal uso','Usa los equipos sin mayor cuidado, no reporta fallas','Usa correctamente los equipos y reporta fallas cuando las detecta','Cuida los equipos como si fueran propios, los mantiene en buen estado','Referente en cuidado de equipos, prolonga su vida útil con mantenimiento preventivo'] },
       { id: 'c4', label: 'Proactividad', desc: 'Iniciativa para detectar y resolver problemas', escala: ['Nunca actúa sin que se le indique, aunque el problema sea evidente','Actúa solo en situaciones muy obvias o urgentes','Detecta problemas menores y los resuelve sin necesidad de indicación','Regularmente anticipa necesidades del área y actúa antes de que se lo pidan','Constantemente identifica y resuelve situaciones que nadie más nota'] },
       { id: 'c5', label: 'Actitud y disposición', desc: 'Buena actitud hacia el trabajo y el equipo', escala: ['Actitud negativa, se queja o resiste ante tareas adicionales','Cumple lo mínimo sin disposición para colaborar más allá de su rol','Buena actitud general, dispuesto a apoyar cuando se le solicita','Siempre dispuesto, su actitud positiva es valorada por todo el equipo','Referente de actitud en la clínica, su energía impacta positivamente en el ambiente'] },
+    ]
+  },
+  mensajeria: {
+    label: 'Mensajería', jefe: 'Elizabeth Echeverria', color: '#f5a623', icon: '🛵',
+    colaboradores: [
+      { id: 'COE-026', name: 'Wilfredo Felix Negron Alva', cargo: 'Motorizado / Mensajero' },
+    ],
+    criterios: [
+      { id: 'c1', label: 'Puntualidad en entregas', desc: 'Cumplimiento de los tiempos acordados para cada entrega o diligencia', escala: ['Incumple los tiempos de entrega de forma habitual sin avisar','Llega tarde con frecuencia, sus justificaciones son inconsistentes','Cumple los tiempos en la mayoría de entregas, avisa cuando hay demoras','Puntual en casi todas las entregas, gestiona bien imprevistos de ruta','Entrega siempre a tiempo o antes, cero retrasos sin justificación válida'] },
+      { id: 'c2', label: 'Cuidado del vehículo / moto', desc: 'Mantenimiento y uso responsable del vehículo de la empresa', escala: ['Ha ocasionado daños o descuida el vehículo de forma habitual','Usa el vehículo sin mayor cuidado, no reporta fallas ni incidentes','Cuida el vehículo de forma básica y reporta fallas cuando las detecta','Mantiene el vehículo limpio y en buen estado, hace mantenimiento preventivo','Cuida el vehículo como propio, prolonga su vida útil con atención constante'] },
+      { id: 'c3', label: 'Comunicación con el equipo', desc: 'Reporte oportuno de situaciones durante las diligencias', escala: ['No comunica demoras, problemas ni entregas realizadas','Comunica solo cuando el problema ya no tiene solución','Informa al equipo sobre el estado de sus diligencias cuando se le solicita','Comunicación proactiva, avisa ante cualquier cambio o imprevisto en ruta','Comunicación fluida y constante, el equipo siempre sabe dónde está y qué pasa'] },
+      { id: 'c4', label: 'Responsabilidad con documentos y paquetes', desc: 'Cuidado e integridad de lo que transporta', escala: ['Ha extraviado o dañado documentos o paquetes bajo su custodia','Maneja los envíos sin mayor cuidado, sin verificar recepción','Entrega correctamente y verifica que el destinatario reciba lo indicado','Siempre entrega completo, solicita firma o confirmación de recepción','Cero incidentes, maneja con máxima responsabilidad cualquier encargo'] },
+      { id: 'c5', label: 'Conocimiento de rutas', desc: 'Eficiencia en el desplazamiento y manejo del tráfico', escala: ['Se pierde con frecuencia o toma rutas muy ineficientes','Conoce rutas básicas pero no optimiza los trayectos','Maneja bien las rutas habituales con tiempos razonables','Optimiza rutas según el tráfico, llega antes de lo esperado en muchos casos','Conocimiento experto de la ciudad, siempre elige la ruta más eficiente'] },
     ]
   },
   coe_lab: {
