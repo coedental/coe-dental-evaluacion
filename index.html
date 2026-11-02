@@ -257,6 +257,58 @@
   .admin-link:hover { color: var(--accent); }
   .step { display: none; }
   .step.active { display: block; }
+
+  /* ── COE DESTACA ── */
+  .destaca-header { display:flex; align-items:center; gap:16px; background:linear-gradient(135deg,#ede8f8,#fff8e1); border-radius:14px; padding:20px 24px; margin-bottom:24px; border:1.5px solid #e4ddf2; }
+  .destaca-header .trophy { font-size:40px; }
+  .destaca-header h2 { font-size:20px; font-weight:700; color:#3d3550; margin-bottom:3px; }
+  .destaca-header p { font-size:13px; color:#8f82a8; }
+  .destaca-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .destaca-tab { padding:7px 18px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12.5px; font-weight:600; color:var(--text-muted); cursor:pointer; transition:all .15s; }
+  .destaca-tab.active { background:#f5d020; border-color:#d4a800; color:#5a4000; }
+  .destaca-winners { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:28px; }
+  .winner-card { background:var(--surface); border-radius:12px; padding:20px; box-shadow:var(--shadow); border:1.5px solid var(--border); position:relative; overflow:hidden; }
+  .winner-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#f5d020,#f5a623); }
+  .winner-card .cat-label { font-size:10px; font-weight:700; color:#8f82a8; letter-spacing:.08em; margin-bottom:6px; }
+  .winner-card .winner-name { font-size:16px; font-weight:700; color:#3d3550; margin-bottom:2px; }
+  .winner-card .winner-area { font-size:12px; color:#8f82a8; margin-bottom:12px; }
+  .winner-card .winner-score { display:flex; align-items:center; gap:10px; }
+  .winner-card .score-big { font-size:30px; font-weight:800; color:#f5a623; line-height:1; }
+  .winner-card .score-meta { font-size:11px; color:#8f82a8; }
+  .winner-card .crown { position:absolute; top:16px; right:16px; font-size:24px; }
+  .winner-card.no-winner { opacity:.6; }
+  .winner-card.no-winner .winner-name { color:#8f82a8; font-size:14px; }
+
+  /* Voto de Pares */
+  .votos-container { max-width:680px; }
+  .voto-card { background:var(--surface); border-radius:12px; padding:24px; box-shadow:var(--shadow); border:1.5px solid var(--border); margin-bottom:16px; }
+  .voto-card h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .voto-card .voto-sub { font-size:13px; color:#8f82a8; margin-bottom:20px; }
+  .nominee-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .nominee-btn { padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); background:#fafbfd; cursor:pointer; text-align:left; font-family:inherit; transition:all .15s; }
+  .nominee-btn:hover { border-color:var(--accent); background:var(--accent-light); }
+  .nominee-btn.selected { border-color:#f5a623; background:#fff8e1; }
+  .nominee-btn .nom-name { font-size:13px; font-weight:600; color:#3d3550; }
+  .nominee-btn .nom-area { font-size:11px; color:#8f82a8; }
+  .voto-badge { background:#fff8e1; border:1.5px solid #f5d020; color:#8a6000; border-radius:8px; padding:10px 16px; font-size:13px; margin-bottom:16px; display:none; }
+
+  /* Aniversarios */
+  .aniv-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-bottom:24px; }
+  .aniv-card { background:var(--surface); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow); border:1.5px solid var(--border); }
+  .aniv-card.milestone { border-color:#f5d020; background:linear-gradient(135deg,#fffdf0,#fff); }
+  .aniv-card .aniv-name { font-size:14px; font-weight:700; color:#3d3550; margin-bottom:2px; }
+  .aniv-card .aniv-area { font-size:11px; color:#8f82a8; margin-bottom:8px; }
+  .aniv-card .aniv-years { font-size:28px; font-weight:800; color:#a78bd4; line-height:1; }
+  .aniv-card .aniv-date { font-size:11px; color:#8f82a8; margin-top:4px; }
+  .aniv-card .aniv-badge { display:inline-block; margin-top:8px; background:#f5d020; color:#5a4000; font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; }
+  .aniv-section-title { font-size:13.5px; font-weight:700; color:#3d3550; margin:20px 0 10px; display:flex; align-items:center; gap:8px; }
+  .aniv-section-title .count-badge { background:var(--accent-light); color:var(--accent); font-size:11px; padding:2px 8px; border-radius:10px; }
+
+  /* Diploma */
+  .diploma-controls { background:var(--surface); border-radius:12px; padding:20px 24px; box-shadow:var(--shadow); border:1.5px solid var(--border); margin-bottom:20px; max-width:720px; }
+  .diploma-controls h3 { font-size:15px; font-weight:700; margin-bottom:16px; }
+  .diploma-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .diploma-preview-wrap { background:#f8f6ff; border-radius:12px; padding:20px; border:1.5px solid var(--border); margin-bottom:16px; }
 </style>
 </head>
 <body>
@@ -326,6 +378,16 @@
       </div>
       <div class="nav-item hidden" id="nav-print" onclick="openPrintModal()">
         <span class="icon">🖨️</span><span>Imprimir</span>
+      </div>
+      <div class="nav-section" id="nav-section-destaca" style="display:none">COE DESTACA</div>
+      <div class="nav-item hidden" id="nav-destaca" onclick="showView('destaca')">
+        <span class="icon">🏆</span><span>COE Destaca</span>
+      </div>
+      <div class="nav-item" id="nav-votos" onclick="showView('votos')">
+        <span class="icon">🤝</span><span>Voto de Pares</span>
+      </div>
+      <div class="nav-item hidden" id="nav-aniversarios" onclick="showView('aniversarios')">
+        <span class="icon">🎂</span><span>Aniversarios</span>
       </div>
     </nav>
     <div class="sidebar-user">
@@ -457,6 +519,79 @@
             <tbody id="results-table"><tr><td colspan="10"><div class="empty"><div class="icon">📊</div><p>Sin evaluaciones.</p></div></td></tr></tbody>
           </table>
         </div>
+      </div>
+
+      <!-- COE DESTACA -->
+      <div class="view" id="view-destaca">
+        <div class="destaca-header">
+          <div class="trophy">🏆</div>
+          <div>
+            <h2>COE Destaca del Mes</h2>
+            <p>Ganadores automáticos basados en evaluaciones de desempeño · 60% objetivo + 30% pares + 10% liderazgo</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+          <div class="form-row" style="margin:0;flex:1;min-width:180px">
+            <select id="destaca-periodo-sel" onchange="renderDestaca()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
+              <option value="">— Todos los períodos —</option>
+            </select>
+          </div>
+          <div class="destaca-tabs" style="margin:0">
+            <button class="destaca-tab active" id="tab-clinico" onclick="setDestacaTrack('clinico',this)">🦷 Clínico</button>
+            <button class="destaca-tab" id="tab-admin" onclick="setDestacaTrack('admin',this)">💼 Administrativo</button>
+          </div>
+        </div>
+        <div class="destaca-winners" id="destaca-winners"></div>
+        <div style="background:#f8f6ff;border-radius:10px;padding:14px 18px;font-size:12px;color:#8f82a8;margin-bottom:16px">
+          <strong style="color:#a78bd4">ℹ️ Metodología:</strong> El puntaje COE Destaca combina: 60% del promedio de evaluaciones de desempeño + 30% de votos de pares recibidos + 10% del puntaje de criterios de liderazgo. El ganador de cada categoría no puede repetir en la misma categoría el siguiente período.
+        </div>
+      </div>
+
+      <!-- VOTO DE PARES -->
+      <div class="view" id="view-votos">
+        <div class="votos-container">
+          <div class="voto-card">
+            <h3>🤝 Voto de Pares — COE Destaca</h3>
+            <div class="voto-sub">Elige a un compañero que haya destacado por su actitud, apoyo y compromiso este período. Tu voto es anónimo.</div>
+            <div id="voto-badge" class="voto-badge">✅ Ya registraste tu voto este período. Puedes cambiar tu selección hasta el final del período.</div>
+            <div class="form-row" style="margin-bottom:14px">
+              <label>Período</label>
+              <select id="voto-periodo" onchange="buildNominees()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
+                <option value="">— Selecciona el período —</option>
+              </select>
+            </div>
+            <div id="nominees-section" style="display:none">
+              <div class="form-row" style="margin-bottom:10px">
+                <label>¿A quién nominás? <span style="color:#b85555">*</span></label>
+                <p style="font-size:12px;color:#8f82a8;margin-bottom:10px">Selecciona la persona que más ha aportado al equipo, más allá de sus funciones.</p>
+              </div>
+              <div class="nominee-grid" id="nominee-grid"></div>
+              <div class="form-row">
+                <label>¿Por qué la nominás? <span style="font-weight:400;color:#8f82a8">(opcional)</span></label>
+                <textarea id="voto-razon" placeholder="Describe brevemente por qué esta persona merece ser reconocida..." style="width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;min-height:72px;outline:none;background:#fafbfd"></textarea>
+              </div>
+              <div class="form-actions" style="margin-top:16px">
+                <button class="btn-primary" onclick="submitVoto()">✓ Enviar voto</button>
+                <button class="btn-secondary" onclick="resetVoto()">Limpiar</button>
+              </div>
+            </div>
+          </div>
+          <div class="voto-card" id="mis-votos-section" style="display:none">
+            <h3>📊 Resumen de votos — Solo visible para administrador</h3>
+            <div id="votos-resumen"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANIVERSARIOS -->
+      <div class="view" id="view-aniversarios">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <h2 style="font-size:18px;font-weight:700;color:#3d3550">🎂 Aniversarios Laborales</h2>
+          <span id="aniv-hoy-count" style="background:#fff8e1;border:1.5px solid #f5d020;color:#8a6000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;display:none"></span>
+        </div>
+        <p style="font-size:13px;color:#8f82a8;margin-bottom:20px">Registro de ingreso del personal COE Dental y sus próximas fechas de aniversario</p>
+        <div id="aniv-alerta" style="display:none;background:#fff8e1;border:1.5px solid #f5d020;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#7a6000"></div>
+        <div id="aniv-content"></div>
       </div>
 
     </div><!-- /content -->
@@ -967,6 +1102,9 @@ function startApp() {
   // Nav visibility
   if (currentUser.role === 'admin') {
     document.getElementById('nav-print').classList.remove('hidden');
+    document.getElementById('nav-destaca').classList.remove('hidden');
+    document.getElementById('nav-aniversarios').classList.remove('hidden');
+    document.getElementById('nav-section-destaca').style.display = '';
   }
   // Build form area selector
   buildFormAreaSelector();
@@ -991,23 +1129,31 @@ function showView(view) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
-  const navMap = { dashboard: 'nav-dashboard', form: 'nav-form', results: 'nav-results' };
-  if (navMap[view]) document.getElementById(navMap[view]).classList.add('active');
+  const navMap = { dashboard: 'nav-dashboard', form: 'nav-form', results: 'nav-results',
+                   destaca: 'nav-destaca', votos: 'nav-votos', aniversarios: 'nav-aniversarios' };
+  if (navMap[view]) document.getElementById(navMap[view])?.classList.add('active');
   const titles = {
-    dashboard: ['Dashboard', 'Resumen de evaluaciones'],
-    form: ['Nueva Evaluación', 'Completar formulario de desempeño'],
-    results: ['Resultados', 'Historial de evaluaciones']
+    dashboard:    ['Dashboard',         'Resumen de evaluaciones'],
+    form:         ['Nueva Evaluación',  'Completar formulario de desempeño'],
+    results:      ['Resultados',        'Historial de evaluaciones'],
+    destaca:      ['COE Destaca',       'Ganadores automáticos por categoría y período'],
+    votos:        ['Voto de Pares',     'Nominación anónima de compañeros destacados'],
+    aniversarios: ['Aniversarios',      'Registro de aniversarios laborales del personal']
   };
-  document.getElementById('topbar-title').textContent = titles[view][0];
-  document.getElementById('topbar-sub').textContent = titles[view][1];
+  const titleData = titles[view] || [view, ''];
+  document.getElementById('topbar-title').textContent = titleData[0];
+  document.getElementById('topbar-sub').textContent = titleData[1];
   // Mostrar botón sync solo a admin en dashboard
   const btnSync = document.getElementById('btn-sync');
   const btnLimpiar = document.getElementById('btn-limpiar');
   const isAdmin = view === 'dashboard' && currentUser && currentUser.role === 'admin';
   if (btnSync) btnSync.style.display = isAdmin ? '' : 'none';
   if (btnLimpiar) btnLimpiar.style.display = isAdmin ? '' : 'none';
-  if (view === 'dashboard') renderDashboard();
-  if (view === 'results') renderResultsTable();
+  if (view === 'dashboard')    renderDashboard();
+  if (view === 'results')      renderResultsTable();
+  if (view === 'destaca')      renderDestaca();
+  if (view === 'votos')        { fillPeriodoSelector('voto-periodo', false); buildNominees(); if (currentUser?.role==='admin') document.getElementById('mis-votos-section').style.display='block'; }
+  if (view === 'aniversarios') renderAniversarios();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1649,6 +1795,433 @@ function buildAreaReportHTML(areaKeys, isGeneral) {
     <div style="text-align:center;font-size:10px;color:#b8b0cc;margin-top:28px;padding-top:12px;border-top:1px solid #e4ddf2">
       COE Dental · Sistema de Evaluación de Desempeño · ${new Date().toLocaleDateString('es-PE')}
     </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// COE DESTACA — DATOS DE INGRESO
+// ═══════════════════════════════════════════════════════
+const FECHAS_INGRESO = {
+  'COE-001': { nombre: 'Alexander Zamora García',        fecha: '2009-05-01', area: 'Clínico' },
+  'COE-002': { nombre: 'Alexis Temoche Ojeda',           fecha: '2014-05-01', area: 'Clínico' },
+  'COE-004': { nombre: 'Carlos Grados Salazar',          fecha: '2020-02-01', area: 'Administrativo' },
+  'COE-005': { nombre: 'Erika Guizado Francia',          fecha: '2023-11-01', area: 'Clínico' },
+  'COE-006': { nombre: 'Estela Barrientos Mendoza',      fecha: '2020-10-01', area: 'Administrativo' },
+  'COE-007': { nombre: 'Fidel Velasquez Carmona',        fecha: '2023-05-02', area: 'Clínico' },
+  'COE-008': { nombre: 'George Aguirre Yumbato',         fecha: '2024-09-15', area: 'Clínico' },
+  'COE-009': { nombre: 'Gladys Alva García',             fecha: '2020-02-01', area: 'Recepción' },
+  'COE-010': { nombre: 'Gladys García Sinti',            fecha: '2024-12-02', area: 'Clínico' },
+  'COE-011': { nombre: 'Jhohana Gonzalez Vargas',        fecha: '2022-01-01', area: 'Administrativo' },
+  'COE-012': { nombre: 'José Manyari Geldres',           fecha: '2023-05-02', area: 'Clínico' },
+  'COE-013': { nombre: 'Jose Carbajal Parra',            fecha: '2022-11-30', area: 'Clínico' },
+  'COE-014': { nombre: 'Jose Culque Villar',             fecha: '2024-09-15', area: 'Clínico' },
+  'COE-015': { nombre: 'Juan Acasiete Ramirez',          fecha: '2021-06-01', area: 'Clínico' },
+  'COE-016': { nombre: 'Katia Ágreda Daffaut',           fecha: '2024-09-03', area: 'Clínico' },
+  'COE-017': { nombre: 'Larry Santillan Rios',           fecha: '2017-08-10', area: 'Servicios' },
+  'COE-018': { nombre: 'Maria Nelly Espinoza Roman',     fecha: '2019-07-01', area: 'Clínico' },
+  'COE-019': { nombre: 'Mayra Saldaña Vascones',         fecha: '2024-03-11', area: 'Clínico' },
+  'COE-020': { nombre: 'Rebeca Grados Salazar',          fecha: '2020-02-01', area: 'Administrativo' },
+  'COE-021': { nombre: 'Rosario Cuzcano Hinojo',         fecha: '2023-09-16', area: 'Recepción' },
+  'COE-022': { nombre: 'Ruben Bassallo Palacios',        fecha: '2025-02-01', area: 'Clínico' },
+  'COE-023': { nombre: 'Veronica Echeverria Marin',      fecha: '2024-04-08', area: 'Clínico' },
+  'COE-024': { nombre: 'Melanie Saldamando Balcazar',    fecha: '2025-01-02', area: 'Clínico' },
+  'COE-025': { nombre: 'Anghi Rojas Pariona',            fecha: '2025-05-15', area: 'Clínico' },
+  'COE-027': { nombre: 'Milagros Trigodo Quinteros',     fecha: '2025-09-08', area: 'Clínico' },
+  'COE-028': { nombre: 'Fiorella O\'Brien Chavez',       fecha: '2025-09-09', area: 'Clínico' },
+  'COE-029': { nombre: 'Gabriela Huamanciza Alva',       fecha: '2026-03-16', area: 'Clínico' },
+  'COE-030': { nombre: 'Daiana Huangal Flores',          fecha: '2026-04-15', area: 'Clínico' },
+  'COE-031': { nombre: 'Nayua Aliaga Pascual',           fecha: '2026-05-05', area: 'Clínico' },
+  'COE-032': { nombre: 'Dorcas Godoy Broncano',          fecha: '2026-04-27', area: 'Clínico' },
+  'COE-034': { nombre: 'Tiffany Clausen Moscayza',       fecha: '2026-07-10', area: 'Clínico' },
+  'COE-035': { nombre: 'Cristian Payano Pashanasi',      fecha: '2026-07-10', area: 'Mensajería' },
+  'COE-036': { nombre: 'Angeles Trevejo Soto',           fecha: '2026-08-20', area: 'Clínico' },
+  'COE-037': { nombre: 'Camila Calderon Abril',          fecha: '2026-09-28', area: 'Clínico' }
+};
+
+const HITOS_ANIVERSARIO = [1, 5, 10, 15, 20];
+const DESTACA_CATEGORIAS = [
+  { id: 'calidad',      label: 'Calidad Clínica/Técnica', icon: '⭐' },
+  { id: 'trato',        label: 'Trato y Atención',        icon: '💛' },
+  { id: 'equipo',       label: 'Trabajo en Equipo',        icon: '🤝' },
+  { id: 'productividad',label: 'Productividad',            icon: '📈' },
+  { id: 'iniciativa',   label: 'Iniciativa',               icon: '💡' }
+];
+const CLINICO_AREAS   = ['doctores', 'asistentes', 'coe_lab'];
+const ADMIN_AREAS     = ['recepcion', 'administrativo', 'ventas', 'marketing', 'mensajeria'];
+let destacaTrack = 'clinico';
+
+// ── helpers ──────────────────────────────────────────────
+function getPeriodos() {
+  const evals = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
+  const set = new Set(evals.map(e => e.periodo).filter(Boolean));
+  return [...set].sort().reverse();
+}
+
+function fillPeriodoSelector(selId, includeAll) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const current = sel.value;
+  sel.innerHTML = includeAll ? '<option value="">— Todos los períodos —</option>' : '<option value="">— Selecciona el período —</option>';
+  getPeriodos().forEach(p => {
+    const o = document.createElement('option');
+    o.value = p; o.textContent = p;
+    sel.appendChild(o);
+  });
+  if (current) sel.value = current;
+}
+
+// ═══════════════════════════════════════════════════════
+// COE DESTACA — PANEL ADMIN
+// ═══════════════════════════════════════════════════════
+function setDestacaTrack(track, btn) {
+  destacaTrack = track;
+  document.querySelectorAll('.destaca-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderDestaca();
+}
+
+function computeDestacaWinners(periodo) {
+  const evals = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
+  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+  const trackAreas = destacaTrack === 'clinico' ? CLINICO_AREAS : ADMIN_AREAS;
+
+  // Filter evaluations by period and track
+  const filtered = evals.filter(e => {
+    const matchPeriodo = !periodo || e.periodo === periodo;
+    const matchTrack = trackAreas.includes(e.area);
+    return matchPeriodo && matchTrack;
+  });
+
+  // Compute average score per collaborator
+  const byColab = {};
+  filtered.forEach(ev => {
+    const key = ev.colaborador + '|' + ev.area;
+    if (!byColab[key]) byColab[key] = { nombre: ev.colaborador, area: ev.area, scores: [], count: 0 };
+    const criterios = ev.criterios || {};
+    const vals = Object.values(criterios).filter(v => typeof v === 'number' && v > 0);
+    if (vals.length) {
+      const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+      byColab[key].scores.push(avg);
+      byColab[key].count++;
+    }
+  });
+
+  // Get peer votes for current period
+  const periodoVotos = votos[periodo] || {};
+  const voteCount = {};
+  Object.values(periodoVotos).forEach(v => {
+    if (v.nominado) voteCount[v.nominado] = (voteCount[v.nominado] || 0) + 1;
+  });
+  const maxVotos = Math.max(1, ...Object.values(voteCount));
+
+  // Build candidates with composite score
+  const candidates = Object.values(byColab).map(c => {
+    const evalAvg = c.scores.length ? c.scores.reduce((a, b) => a + b, 0) / c.scores.length : 0;
+    const peerScore = ((voteCount[c.nombre] || 0) / maxVotos) * 5; // normalize to 0-5
+    const composite = evalAvg * 0.6 + peerScore * 0.3 + 3 * 0.1; // 10% leadership = 3/5 default
+    return { ...c, evalAvg, peerScore, composite };
+  });
+
+  // Find winner per category (simplified: top composite score per track)
+  // In reality each category would map to specific evaluation criteria
+  const sorted = candidates.sort((a, b) => b.composite - a.composite);
+
+  return DESTACA_CATEGORIAS.map((cat, i) => {
+    const winner = sorted[i] || null;
+    return { cat, winner };
+  });
+}
+
+function renderDestaca() {
+  fillPeriodoSelector('destaca-periodo-sel', true);
+  const periodo = document.getElementById('destaca-periodo-sel')?.value || '';
+  const results = computeDestacaWinners(periodo);
+  const container = document.getElementById('destaca-winners');
+  if (!container) return;
+
+  container.innerHTML = results.map(({ cat, winner }) => {
+    if (!winner) {
+      return `<div class="winner-card no-winner">
+        <div class="cat-label">${cat.icon} ${cat.label}</div>
+        <div class="winner-name">Sin datos suficientes</div>
+        <div class="winner-area">Registra evaluaciones para este período</div>
+      </div>`;
+    }
+    const score = winner.composite.toFixed(1);
+    return `<div class="winner-card">
+      <span class="crown">👑</span>
+      <div class="cat-label">${cat.icon} ${cat.label}</div>
+      <div class="winner-name">${winner.nombre}</div>
+      <div class="winner-area">${(AREAS[winner.area]||{}).label || winner.area} · ${winner.count} eval${winner.count !== 1 ? 's' : ''}</div>
+      <div class="winner-score">
+        <div class="score-big">${score}</div>
+        <div class="score-meta">60% eval: ${winner.evalAvg.toFixed(1)}<br>30% pares: ${winner.peerScore.toFixed(1)}</div>
+      </div>
+      <div style="margin-top:12px">
+        <button onclick="abrirDiploma('${winner.nombre}','${cat.label}','${periodo}')" style="background:#f5d020;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;color:#5a4000;cursor:pointer">🎓 Diploma</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// VOTO DE PARES
+// ═══════════════════════════════════════════════════════
+let votoPeriodo = '';
+let votoSeleccionado = '';
+
+function buildNominees() {
+  const periodoSel = document.getElementById('voto-periodo');
+  votoPeriodo = periodoSel ? periodoSel.value : '';
+  const section = document.getElementById('nominees-section');
+  if (!section) return;
+  if (!votoPeriodo) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  // Get collaborators from evaluations of this period (excluding self)
+  const evals = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
+  const periodoEvals = evals.filter(e => e.periodo === votoPeriodo);
+  const names = new Set();
+  periodoEvals.forEach(e => { if (e.colaborador) names.add(e.colaborador + '||' + (e.area || '')); });
+
+  // Also add from other areas (all collaborators in the system for this area)
+  const currentAreaColab = periodoEvals
+    .filter(e => currentUser && e.area === currentUser.area)
+    .map(e => e.colaborador);
+
+  const grid = document.getElementById('nominee-grid');
+  if (!grid) return;
+
+  // Show previous vote if any
+  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+  const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
+  const prevVoto = (votos[votoPeriodo] || {})[votoKey];
+  if (prevVoto) {
+    votoSeleccionado = prevVoto.nominado;
+    document.getElementById('voto-badge').style.display = 'block';
+    if (prevVoto.razon) document.getElementById('voto-razon').value = prevVoto.razon;
+  } else {
+    votoSeleccionado = '';
+    document.getElementById('voto-badge').style.display = 'none';
+  }
+
+  const allNames = [...names];
+  if (!allNames.length) {
+    grid.innerHTML = '<p style="color:#8f82a8;font-size:13px;grid-column:1/-1">No hay evaluados registrados para este período.</p>';
+    return;
+  }
+
+  grid.innerHTML = allNames.map(entry => {
+    const [nombre, area] = entry.split('||');
+    // Don't show yourself
+    if (currentUser && nombre === currentUser.name) return '';
+    const isSelected = votoSeleccionado === nombre;
+    return `<button class="nominee-btn ${isSelected ? 'selected' : ''}" onclick="selectNominee(this,'${nombre.replace(/'/g,"\\'")}')">
+      <div class="nom-name">${nombre}</div>
+      <div class="nom-area">${(AREAS[area]||{}).label || area || 'COE Dental'}</div>
+    </button>`;
+  }).filter(Boolean).join('');
+
+  // Admin: show vote summary
+  if (currentUser && currentUser.role === 'admin') {
+    renderVotosSummary(votoPeriodo);
+  }
+}
+
+function selectNominee(btn, nombre) {
+  document.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  votoSeleccionado = nombre;
+}
+
+function submitVoto() {
+  if (!votoPeriodo) { alert('Selecciona un período primero.'); return; }
+  if (!votoSeleccionado) { alert('Selecciona a un compañero para nominar.'); return; }
+  const razon = document.getElementById('voto-razon')?.value || '';
+  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+  if (!votos[votoPeriodo]) votos[votoPeriodo] = {};
+  const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
+  votos[votoPeriodo][votoKey] = { nominado: votoSeleccionado, razon, ts: new Date().toISOString() };
+  localStorage.setItem('coe_votos_v1', JSON.stringify(votos));
+  document.getElementById('voto-badge').style.display = 'block';
+  alert(`✅ Voto registrado para ${votoSeleccionado}. ¡Gracias por participar!`);
+  if (currentUser?.role === 'admin') renderVotosSummary(votoPeriodo);
+}
+
+function resetVoto() {
+  votoSeleccionado = '';
+  document.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('voto-razon').value = '';
+}
+
+function renderVotosSummary(periodo) {
+  const section = document.getElementById('mis-votos-section');
+  const container = document.getElementById('votos-resumen');
+  if (!section || !container) return;
+  section.style.display = 'block';
+  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+  const periodoVotos = votos[periodo] || {};
+  const count = {};
+  const razones = {};
+  Object.values(periodoVotos).forEach(v => {
+    count[v.nominado] = (count[v.nominado] || 0) + 1;
+    if (v.razon) { if (!razones[v.nominado]) razones[v.nominado] = []; razones[v.nominado].push(v.razon); }
+  });
+  const total = Object.values(count).reduce((a, b) => a + b, 0);
+  if (!total) {
+    container.innerHTML = '<p style="color:#8f82a8;font-size:13px">No hay votos registrados para este período.</p>';
+    return;
+  }
+  const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
+  container.innerHTML = `<p style="font-size:12px;color:#8f82a8;margin-bottom:12px">Total de votos registrados: <strong>${total}</strong></p>` +
+    sorted.map(([nom, cnt]) => {
+      const pct = Math.round(cnt / total * 100);
+      return `<div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:13px;font-weight:600;color:#3d3550">${nom}</span>
+          <span style="font-size:13px;font-weight:700;color:#a78bd4">${cnt} voto${cnt !== 1 ? 's' : ''} (${pct}%)</span>
+        </div>
+        <div style="background:#ede8f8;border-radius:6px;height:8px"><div style="background:#a78bd4;width:${pct}%;height:100%;border-radius:6px"></div></div>
+        ${razones[nom] ? `<div style="font-size:11px;color:#8f82a8;margin-top:4px;font-style:italic">"${razones[nom][0]}"</div>` : ''}
+      </div>`;
+    }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// ANIVERSARIOS LABORALES
+// ═══════════════════════════════════════════════════════
+function renderAniversarios() {
+  const hoy = new Date();
+  const anivContent = document.getElementById('aniv-content');
+  const anivAlerta = document.getElementById('aniv-alerta');
+  const anivHoyCount = document.getElementById('aniv-hoy-count');
+  if (!anivContent) return;
+
+  const lista = Object.entries(FECHAS_INGRESO).map(([id, data]) => {
+    const ingreso = new Date(data.fecha + 'T00:00:00');
+    const aniosExactos = (hoy - ingreso) / (365.25 * 24 * 3600 * 1000);
+    const aniosCompletos = Math.floor(aniosExactos);
+
+    // Next anniversary
+    const proxAniv = new Date(ingreso);
+    proxAniv.setFullYear(hoy.getFullYear());
+    if (proxAniv < hoy) proxAniv.setFullYear(hoy.getFullYear() + 1);
+    const diasRestantes = Math.ceil((proxAniv - hoy) / (24 * 3600 * 1000));
+    const aniosEnProx = proxAniv.getFullYear() - ingreso.getFullYear();
+
+    const esHito = HITOS_ANIVERSARIO.includes(aniosEnProx);
+    const esHoy = diasRestantes === 0 || (proxAniv.getDate() === hoy.getDate() && proxAniv.getMonth() === hoy.getMonth());
+    const esProximo = diasRestantes <= 30;
+
+    return { id, ...data, ingreso, aniosCompletos, proxAniv, diasRestantes, aniosEnProx, esHito, esHoy, esProximo };
+  });
+
+  // Sort by proximity
+  lista.sort((a, b) => a.diasRestantes - b.diasRestantes);
+
+  // Alerts for today
+  const hoy_lista = lista.filter(p => p.esHoy);
+  if (hoy_lista.length) {
+    anivHoyCount.textContent = `🎉 ${hoy_lista.length} aniversario${hoy_lista.length > 1 ? 's' : ''} hoy`;
+    anivHoyCount.style.display = '';
+    anivAlerta.style.display = 'block';
+    anivAlerta.innerHTML = '🎊 <strong>¡Aniversario hoy!</strong> ' +
+      hoy_lista.map(p => `<strong>${p.nombre}</strong> cumple ${p.aniosEnProx} año${p.aniosEnProx !== 1 ? 's' : ''}`).join(' · ');
+  } else {
+    anivHoyCount.style.display = 'none';
+    anivAlerta.style.display = 'none';
+  }
+
+  // Hitos próximos (≤30 días y es hito)
+  const proxHitos = lista.filter(p => p.esProximo && p.esHito && !p.esHoy);
+  // Todos los próximos ≤60 días
+  const proximos = lista.filter(p => p.diasRestantes <= 60 && p.diasRestantes > 0 && !p.esHito);
+  // Resto ordenado por fecha próxima
+  const resto = lista.filter(p => p.diasRestantes > 60 || (p.diasRestantes > 0 && !p.esHito && !proximos.includes(p)));
+
+  function tarjeta(p) {
+    const fechaStr = p.ingreso.toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' });
+    const proxStr = p.proxAniv.toLocaleDateString('es-PE', { day: '2-digit', month: 'long' });
+    return `<div class="aniv-card ${p.esHito ? 'milestone' : ''}">
+      <div class="aniv-name">${p.nombre}</div>
+      <div class="aniv-area">${p.area} · ${p.id}</div>
+      <div class="aniv-years">${p.aniosEnProx}<span style="font-size:14px;font-weight:400"> años</span></div>
+      <div class="aniv-date">Ingreso: ${fechaStr}</div>
+      <div class="aniv-date" style="margin-top:2px">Próximo: ${proxStr} ${p.diasRestantes === 0 ? '— <strong>¡HOY!</strong>' : `(en ${p.diasRestantes} día${p.diasRestantes !== 1 ? 's' : ''})`}</div>
+      ${p.esHito ? `<span class="aniv-badge">🏅 HITO ${p.aniosEnProx} años</span>` : ''}
+    </div>`;
+  }
+
+  let html = '';
+  if (hoy_lista.length) {
+    html += `<div class="aniv-section-title">🎉 Aniversarios hoy <span class="count-badge">${hoy_lista.length}</span></div>`;
+    html += `<div class="aniv-grid">${hoy_lista.map(tarjeta).join('')}</div>`;
+  }
+  if (proxHitos.length) {
+    html += `<div class="aniv-section-title">🏅 Hitos próximos — 30 días <span class="count-badge">${proxHitos.length}</span></div>`;
+    html += `<div class="aniv-grid">${proxHitos.map(tarjeta).join('')}</div>`;
+  }
+  if (proximos.length) {
+    html += `<div class="aniv-section-title">📅 Próximos aniversarios — 60 días <span class="count-badge">${proximos.length}</span></div>`;
+    html += `<div class="aniv-grid">${proximos.map(tarjeta).join('')}</div>`;
+  }
+  const otrosSorted = lista.filter(p => !hoy_lista.includes(p) && !proxHitos.includes(p) && !proximos.includes(p));
+  if (otrosSorted.length) {
+    html += `<div class="aniv-section-title">📋 Todo el personal <span class="count-badge">${otrosSorted.length}</span></div>`;
+    html += `<div class="aniv-grid">${otrosSorted.map(tarjeta).join('')}</div>`;
+  }
+
+  anivContent.innerHTML = html || '<p style="color:#8f82a8;font-size:13px">No hay datos de aniversarios disponibles.</p>';
+}
+
+// ═══════════════════════════════════════════════════════
+// DIPLOMA / CERTIFICADO
+// ═══════════════════════════════════════════════════════
+function abrirDiploma(nombre, categoria, periodo) {
+  showView('aniversarios'); // reuse print screen
+  // Actually show diploma via print overlay
+  generarDiploma(nombre, categoria, periodo);
+}
+
+function generarDiploma(nombre, categoria, periodo) {
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  let mesStr = periodo || '';
+  if (periodo && periodo.includes('-')) {
+    const [y, m] = periodo.split('-');
+    mesStr = `${meses[parseInt(m,10)-1]} ${y}`;
+  }
+
+  const html = `
+  <div style="font-family:'Georgia',serif;max-width:720px;margin:0 auto;padding:40px 50px;background:#fffdf5;border:3px solid #c8a800;border-radius:4px;text-align:center;position:relative">
+    <div style="position:absolute;top:12px;left:12px;right:12px;bottom:12px;border:1px solid #e4c840;border-radius:2px;pointer-events:none"></div>
+    <div style="font-size:13px;letter-spacing:.2em;color:#8a6000;margin-bottom:8px">CENTRO ODONTOLÓGICO ESPECIALIZADO COE DENTAL</div>
+    <div style="font-size:36px;margin:8px 0">🏆</div>
+    <h1 style="font-size:28px;color:#3d2800;margin:0 0 4px;letter-spacing:.05em">CERTIFICADO DE RECONOCIMIENTO</h1>
+    <div style="font-size:14px;color:#8a6000;letter-spacing:.15em;margin-bottom:24px">COE DESTACA DEL MES</div>
+    <div style="font-size:14px;color:#5a4a2a;margin-bottom:8px">Se otorga el presente reconocimiento a</div>
+    <div style="font-size:32px;font-weight:bold;color:#3d2800;margin:12px 0;border-bottom:2px solid #c8a800;padding-bottom:12px">${nombre}</div>
+    <div style="font-size:14px;color:#5a4a2a;margin:16px 0 8px">Por su destacado desempeño en la categoría</div>
+    <div style="font-size:20px;font-weight:bold;color:#a87800;margin-bottom:16px">${categoria}</div>
+    <div style="font-size:13px;color:#8a7050;margin-bottom:32px">Correspondiente al período: <strong>${mesStr}</strong></div>
+    <div style="display:flex;justify-content:space-around;margin-top:24px;padding-top:20px;border-top:1px solid #e4c840">
+      <div style="text-align:center">
+        <div style="width:120px;border-bottom:1px solid #8a6000;margin-bottom:6px;margin:0 auto 6px"></div>
+        <div style="font-size:11px;color:#8a6000;letter-spacing:.05em">GERENCIA GENERAL</div>
+        <div style="font-size:11px;color:#8a6000">COE Dental</div>
+      </div>
+      <div style="text-align:center">
+        <div style="width:120px;border-bottom:1px solid #8a6000;margin-bottom:6px;margin:0 auto 6px"></div>
+        <div style="font-size:11px;color:#8a6000;letter-spacing:.05em">RECURSOS HUMANOS</div>
+        <div style="font-size:11px;color:#8a6000">COE Dental</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;font-size:10px;color:#b8a080;letter-spacing:.1em">Lima, ${new Date().toLocaleDateString('es-PE',{day:'2-digit',month:'long',year:'numeric'})}</div>
+  </div>`;
+
+  const overlay = document.getElementById('print-overlay');
+  const content = document.getElementById('print-content');
+  if (!overlay || !content) return;
+  content.innerHTML = html;
+  overlay.classList.add('visible');
 }
 
 // ═══════════════════════════════════════════════════════
