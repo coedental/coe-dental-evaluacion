@@ -1922,10 +1922,16 @@ function computeDestacaWinners(periodo) {
     const nombre = ev.colaboradorName || ev.colaborador || '?';
     const key = nombre + '|' + ev.area;
     if (!byColab[key]) byColab[key] = { nombre, area: ev.area, scores: [], count: 0 };
-    const criterios = ev.criterios || {};
-    const vals = Object.values(criterios).filter(v => typeof v === 'number' && v > 0);
-    if (vals.length) {
-      const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    // Leer avg directo (evaluaciones del Sheet) o calcular desde criterios/ratings
+    let avg = null;
+    if (typeof ev.avg === 'number' && ev.avg > 0) {
+      avg = ev.avg;
+    } else {
+      const criterios = ev.criterios || ev.ratings || {};
+      const vals = Object.values(criterios).filter(v => typeof v === 'number' && v > 0);
+      if (vals.length) avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    }
+    if (avg !== null) {
       byColab[key].scores.push(avg);
       byColab[key].count++;
     }
@@ -1935,6 +1941,11 @@ function computeDestacaWinners(periodo) {
   const periodoVotos = votos[periodo] || {};
   const voteCount = {};
   Object.values(periodoVotos).forEach(v => {
+    // Formato nuevo: q01, q02, q03
+    ['q01','q02','q03'].forEach(q => {
+      if (v[q]) voteCount[v[q]] = (voteCount[v[q]] || 0) + 1;
+    });
+    // Formato viejo: nominado
     if (v.nominado) voteCount[v.nominado] = (voteCount[v.nominado] || 0) + 1;
   });
   const maxVotos = Math.max(1, ...Object.values(voteCount));
@@ -2204,8 +2215,6 @@ function renderAniversarios() {
 // DIPLOMA / CERTIFICADO
 // ═══════════════════════════════════════════════════════
 function abrirDiploma(nombre, categoria, periodo) {
-  showView('aniversarios'); // reuse print screen
-  // Actually show diploma via print overlay
   generarDiploma(nombre, categoria, periodo);
 }
 
@@ -2244,11 +2253,8 @@ function generarDiploma(nombre, categoria, periodo) {
     <div style="margin-top:24px;font-size:10px;color:#b8a080;letter-spacing:.1em">Lima, ${new Date().toLocaleDateString('es-PE',{day:'2-digit',month:'long',year:'numeric'})}</div>
   </div>`;
 
-  const overlay = document.getElementById('print-overlay');
-  const content = document.getElementById('print-content');
-  if (!overlay || !content) return;
-  content.innerHTML = html;
-  overlay.classList.add('visible');
+  // Usar showPrintOverlay que crea el overlay dinámicamente si no existe
+  showPrintOverlay(html);
 }
 
 // ═══════════════════════════════════════════════════════
