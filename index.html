@@ -555,6 +555,12 @@
             <div class="voto-sub">Nomina a tus compañeros que destacaron este mes. Tu voto es anónimo y contribuye al programa COE Destaca.</div>
             <div id="voto-badge" class="voto-badge">✅ Ya registraste tu voto este período. Puedes actualizar tu selección hasta el cierre del período.</div>
             <div class="form-row" style="margin-bottom:20px">
+              <label>¿Quién eres tú? — Selecciona tu nombre</label>
+              <select id="voto-votante" onchange="buildNominees()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
+                <option value="">— Selecciona tu nombre —</option>
+              </select>
+            </div>
+            <div class="form-row" style="margin-bottom:20px">
               <label>MES / AÑO — Período</label>
               <select id="voto-periodo" onchange="buildNominees()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
                 <option value="">— Selecciona el período —</option>
@@ -1177,7 +1183,7 @@ function showView(view) {
   if (view === 'dashboard')    renderDashboard();
   if (view === 'results')      renderResultsTable();
   if (view === 'destaca')      renderDestaca();
-  if (view === 'votos')        { fillPeriodoSelector('voto-periodo', false); buildNominees(); if (currentUser?.role==='admin') document.getElementById('mis-votos-section').style.display='block'; }
+  if (view === 'votos')        { fillVotanteSelector(); fillPeriodoSelector('voto-periodo', false, true); buildNominees(); if (currentUser?.role==='admin') document.getElementById('mis-votos-section').style.display='block'; }
   if (view === 'aniversarios') renderAniversarios();
 }
 
@@ -1881,12 +1887,21 @@ function getPeriodos() {
   return [...set].sort().reverse();
 }
 
-function fillPeriodoSelector(selId, includeAll) {
+// Períodos fijos del formulario (siempre disponibles para votación)
+const PERIODOS_FIJOS = [
+  '2026 — Primer trimestre','2026 — Segundo trimestre','2026 — Tercer trimestre',
+  '2026 — Cuarto trimestre','2026 — Segundo semestre','2026 — Anual',
+  '2027 — Primer trimestre','2027 — Segundo trimestre','2027 — Tercer trimestre',
+  '2027 — Cuarto trimestre','2027 — Primer semestre','2027 — Segundo semestre','2027 — Anual'
+];
+
+function fillPeriodoSelector(selId, includeAll, useFijos) {
   const sel = document.getElementById(selId);
   if (!sel) return;
   const current = sel.value;
   sel.innerHTML = includeAll ? '<option value="">— Todos los períodos —</option>' : '<option value="">— Selecciona el período —</option>';
-  getPeriodos().forEach(p => {
+  const lista = useFijos ? PERIODOS_FIJOS : getPeriodos();
+  lista.forEach(p => {
     const o = document.createElement('option');
     o.value = p; o.textContent = p;
     sel.appendChild(o);
@@ -2013,17 +2028,51 @@ function getPersonalParaVotar() {
     .sort((a, b) => a.nombre.localeCompare(b.nombre));
 }
 
+// Poblar selector de votante según el área del usuario actual
+function fillVotanteSelector() {
+  const sel = document.getElementById('voto-votante');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Selecciona tu nombre —</option>';
+  const userArea = currentUser?.area || '';
+  // Para admin mostrar todos; para área específica filtrar por esa área
+  const personal = getPersonalParaVotar().filter(p => {
+    if (currentUser?.role === 'admin') return true;
+    // Mapear área del PIN al área exacta en FECHAS_INGRESO
+    const areaMap = {
+      doctores:      ['Clínico'],
+      asistentes:    ['Clínico'],
+      coe_lab:       ['Clínico'],
+      recepcion:     ['Recepción'],
+      administrativo:['Administrativo'],
+      ventas:        ['Administrativo'],
+      marketing:     ['Administrativo'],
+      mensajeria:    ['Mensajería'],
+      servicios:     ['Servicios']
+    };
+    const allowed = areaMap[userArea] || ['Clínico','Administrativo','Recepción','Mensajería','Servicios'];
+    return allowed.includes(p.area);
+  });
+  personal.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.nombre; o.textContent = p.nombre;
+    sel.appendChild(o);
+  });
+}
+
 function buildNominees() {
   const periodoSel = document.getElementById('voto-periodo');
+  const votanteSel = document.getElementById('voto-votante');
   votoPeriodo = periodoSel ? periodoSel.value : '';
+  const votanteNombre = votanteSel ? votanteSel.value : '';
   const section = document.getElementById('nominees-section');
   if (!section) return;
-  if (!votoPeriodo) { section.style.display = 'none'; return; }
+  // Necesita período Y nombre seleccionado
+  if (!votoPeriodo || !votanteNombre) { section.style.display = 'none'; return; }
   section.style.display = 'block';
 
-  // Recuperar votos previos
+  // Recuperar votos previos — clave por nombre individual
   const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
-  const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
+  const votoKey = (currentUser?.area || 'anon') + '|' + votanteNombre;
   const prevVoto = (votos[votoPeriodo] || {})[votoKey];
   if (prevVoto) {
     votoSelecciones = { q01: prevVoto.q01 || '', q02: prevVoto.q02 || '', q03: prevVoto.q03 || '' };
@@ -2060,12 +2109,15 @@ function selectNomineeQ(qNum, btn, nombre) {
 }
 
 function submitVoto() {
+  const votanteSel = document.getElementById('voto-votante');
+  const votanteNombre = votanteSel ? votanteSel.value : '';
+  if (!votanteNombre) { alert('Selecciona tu nombre primero.'); return; }
   if (!votoPeriodo) { alert('Selecciona un período primero.'); return; }
   const { q01, q02, q03 } = votoSelecciones;
   if (!q01 && !q02 && !q03) { alert('Selecciona al menos una nominación para enviar.'); return; }
   const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
   if (!votos[votoPeriodo]) votos[votoPeriodo] = {};
-  const votoKey = (currentUser?.area || 'anon') + '|' + (currentUser?.name || 'anon');
+  const votoKey = (currentUser?.area || 'anon') + '|' + votanteNombre;
   votos[votoPeriodo][votoKey] = { q01, q02, q03, ts: new Date().toISOString() };
   localStorage.setItem('coe_votos_v1', JSON.stringify(votos));
   document.getElementById('voto-badge').style.display = 'block';
