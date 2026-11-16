@@ -2124,7 +2124,7 @@ function submitVoto() {
   // Enviar al Google Sheet
   // Enviar al Google Sheet via formulario oculto (evita problema CORS)
   try {
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx-xbPmd7CgG3eYmiXILplZyaH0B94MO7OnrBIRrmfAEDNZE6NtbD45dNDet4npJ_rTLA/exec';
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx-xbPmd7CgG3eYmiXlLpIZyaH0B94MO7OnrBIRrmfAEDNZE6NtbD45dNDet4npJ_rTLA/exec';
     const payload = JSON.stringify({ periodo: votoPeriodo, area: currentUser?.area || 'anon', votante: votanteNombre, q01, q02, q03 });
     const img = new Image();
     img.src = SHEET_URL + '?data=' + encodeURIComponent(payload);
