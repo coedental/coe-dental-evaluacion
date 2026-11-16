@@ -2121,6 +2121,14 @@ function submitVoto() {
   votos[votoPeriodo][votoKey] = { q01, q02, q03, ts: new Date().toISOString() };
   localStorage.setItem('coe_votos_v1', JSON.stringify(votos));
   document.getElementById('voto-badge').style.display = 'block';
+  // Enviar al Google Sheet
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx-xbPmd7CgG3eYmiXILplZyaH0B94MO7OnrBIRrmfAEDNZE6NtbD45dNDet4npJ_rTLA/exec';
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ periodo: votoPeriodo, area: currentUser?.area || 'anon', votante: votanteNombre, q01, q02, q03 })
+  }).catch(() => {});
   alert('✅ ¡Votos registrados! Gracias por participar en el reconocimiento mensual.');
   if (currentUser?.role === 'admin') renderVotosSummary(votoPeriodo);
 }
