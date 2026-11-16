@@ -562,7 +562,7 @@
             </div>
             <div class="form-row" style="margin-bottom:20px">
               <label>MES / AÑO — Período</label>
-              <select id="voto-periodo" onchange="buildNominees()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
+              <select id="voto-periodo" onchange="buildNominees(); if(currentUser?.role==='admin'){const p=this.value;if(p)renderVotosSummary(p);}" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;width:100%;outline:none;background:#fafbfd">
                 <option value="">— Selecciona el período —</option>
               </select>
             </div>
@@ -1183,7 +1183,7 @@ function showView(view) {
   if (view === 'dashboard')    renderDashboard();
   if (view === 'results')      renderResultsTable();
   if (view === 'destaca')      renderDestaca();
-  if (view === 'votos')        { fillVotanteSelector(); fillPeriodoSelector('voto-periodo', false, true); buildNominees(); if (currentUser?.role==='admin') document.getElementById('mis-votos-section').style.display='block'; }
+  if (view === 'votos')        { fillVotanteSelector(); fillPeriodoSelector('voto-periodo', false, true); buildNominees(); if (currentUser?.role==='admin') { document.getElementById('mis-votos-section').style.display='block'; const pSel=document.getElementById('voto-periodo'); if(pSel && pSel.value) renderVotosSummary(pSel.value); } }
   if (view === 'aniversarios') renderAniversarios();
 }
 
