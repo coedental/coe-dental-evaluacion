@@ -2121,16 +2121,57 @@ function submitVoto() {
   votos[votoPeriodo][votoKey] = { q01, q02, q03, ts: new Date().toISOString() };
   localStorage.setItem('coe_votos_v1', JSON.stringify(votos));
   document.getElementById('voto-badge').style.display = 'block';
-  // Enviar al Google Sheet
-  // Enviar al Google Sheet via formulario oculto (evita problema CORS)
-  try {
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx-xbPmd7CgG3eYmiXlLpIZyaH0B94MO7OnrBIRrmfAEDNZE6NtbD45dNDet4npJ_rTLA/exec';
-    const payload = JSON.stringify({ periodo: votoPeriodo, area: currentUser?.area || 'anon', votante: votanteNombre, q01, q02, q03 });
-    const img = new Image();
-    img.src = SHEET_URL + '?data=' + encodeURIComponent(payload);
-  } catch(e) {}
+  // Guardar en nube (JSONBin)
+  guardarVotoNube({ periodo: votoPeriodo, area: currentUser?.area || 'anon', votante: votanteNombre, q01, q02, q03 });
   alert('✅ ¡Votos registrados! Gracias por participar en el reconocimiento mensual.');
   if (currentUser?.role === 'admin') renderVotosSummary(votoPeriodo);
+}
+
+// ═══════════════════════════════════════════════════════
+// NUBE: Supabase para centralizar votos
+// ═══════════════════════════════════════════════════════
+const SUPA_URL = 'https://ysahidcycsmjqfnoagtk.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzYWhpZGN5Y3NtanFmbm9hZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyNTc4MTQsImV4cCI6MjEwOTgzMzgxNH0.7_U7z2JAzxf-XDDIV8fEfIfpulmGc5EVO51JR3ToNuc';
+
+async function guardarVotoNube(voto) {
+  try {
+    await fetch(SUPA_URL + '/rest/v1/votos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        periodo: voto.periodo,
+        area: voto.area,
+        votante: voto.votante,
+        q01: voto.q01,
+        q02: voto.q02,
+        q03: voto.q03
+      })
+    });
+  } catch(e) {}
+}
+
+async function cargarVotosNube(periodo) {
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1/votos?periodo=eq.' + encodeURIComponent(periodo), {
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY
+      }
+    });
+    const rows = await r.json();
+    if (!Array.isArray(rows)) return null;
+    const result = {};
+    rows.forEach(v => {
+      const key = (v.area || 'anon') + '|' + v.votante;
+      result[key] = { q01: v.q01, q02: v.q02, q03: v.q03, ts: v.created_at };
+    });
+    return result;
+  } catch(e) { return null; }
 }
 
 function resetVoto() {
@@ -2138,13 +2179,23 @@ function resetVoto() {
   document.querySelectorAll('.nominee-btn').forEach(b => b.classList.remove('selected'));
 }
 
-function renderVotosSummary(periodo) {
+async function renderVotosSummary(periodo) {
   const section = document.getElementById('mis-votos-section');
   const container = document.getElementById('votos-resumen');
   if (!section || !container) return;
   section.style.display = 'block';
-  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
-  const periodoVotos = votos[periodo] || {};
+  container.innerHTML = '<p style="color:#8f82a8;font-size:13px">Cargando votos...</p>';
+
+  // Admin: intentar cargar desde nube primero
+  let periodoVotos = null;
+  if (currentUser?.role === 'admin') {
+    periodoVotos = await cargarVotosNube(periodo);
+  }
+  // Fallback a localStorage
+  if (!periodoVotos) {
+    const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+    periodoVotos = votos[periodo] || {};
+  }
 
   // Contar votos por pregunta
   const cats = [
