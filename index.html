@@ -2035,23 +2035,8 @@ function fillVotanteSelector() {
   sel.innerHTML = '<option value="">— Selecciona tu nombre —</option>';
   const userArea = currentUser?.area || '';
   // Para admin mostrar todos; para área específica filtrar por esa área
-  const personal = getPersonalParaVotar().filter(p => {
-    if (currentUser?.role === 'admin') return true;
-    // Mapear área del PIN al área exacta en FECHAS_INGRESO
-    const areaMap = {
-      doctores:      ['Clínico'],
-      asistentes:    ['Clínico'],
-      coe_lab:       ['Clínico'],
-      recepcion:     ['Recepción'],
-      administrativo:['Administrativo'],
-      ventas:        ['Administrativo'],
-      marketing:     ['Administrativo'],
-      mensajeria:    ['Mensajería'],
-      servicios:     ['Servicios']
-    };
-    const allowed = areaMap[userArea] || ['Clínico','Administrativo','Recepción','Mensajería','Servicios'];
-    return allowed.includes(p.area);
-  });
+  // Todos los usuarios (admin y jefes) ven a todo el personal para votar
+  const personal = getPersonalParaVotar();
   personal.forEach(p => {
     const o = document.createElement('option');
     o.value = p.nombre; o.textContent = p.nombre;
@@ -2180,6 +2165,7 @@ function resetVoto() {
 }
 
 async function renderVotosSummary(periodo) {
+  if (currentUser?.role !== 'admin') return; // Solo admin puede ver el resumen
   const section = document.getElementById('mis-votos-section');
   const container = document.getElementById('votos-resumen');
   if (!section || !container) return;
