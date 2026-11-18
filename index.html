@@ -1919,9 +1919,8 @@ function setDestacaTrack(track, btn) {
   renderDestaca();
 }
 
-function computeDestacaWinners(periodo) {
+async function computeDestacaWinners(periodo) {
   const evals = JSON.parse(localStorage.getItem('coe_eval_v2') || '[]');
-  const votos = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
   const trackAreas = destacaTrack === 'clinico' ? CLINICO_AREAS : ADMIN_AREAS;
 
   // Filter evaluations by period and track
@@ -1952,8 +1951,21 @@ function computeDestacaWinners(periodo) {
     }
   });
 
-  // Get peer votes for current period
-  const periodoVotos = votos[periodo] || {};
+  // Get peer votes — cargar desde Supabase si hay período seleccionado
+  let periodoVotos = {};
+  if (periodo) {
+    const nube = await cargarVotosNube(periodo);
+    if (nube) {
+      periodoVotos = nube;
+    } else {
+      const votosLocal = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+      periodoVotos = votosLocal[periodo] || {};
+    }
+  } else {
+    const votosLocal = JSON.parse(localStorage.getItem('coe_votos_v1') || '{}');
+    periodoVotos = {};
+  }
+
   const voteCount = {};
   Object.values(periodoVotos).forEach(v => {
     // Formato nuevo: q01, q02, q03
@@ -1983,12 +1995,13 @@ function computeDestacaWinners(periodo) {
   });
 }
 
-function renderDestaca() {
+async function renderDestaca() {
   fillPeriodoSelector('destaca-periodo-sel', true);
   const periodo = document.getElementById('destaca-periodo-sel')?.value || '';
-  const results = computeDestacaWinners(periodo);
   const container = document.getElementById('destaca-winners');
   if (!container) return;
+  container.innerHTML = '<p style="color:#8f82a8;font-size:13px;text-align:center;padding:20px">Cargando...</p>';
+  const results = await computeDestacaWinners(periodo);
 
   container.innerHTML = results.map(({ cat, winner }) => {
     if (!winner) {
